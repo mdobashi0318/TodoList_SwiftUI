@@ -98,7 +98,7 @@ class ToDoModel: Object, ObservableObject {
     ///   - vc: 呼び出し元のViewController
     ///   - todoId: TodoId
     ///   - updateValue: 更新する値
-    class func updateRealm(_ vc: UIViewController, todoId: Int, updateValue: TableValue) {
+    class func updateRealm(todoId: Int, updateValue: TableValue) {
         guard let realm = initRealm() else { return }
         let toDoModel: ToDoModel = (realm.objects(ToDoModel.self).filter("id == '\(String(describing: todoId))'").first!)
         
