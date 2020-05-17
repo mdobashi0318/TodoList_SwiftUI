@@ -21,11 +21,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Create the SwiftUI view that provides the window contents.
         
-        ToDoModel.addRealm(addValue: TableValue(id: "0",
-                                                title: "Title",
-                                                todoDate: "2000/01/01 00:00",
-                                                detail: "detail"
-        ))
         let toDoListView = ToDoListView()
             .environmentObject(ToDoViewModel())
 

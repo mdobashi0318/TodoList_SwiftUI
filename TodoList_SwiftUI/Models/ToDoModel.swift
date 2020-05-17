@@ -24,7 +24,7 @@ class ToDoModel: Object, ObservableObject {
     
     
     /// Todoの期限
-    @objc dynamic var todoDate:String?
+    @objc dynamic var todoDate:String = ""
     
     /// Todoのタイトル
     @objc dynamic var toDoName:String = ""
@@ -122,7 +122,7 @@ class ToDoModel: Object, ObservableObject {
     ///   - todoId: TodoId
     ///   - createTime: Todoの作成時間
     /// - Returns: 取得したTodoの最初の1件を返す
-    class func findRealm(_ vc: UIViewController, todoId: Int, createTime: String?) -> ToDoModel? {
+    class func findRealm(todoId: Int, createTime: String?) -> ToDoModel? {
         guard let realm = initRealm() else { return nil }
         
         if let _createTime = createTime {
