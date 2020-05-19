@@ -24,8 +24,8 @@ struct ToDoRow: View {
 struct ToDoRow_Previews: PreviewProvider {
     
     static var previews: some View {
-        ToDoRow(todoModel: (ToDoModel.allFindRealm()?[0])!)
+        ToDoRow(todoModel: todomodel[0])
             .previewLayout(.fixed(width: UIScreen.main.bounds.width, height: 100))
-        .environmentObject(ToDoViewModel())
     }
 }
+

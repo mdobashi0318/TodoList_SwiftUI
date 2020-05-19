@@ -13,7 +13,11 @@ import Combine
 
 
 class ToDoViewModel: ObservableObject {
-    @Published var todoModel: Results<ToDoModel> = ToDoModel.allFindRealm()!
+    
+//    @Published var todoModel: Results<ToDoModel> = ToDoModel.allFindRealm()!
+    
+    /// Realmのモデルを参照しない時はTestデータの配列を使う
+    @Published var todoModel: [ToDoModel] = todomodel
 }
 
 
@@ -227,3 +231,44 @@ struct TableValue {
     }
 }
 
+
+
+
+
+/// テスト用の配列
+let todomodel:[ToDoModel] = {
+    
+    var todomodel = [ToDoModel]()
+    
+    let todo1 = ToDoModel()
+    todo1.toDoName = "TODOName1"
+    todo1.todoDate = "2020/01/01 00:00:01"
+    todo1.toDo = "TODO詳細1"
+    todo1.createTime = "2020/01/01 00:00:01"
+    
+    let todo2 = ToDoModel()
+    todo2.toDoName = "TODOName2"
+    todo2.todoDate = "2020/01/01 00:00:02"
+    todo2.toDo = "TODO詳細2"
+    todo2.createTime = "2020/01/01 00:00:02"
+    
+    let todo3 = ToDoModel()
+    todo3.toDoName = "TODOName3"
+    todo3.todoDate = "2020/01/01 00:00:03"
+    todo3.toDo = "TODO詳細3"
+    todo3.createTime = "2020/01/01 00:00:03"
+    
+    
+    let todo4 = ToDoModel()
+    todo4.toDoName = "TODOName4"
+    todo4.todoDate = "2020/01/01 00:00:04"
+    todo4.toDo = "TODO詳細4"
+    todo4.createTime = "2020/01/01 00:00:04"
+    
+    todomodel.append(todo1)
+    todomodel.append(todo2)
+    todomodel.append(todo3)
+    todomodel.append(todo4)
+    
+    return todomodel
+}()
