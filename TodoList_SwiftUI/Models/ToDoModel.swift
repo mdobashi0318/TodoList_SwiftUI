@@ -13,7 +13,7 @@ import Combine
 
 
 class ToDoViewModel: ObservableObject {
-    @Published var todoModel: [ToDoModel] = ToDoModel.allFindRealm()!
+    @Published var todoModel: Results<ToDoModel> = ToDoModel.allFindRealm()!
 }
 
 
@@ -138,7 +138,7 @@ class ToDoModel: Object, ObservableObject {
     /// 全件取得
     /// - Parameter vc: 呼び出し元のViewController
     /// - Returns: 取得したTodoを全件返す
-    class func allFindRealm() -> [ToDoModel]? {
+    class func allFindRealm() -> Results<ToDoModel>? {
         guard let realm = initRealm() else { return nil }
         
         let resultModel = realm.objects(ToDoModel.self)
@@ -146,7 +146,7 @@ class ToDoModel: Object, ObservableObject {
         for model in resultModel {
             quizModel.append(model)
         }
-        return quizModel
+        return realm.objects(ToDoModel.self)
     }
     
     

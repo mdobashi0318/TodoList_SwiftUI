@@ -72,6 +72,9 @@ struct ToDoInputView: View {
             Spacer()
         }
         .padding()
+        .onDisappear {
+            self.toDoModel = ToDoModel()
+        }
     }
 }
 
