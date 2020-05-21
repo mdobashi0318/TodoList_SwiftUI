@@ -39,9 +39,10 @@ struct ToDoListView: View {
                     
                 } else {
                     ForEach(self.toDoviewModel.todoModel, id: \.createTime) { toDoviewModel in
-                        ToDoRow(todoModel: toDoviewModel)
+                        NavigationLink(destination: TodoDetailView(toDoModel: toDoviewModel)) {
+                            ToDoRow(todoModel: toDoviewModel)
+                        }
                     }
-                    
                 }
             }
             .navigationBarTitle("ToDoList")

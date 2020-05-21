@@ -16,14 +16,13 @@ struct ToDoInputView: View {
     
     /// キャンセルボタン
     var cancelButton: some View {
-        HStack {
-            Button(action: {
-                self.isShowModle.toggle()
-                self.presentationMode.wrappedValue.dismiss()
-            }) {
-                Text("×")
-            }
+        Button(action: {
+            self.isShowModle.toggle()
+            self.presentationMode.wrappedValue.dismiss()
+        }) {
+            Text("×")
         }
+        .frame(width: 50, height: 50)
     }
     
     
@@ -31,7 +30,7 @@ struct ToDoInputView: View {
     var addButton: some View {
         Button(action: {
             let id: String = String(ToDoModel.allFindRealm()!.count + 1)
-                
+            
             self.isShowModle.toggle()
             self.presentationMode.wrappedValue.dismiss()
             ToDoModel.addRealm(addValue:
@@ -42,7 +41,7 @@ struct ToDoInputView: View {
             ))
         }) {
             Image(systemName: "plus.circle")
-        }
+        }.frame(width: 50, height: 50)
     }
     
     
@@ -54,23 +53,24 @@ struct ToDoInputView: View {
                 addButton
             }
             
-            HStack {
-                Text("タイトル")
-                TextField("タイトルを入力してください", text: $toDoModel.toDoName)
-            }.frame(height: 50, alignment: .center)
-            
-            HStack {
-                Text("期限")
-                TextField("期限を入力してください", text: $toDoModel.todoDate)
-            }.frame(height: 50, alignment: .center)
-            
-            
-            HStack {
-                Text("詳細")
-                TextField("タイトルを入力してください", text: $toDoModel.toDo)
-            }.frame(height: 50, alignment: .center)
-            Spacer()
-        }
+                HStack {
+                    Text("タイトル")
+                    TextField("タイトルを入力してください", text: $toDoModel.toDoName)
+                }.frame(height: 50, alignment: .leading)
+                
+                HStack {
+                    Text("期限")
+                    TextField("期限を入力してください", text: $toDoModel.todoDate)
+                }.frame(height: 50, alignment: .leading)
+                
+                
+                HStack {
+                    Text("詳細")
+                    TextField("タイトルを入力してください", text: $toDoModel.toDo)
+                }.frame(height: 50, alignment: .leading)
+                Spacer()
+            }
+        
         .padding()
         .onDisappear {
             self.toDoModel = ToDoModel()

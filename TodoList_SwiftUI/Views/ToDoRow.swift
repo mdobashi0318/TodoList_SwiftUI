@@ -16,16 +16,15 @@ struct ToDoRow: View {
             Text(todoModel.toDoName)
             Text(todoModel.todoDate)
         }
-        .frame(width: UIScreen.main.bounds.width, height: 50, alignment: .leading)
+        .frame(height: 50, alignment: .leading)
         .padding()
     }
 }
 
 struct ToDoRow_Previews: PreviewProvider {
-    
     static var previews: some View {
         ToDoRow(todoModel: todomodel[0])
-            .previewLayout(.fixed(width: UIScreen.main.bounds.width, height: 100))
+            .previewLayout(.fixed(width: UIScreen.main.bounds.width, height: 50))
     }
 }
 
