@@ -11,7 +11,15 @@ import SwiftUI
 struct ToDoInputView: View {
     @Binding var toDoModel: ToDoModel
     @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
+    
+    /// 項目が入力されているかの判断し、入力されていなければアラートを表示させる
+    ///
+    /// true:  入力されていない項目があるのでアラートを表示させる
+    /// false: 項目が入力されているのでTodoの追加、更新処理をする
     @State var isValidate = false
+    
+    /// Todoの更新か追加かを判断
+    @State var isUpdate: Bool
     
     /// キャンセルボタン
     var cancelButton: some View {
@@ -33,13 +41,23 @@ struct ToDoInputView: View {
             self.isValidate = self.validateCheck()
             
             if !self.isValidate {
-                let id: String = String(ToDoModel.allFindRealm()!.count + 1)
-                ToDoModel.addRealm(addValue:
-                    TableValue(id: id,
-                               title: self.toDoModel.toDoName,
-                               todoDate: self.toDoModel.todoDate,
-                               detail: self.toDoModel.toDo
-                ))
+                
+                if !self.isUpdate {
+                    let id: String = String(ToDoModel.allFindRealm()!.count + 1)
+                    ToDoModel.addRealm(addValue:
+                        TableValue(id: id,
+                                   title: self.toDoModel.toDoName,
+                                   todoDate: self.toDoModel.todoDate,
+                                   detail: self.toDoModel.toDo
+                    ))
+                } else {
+                    ToDoModel.updateRealm(todoId: Int(self.toDoModel.id)!,
+                                          updateValue: TableValue(id: self.toDoModel.id,
+                                                                  title: self.toDoModel.toDoName,
+                                                                  todoDate: self.toDoModel.todoDate,
+                                                                  detail: self.toDoModel.toDo
+                    ))
+                }
                 self.presentationMode.wrappedValue.dismiss()
             }
             
@@ -80,7 +98,7 @@ struct ToDoInputView: View {
                 Spacer()
                 addButton
             }
-            
+            Divider()
                 HStack {
                     Text("タイトル")
                     TextField("タイトルを入力してください", text: $toDoModel.toDoName)
@@ -100,14 +118,21 @@ struct ToDoInputView: View {
             }
         
         .padding()
+        .onAppear {
+            if self.isUpdate {
+                self.toDoModel = ToDoViewModel.todoUpdate(self.toDoModel)
+            }
+        }
         .onDisappear {
-            self.toDoModel = ToDoModel()
+            if !self.isUpdate {
+                self.toDoModel = ToDoModel()
+            }
         }
     }
 }
 
 struct ToDoInputView_Previews: PreviewProvider {
     static var previews: some View {
-        ToDoInputView(toDoModel: .constant(ToDoModel()))
+        ToDoInputView(toDoModel: .constant(ToDoModel()), isUpdate: false)
     }
 }

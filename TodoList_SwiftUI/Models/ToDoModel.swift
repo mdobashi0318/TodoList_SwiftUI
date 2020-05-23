@@ -14,10 +14,24 @@ import Combine
 
 class ToDoViewModel: ObservableObject {
     
-//    @Published var todoModel: Results<ToDoModel> = ToDoModel.allFindRealm()!
+    @Published var todoModel: Results<ToDoModel> = ToDoModel.allFindRealm()!
     
     /// Realmのモデルを参照しない時はTestデータの配列を使う
-    @Published var todoModel: [ToDoModel] = todomodel
+//    @Published var todoModel: [ToDoModel] = todomodel
+    
+    
+    
+    /// 更新するTodoを返す
+    class func todoUpdate(_ model: ToDoModel) -> ToDoModel {
+        let todo = ToDoModel()
+        todo.id = model.id
+        todo.toDoName = model.toDoName
+        todo.todoDate = model.todoDate
+        todo.toDo = model.toDo
+        
+        return todo
+    }
+    
 }
 
 

@@ -25,7 +25,7 @@ struct ToDoListView: View {
             .resizable()
         }
         .sheet(isPresented: $isShowModle) {
-            ToDoInputView(toDoModel: self.$todoModel)
+            ToDoInputView(toDoModel: self.$todoModel, isUpdate: false)
         }
         .frame(width: 30, height: 30)
     }
@@ -33,30 +33,23 @@ struct ToDoListView: View {
     
     var body: some View {
         NavigationView {
-            
-            VStack {
-                List {
-                    if self.toDoviewModel.todoModel.count == 0 {
-                        Text("ToDoが登録されていません")
-                        
-                    } else {
-                        ForEach(self.toDoviewModel.todoModel, id: \.createTime) { toDoviewModel in
-                            NavigationLink(destination: TodoDetailView(toDoModel: toDoviewModel)) {
-                                ToDoRow(todoModel: toDoviewModel)
-                            }
+            List {
+                if self.toDoviewModel.todoModel.count == 0 {
+                    Text("ToDoが登録されていません")
+                } else {
+                    ForEach(self.toDoviewModel.todoModel, id: \.createTime) { toDoviewModel in
+                        NavigationLink(destination: TodoDetailView(toDoModel: toDoviewModel)) {
+                            ToDoRow(todoModel: toDoviewModel)
                         }
                     }
                 }
-                
-                HStack {
-                    Spacer()
-                    addButton
-                        .padding(.bottom, 20)
-                        .padding(.trailing, 10)
-                }
-                .padding()
+            }
+            .listStyle(GroupedListStyle())
+            .onAppear {
+                self.toDoviewModel.objectWillChange.send()
             }
             .navigationBarTitle("ToDoList")
+            .navigationBarItems(trailing: addButton)
         }
     }
 }

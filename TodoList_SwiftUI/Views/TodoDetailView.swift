@@ -9,7 +9,22 @@
 import SwiftUI
 
 struct TodoDetailView: View {
-    var toDoModel: ToDoModel
+    @State var toDoModel: ToDoModel
+    @State var isShowModle = false
+    
+    /// ToDo追加ボタン
+    var addButton: some View {
+        Button(action: {
+            self.isShowModle.toggle()
+        }) {
+            Image(systemName: "plus.circle")
+            .resizable()
+        }
+        .sheet(isPresented: $isShowModle) {
+            ToDoInputView(toDoModel: self.$toDoModel, isUpdate: true)
+        }
+        .frame(width: 30, height: 30)
+    }
     
     var body: some View {
         VStack {
@@ -25,8 +40,11 @@ struct TodoDetailView: View {
             Spacer()
         }
         .navigationBarTitle(toDoModel.toDoName)
+    .navigationBarItems(trailing: addButton)
     }
 }
+
+
 
 struct TodoDetail_Previews: PreviewProvider {
     static var previews: some View {
