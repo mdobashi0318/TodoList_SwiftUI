@@ -22,31 +22,41 @@ struct ToDoListView: View {
             self.isShowModle.toggle()
         }) {
             Image(systemName: "plus.circle")
+            .resizable()
         }
         .sheet(isPresented: $isShowModle) {
-            if self.isShowModle {
-                ToDoInputView(toDoModel: self.$todoModel)
-            }
+            ToDoInputView(toDoModel: self.$todoModel)
         }
+        .frame(width: 30, height: 30)
     }
     
     
     var body: some View {
         NavigationView {
-            List {
-                if self.toDoviewModel.todoModel.count == 0 {
-                    Text("ToDoが登録されていません")
-                    
-                } else {
-                    ForEach(self.toDoviewModel.todoModel, id: \.createTime) { toDoviewModel in
-                        NavigationLink(destination: TodoDetailView(toDoModel: toDoviewModel)) {
-                            ToDoRow(todoModel: toDoviewModel)
+            
+            VStack {
+                List {
+                    if self.toDoviewModel.todoModel.count == 0 {
+                        Text("ToDoが登録されていません")
+                        
+                    } else {
+                        ForEach(self.toDoviewModel.todoModel, id: \.createTime) { toDoviewModel in
+                            NavigationLink(destination: TodoDetailView(toDoModel: toDoviewModel)) {
+                                ToDoRow(todoModel: toDoviewModel)
+                            }
                         }
                     }
                 }
+                
+                HStack {
+                    Spacer()
+                    addButton
+                        .padding(.bottom, 20)
+                        .padding(.trailing, 10)
+                }
+                .padding()
             }
             .navigationBarTitle("ToDoList")
-            .navigationBarItems(trailing: addButton)
         }
     }
 }

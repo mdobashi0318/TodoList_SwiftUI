@@ -10,39 +10,67 @@ import SwiftUI
 
 struct ToDoInputView: View {
     @Binding var toDoModel: ToDoModel
-    @State var isShowModle: Bool = false
-    @Environment(\.presentationMode) var presentationMode
-    
+    @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
+    @State var isValidate = false
     
     /// キャンセルボタン
     var cancelButton: some View {
         Button(action: {
-            self.isShowModle.toggle()
             self.presentationMode.wrappedValue.dismiss()
         }) {
-            Text("×")
+            Image(systemName: "plus")
+                .resizable()
+                .rotationEffect(.init(degrees: 45))
         }
-        .frame(width: 50, height: 50)
+        .frame(width: 20, height: 20)
     }
     
     
     /// ToDo追加ボタン
     var addButton: some View {
         Button(action: {
-            let id: String = String(ToDoModel.allFindRealm()!.count + 1)
             
-            self.isShowModle.toggle()
-            self.presentationMode.wrappedValue.dismiss()
-            ToDoModel.addRealm(addValue:
-                TableValue(id: id,
-                           title: self.toDoModel.toDoName,
-                           todoDate: self.toDoModel.todoDate,
-                           detail: self.toDoModel.toDo
-            ))
+            self.isValidate = self.validateCheck()
+            
+            if !self.isValidate {
+                let id: String = String(ToDoModel.allFindRealm()!.count + 1)
+                ToDoModel.addRealm(addValue:
+                    TableValue(id: id,
+                               title: self.toDoModel.toDoName,
+                               todoDate: self.toDoModel.todoDate,
+                               detail: self.toDoModel.toDo
+                ))
+                self.presentationMode.wrappedValue.dismiss()
+            }
+            
         }) {
-            Image(systemName: "plus.circle")
-        }.frame(width: 50, height: 50)
+            Image(systemName: "plus")
+                .resizable()
+        }
+        .frame(width: 20, height: 20)
+        .alert(isPresented: $isValidate) {
+            Alert(title: Text("入力されていない項目があります"), dismissButton: .default(Text("閉じる")))
+        }
     }
+    
+    
+    /// バリデーションチェック
+    /// テキストフィールドにテキストが入っていなければtrueを返し、アラートを表示させる
+    func validateCheck() -> Bool {
+        if toDoModel.toDoName.isEmpty {
+            return true
+        }
+        
+        if toDoModel.todoDate.isEmpty {
+            return true
+        }
+        
+        if toDoModel.toDo.isEmpty {
+            return true
+        }
+        return false
+    }
+
     
     
     var body: some View {
