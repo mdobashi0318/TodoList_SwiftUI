@@ -32,6 +32,14 @@ class ToDoViewModel: ObservableObject {
         return todo
     }
     
+    
+    class func del(_ model: ToDoModel) {
+        ToDoModel.deleteRealm(todoId: model.id, createTime: model.createTime) {
+            print("削除")
+        }
+        
+    }
+    
 }
 
 
@@ -174,9 +182,9 @@ class ToDoModel: Object, ObservableObject {
     ///   - todoId: TodoId
     ///   - createTime: Todoの作成時間
     ///   - completion: 削除完了後の動作
-    class func deleteRealm(_ vc: UIViewController, todoId: Int, createTime: String?, completion: () ->Void) {
+    class func deleteRealm(todoId: String, createTime: String?, completion: () ->Void) {
         guard let realm = initRealm() else { return }
-        let toDoModel: ToDoModel = (realm.objects(ToDoModel.self).filter("id == '\(String(describing: todoId))'").first!)
+        let toDoModel: ToDoModel = (realm.objects(ToDoModel.self).filter("id == '\(todoId)'").first!)
         
         UNUserNotificationCenter
             .current()
@@ -186,6 +194,7 @@ class ToDoModel: Object, ObservableObject {
             try realm.write() {
                 realm.delete(toDoModel)
             }
+            completion()
         }
             
         catch {
@@ -193,7 +202,7 @@ class ToDoModel: Object, ObservableObject {
         }
         
         
-        completion()
+        
     }
     
     
