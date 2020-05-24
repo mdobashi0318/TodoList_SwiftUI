@@ -16,7 +16,10 @@ struct ToDoListView: View {
     
     @State var isShowModle = false
     
-    /// ToDo追加ボタン
+    @State var isDeleteFlag = false
+    
+    
+    /// ToDoの追加画面に遷移させるボタン
     var addButton: some View {
         Button(action: {
             self.isShowModle.toggle()
@@ -29,6 +32,23 @@ struct ToDoListView: View {
         }
         .frame(width: 30, height: 30)
     }
+    
+    
+    
+    /// 全件削除ボタン
+    var allDeleteButton : some View {
+        Button(action: {
+            self.isDeleteFlag.toggle()
+        }) {
+            Text("削除")
+        }.alert(isPresented: self.$isDeleteFlag) {
+            Alert(title: Text("全件削除しますか?"), primaryButton: .destructive(Text("削除")) {
+                // TODO: 削除した後にクラッシュする
+                ToDoModel.allDelete()
+                }, secondaryButton: .cancel(Text("キャンセル")))
+        }
+    }
+    
     
     
     var body: some View {
@@ -49,7 +69,7 @@ struct ToDoListView: View {
                 self.toDoviewModel.objectWillChange.send()
             }
             .navigationBarTitle("ToDoList")
-            .navigationBarItems(trailing: addButton)
+            .navigationBarItems(leading: allDeleteButton ,trailing: addButton)
         }
     }
 }

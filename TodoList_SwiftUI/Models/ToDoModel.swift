@@ -32,13 +32,7 @@ class ToDoViewModel: ObservableObject {
         return todo
     }
     
-    
-    class func del(_ model: ToDoModel) {
-        ToDoModel.deleteRealm(todoId: model.id, createTime: model.createTime) {
-            print("削除")
-        }
-        
-    }
+
     
 }
 
