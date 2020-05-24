@@ -21,6 +21,17 @@ struct ToDoInputView: View {
     /// Todoの更新か追加かを判断
     @State var isUpdate: Bool
     
+    /// datePickerで選択したDateを格納
+    @State var tododate = Date()
+    
+    
+    var dateRange: ClosedRange<Date> {
+        let min = Calendar.current.date(byAdding: .year, value: -1, to: Date())!
+        let max = Calendar.current.date(byAdding: .year, value: 1, to: Date())!
+        return min...max
+    }
+    
+    
     /// キャンセルボタン
     var cancelButton: some View {
         Button(action: {
@@ -34,12 +45,15 @@ struct ToDoInputView: View {
     }
     
     
+    
+    
+    
     /// ToDo追加ボタン
     var addButton: some View {
         Button(action: {
             
             self.isValidate = self.validateCheck()
-            
+            self.toDoModel.todoDate = ToDoModel.stringFromDate(date: self.tododate)
             if !self.isValidate {
                 
                 if !self.isUpdate {
@@ -49,7 +63,7 @@ struct ToDoInputView: View {
                                    title: self.toDoModel.toDoName,
                                    todoDate: self.toDoModel.todoDate,
                                    detail: self.toDoModel.toDo
-                    ))
+                    ),date: self.tododate)
                 } else {
                     ToDoModel.updateRealm(todoId: Int(self.toDoModel.id)!,
                                           updateValue: TableValue(id: self.toDoModel.id,
@@ -79,16 +93,12 @@ struct ToDoInputView: View {
             return true
         }
         
-        if toDoModel.todoDate.isEmpty {
-            return true
-        }
-        
         if toDoModel.toDo.isEmpty {
             return true
         }
         return false
     }
-
+    
     
     
     var body: some View {
@@ -99,24 +109,26 @@ struct ToDoInputView: View {
                 addButton
             }
             Divider()
-                HStack {
-                    Text("タイトル")
-                    TextField("タイトルを入力してください", text: $toDoModel.toDoName)
-                }.frame(height: 50, alignment: .leading)
-                
-                HStack {
-                    Text("期限")
-                    TextField("期限を入力してください", text: $toDoModel.todoDate)
-                }.frame(height: 50, alignment: .leading)
-                
-                
-                HStack {
-                    Text("詳細")
-                    TextField("タイトルを入力してください", text: $toDoModel.toDo)
-                }.frame(height: 50, alignment: .leading)
-                Spacer()
+            HStack {
+                Text("タイトル")
+                TextField("タイトルを入力してください", text: $toDoModel.toDoName)
+            }.frame(height: 50, alignment: .leading)
+            
+            
+            HStack {
+                Text("期限")
+                DatePicker(selection: self.$tododate, in: dateRange) {
+                    Text("")
+                }
             }
-        
+            .frame(height: 130, alignment: .leading)
+            
+            HStack {
+                Text("詳細")
+                TextField("タイトルを入力してください", text: $toDoModel.toDo)
+            }.frame(height: 50, alignment: .leading)
+            Spacer()
+        }
         .padding()
         .onAppear {
             if self.isUpdate {

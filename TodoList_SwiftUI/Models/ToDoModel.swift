@@ -85,7 +85,7 @@ class ToDoModel: Object, ObservableObject {
     /// - Parameters:
     ///   - vc: 呼び出し元のViewController
     ///   - addValue: 登録するTodoの値
-    class func addRealm(addValue:TableValue) {
+    class func addRealm(addValue:TableValue, date: Date) {
         
         guard let realm = initRealm() else { return }
         let toDoModel: ToDoModel = ToDoModel()
@@ -105,6 +105,8 @@ class ToDoModel: Object, ObservableObject {
             try realm.write() {
                 realm.add(toDoModel)
             }
+            
+            ToDoModel.addNotification(todoModel: toDoModel, date: date)
         }
         catch {
             print("エラーが発生しました")
@@ -225,6 +227,54 @@ class ToDoModel: Object, ObservableObject {
         try! realm.write {
             realm.deleteAll()
         }
+    }
+    
+    
+    /// 通知を設定する
+    class func addNotification(todoModel: ToDoModel, date: Date) {
+        
+        let content:UNMutableNotificationContent = UNMutableNotificationContent()
+        
+        content.title = todoModel.toDoName
+        
+        content.body = todoModel.toDo
+        
+        content.sound = UNNotificationSound.default
+        
+        
+        //通知する日付を設定
+        let date:Date = ToDoModel.dateFromString(string: todoModel.todoDate)
+        let calendar = Calendar.current
+        let dateComponent = calendar.dateComponents([.year, .month, .day, .hour, .minute] , from: date)
+        let trigger:UNCalendarNotificationTrigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: false)
+        let request:UNNotificationRequest = UNNotificationRequest.init(identifier: content.title, content: content, trigger: trigger)
+        
+        let center:UNUserNotificationCenter = UNUserNotificationCenter.current()
+        center.add(request) { (error) in
+            
+        }
+        
+    }
+    
+    
+    
+    class func dateFromString(string: String) -> Date {
+           let formatter: DateFormatter = DateFormatter()
+           formatter.calendar = Calendar(identifier: .gregorian)
+           formatter.dateFormat = "yyyy/MM/dd HH:mm"
+           return formatter.date(from: string)!
+       }
+    
+    
+    
+    /// Dateのフォーマットを設定
+    class func stringFromDate(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd HH:mm"
+        formatter.locale = Locale(identifier: "ja_JP")
+        let s_Date:String = formatter.string(from: date)
+        
+        return s_Date
     }
     
     
