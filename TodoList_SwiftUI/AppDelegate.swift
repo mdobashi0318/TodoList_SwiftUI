@@ -10,7 +10,7 @@ import UIKit
 import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
 
 
@@ -19,10 +19,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
        let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
-            
+            center.delegate = self
         }
         
         return true
+    }
+    
+    
+    /// フォアグラウンドの時の通知
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: (UNNotificationPresentationOptions) -> Void) {
+        
+        completionHandler([.alert, .sound])
     }
 
     // MARK: UISceneSession Lifecycle

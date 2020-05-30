@@ -63,7 +63,7 @@ struct ToDoInputView: View {
                                    title: self.toDoModel.toDoName,
                                    todoDate: self.toDoModel.todoDate,
                                    detail: self.toDoModel.toDo
-                    ),date: self.tododate)
+                    ), date: self.tododate)
                     
                 } else {
                     ToDoModel.updateRealm(todoId: Int(self.toDoModel.id)!,
@@ -71,7 +71,7 @@ struct ToDoInputView: View {
                                                                   title: self.toDoModel.toDoName,
                                                                   todoDate: self.toDoModel.todoDate,
                                                                   detail: self.toDoModel.toDo
-                    ))
+                    ), date: self.tododate)
                 }
                 self.presentationMode.wrappedValue.dismiss()
             }

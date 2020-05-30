@@ -120,7 +120,7 @@ class ToDoModel: Object {
     ///   - vc: 呼び出し元のViewController
     ///   - todoId: TodoId
     ///   - updateValue: 更新する値
-    class func updateRealm(todoId: Int, updateValue: TableValue) {
+    class func updateRealm(todoId: Int, updateValue: TableValue, date: Date) {
         guard let realm = initRealm() else { return }
         let toDoModel: ToDoModel = (realm.objects(ToDoModel.self).filter("id == '\(String(describing: todoId))'").first!)
         
@@ -130,6 +130,7 @@ class ToDoModel: Object {
                 toDoModel.todoDate = updateValue.date
                 toDoModel.toDo = updateValue.detail
             }
+            ToDoModel.addNotification(todoModel: toDoModel, date: date)
         }
         catch {
             print("エラーが発生しました")
