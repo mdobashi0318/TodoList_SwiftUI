@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ToDoListView: View {
     
-    @EnvironmentObject private var toDoviewModel: ToDoViewModel
+    @ObservedObject private var toDoviewModel = ToDoViewModel()
     
     @State var todoModel = ToDoModel()
     
@@ -80,6 +80,5 @@ struct ToDoListView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ToDoListView()
-            .environmentObject(ToDoViewModel())
     }
 }

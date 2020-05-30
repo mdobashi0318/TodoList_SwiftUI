@@ -38,7 +38,7 @@ class ToDoViewModel: ObservableObject {
 
 
 
-class ToDoModel: Object, ObservableObject {
+class ToDoModel: Object {
     
     @objc dynamic var id:String = ""
     

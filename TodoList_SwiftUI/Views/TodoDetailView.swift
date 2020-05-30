@@ -78,15 +78,20 @@ struct TodoDetailView: View {
     
     var body: some View {
         List {
-            HStack {
+            VStack(alignment: .leading) {
                 Text("期限")
+                .font(.headline)
                 Text(toDoModel.todoDate)
-            }.frame(width: 300, height: 50, alignment: .leading)
+            }
+            .frame(width: 300, height: 50, alignment: .leading)
             
-            HStack {
+            VStack(alignment: .leading) {
                 Text("詳細")
+                .font(.headline)
                 Text(toDoModel.toDo)
-            }.frame(width: 300, height: 50, alignment: .leading)
+            }
+            .frame(width: 300, height: 50, alignment: .leading)
+            
         }
         .navigationBarTitle(toDoModel.toDoName)
         .navigationBarItems(trailing: addButton)

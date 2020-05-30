@@ -64,6 +64,7 @@ struct ToDoInputView: View {
                                    todoDate: self.toDoModel.todoDate,
                                    detail: self.toDoModel.toDo
                     ),date: self.tododate)
+                    
                 } else {
                     ToDoModel.updateRealm(todoId: Int(self.toDoModel.id)!,
                                           updateValue: TableValue(id: self.toDoModel.id,
@@ -100,34 +101,60 @@ struct ToDoInputView: View {
     }
     
     
+    /// タイトル入力テキストフィールド
+    fileprivate func todoNameTextField() -> some View {
+        return VStack(alignment: .leading) {
+            Text("タイトル")
+                .font(.headline)
+            TextField("タイトルを入力してください", text: $toDoModel.toDoName)
+        }
+        .frame(height: 50, alignment: .leading)
+        .padding(.top)
+    }
+    
+    
+    /// 期限入力DatePicker
+    fileprivate func todoDatePicker() -> some View {
+        return VStack(alignment: .leading) {
+            DatePicker(selection: self.$tododate, in: dateRange) {
+                Text("期限")
+                    .font(.headline)
+            }
+        }
+        .padding(.top)
+    }
+    
+    
+    /// 詳細入力テキストフィールド
+    fileprivate func todoDetailTextField() -> some View {
+        return VStack(alignment: .leading) {
+            Text("詳細")
+                .font(.headline)
+            TextField("詳細を入力してください", text: $toDoModel.toDo)
+            
+        }
+        .frame(height: 50, alignment: .leading)
+        .padding(.top)
+    }
+    
+    
+    
     
     var body: some View {
-        VStack {
-            HStack {
-                cancelButton
-                Spacer()
-                addButton
-            }
-            Divider()
-            HStack {
-                Text("タイトル")
-                TextField("タイトルを入力してください", text: $toDoModel.toDoName)
-            }.frame(height: 50, alignment: .leading)
-            
-            
-            HStack {
-                Text("期限")
-                DatePicker(selection: self.$tododate, in: dateRange) {
-                    Text("")
+        ScrollView(showsIndicators: false) {
+            VStack {
+                HStack {
+                    cancelButton
+                    Spacer()
+                    addButton
                 }
+                Divider()
+                todoNameTextField()
+                todoDatePicker()
+                todoDetailTextField()
+                Spacer()
             }
-            .frame(height: 130, alignment: .leading)
-            
-            HStack {
-                Text("詳細")
-                TextField("タイトルを入力してください", text: $toDoModel.toDo)
-            }.frame(height: 50, alignment: .leading)
-            Spacer()
+            .frame(height: UIScreen.main.bounds.height)
         }
         .padding()
         .onAppear {
@@ -141,6 +168,8 @@ struct ToDoInputView: View {
             }
         }
     }
+    
+    
 }
 
 struct ToDoInputView_Previews: PreviewProvider {
