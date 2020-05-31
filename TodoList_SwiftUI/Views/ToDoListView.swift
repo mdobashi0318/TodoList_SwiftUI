@@ -12,8 +12,6 @@ struct ToDoListView: View {
     
     @ObservedObject private var toDoviewModel = ToDoViewModel()
     
-    @State var todoModel = ToDoModel()
-    
     @State var isShowModle = false
     
     @State var isDeleteFlag = false
@@ -28,7 +26,7 @@ struct ToDoListView: View {
             .resizable()
         }
         .sheet(isPresented: $isShowModle) {
-            ToDoInputView(toDoModel: self.$todoModel, isUpdate: false)
+            ToDoInputView(toDoModel: .constant(ToDoModel()), isUpdate: false)
         }
         .frame(width: 30, height: 30)
     }

@@ -40,7 +40,7 @@ class TodoList_SwiftUITests: XCTestCase {
             ToDoModel.addRealm(addValue: TableValue(id: "0", title: "UnitTest", todoDate: "2020/01/01 00:00", detail: "詳細"), date: Date())
         
             
-            ToDoModel.updateRealm(todoId: 0, updateValue: TableValue(id: "0", title: "EditUnitTest", todoDate: "2020/01/01 10:00", detail: "詳細編集"))
+            ToDoModel.updateRealm(todoId: 0, updateValue: TableValue(id: "0", title: "EditUnitTest", todoDate: "2020/01/01 10:00", detail: "詳細編集"), date: Date())
             
             
             let todoModel = ToDoModel.findRealm(todoId: 0, createTime: nil)
