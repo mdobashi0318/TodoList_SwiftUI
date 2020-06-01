@@ -6,17 +6,17 @@ target 'TodoList_SwiftUI' do
   use_frameworks!
 
   # Pods for TodoList_SwiftUI
-  pod 'RealmSwift', '4.4.0'
+  pod 'RealmSwift', '5.0.1'
 
   target 'TodoList_SwiftUITests' do
     inherit! :search_paths
     # Pods for testing
-    pod 'RealmSwift', '4.4.0'
+    pod 'RealmSwift', '5.0.1'
   end
 
   target 'TodoList_SwiftUIUITests' do
     # Pods for testing
-    pod 'RealmSwift', '4.4.0'
+    pod 'RealmSwift', '5.0.1'
   end
 
 end
