@@ -65,8 +65,11 @@ struct TodoDetailView: View {
     var deleteAlert: Alert {
         Alert(title: Text("Todoを削除しますか?"),
               primaryButton: .destructive(Text("削除")) {
-                // TODO: 削除した後にクラッシュする
-                ToDoModel.deleteRealm(todoId: self.toDoModel.id, createTime: self.toDoModel.createTime) {
+                
+                ToDoModel.deleteRealm(todoId: self.toDoModel.id, createTime: self.toDoModel.createTime, returnValue: { todo in
+                    /// Todoを削除した時にText()がnilになるためかアプリが落ちるので空のTodoをいれる
+                    self.toDoModel = todo
+                }) {
                     self.presentationMode.wrappedValue.dismiss()
                 }
             },

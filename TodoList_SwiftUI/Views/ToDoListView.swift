@@ -41,7 +41,6 @@ struct ToDoListView: View {
             Text("削除")
         }.alert(isPresented: self.$isDeleteFlag) {
             Alert(title: Text("全件削除しますか?"), primaryButton: .destructive(Text("削除")) {
-                // TODO: 削除した後にクラッシュする
                 ToDoModel.allDelete()
                 }, secondaryButton: .cancel(Text("キャンセル")))
         }
@@ -55,9 +54,9 @@ struct ToDoListView: View {
                 if self.toDoviewModel.todoModel.count == 0 {
                     Text("ToDoが登録されていません")
                 } else {
-                    ForEach(self.toDoviewModel.todoModel, id: \.createTime) { toDoModel in
-                        NavigationLink(destination: TodoDetailView(toDoModel: toDoModel)) {
-                            ToDoRow(todoModel: toDoModel)
+                    ForEach(0..<self.toDoviewModel.todoModel.count, id: \.self) { row in
+                        NavigationLink(destination: TodoDetailView(toDoModel: self.toDoviewModel.todoModel[row])) {
+                            ToDoRow(todoModel: self.toDoviewModel.todoModel[row])
                         }
                     }
                 }

@@ -178,10 +178,17 @@ class ToDoModel: Object {
     ///   - vc: 呼び出し元のViewController
     ///   - todoId: TodoId
     ///   - createTime: Todoの作成時間
+    ///   - returnValue: 空のTodoを返す
     ///   - completion: 削除完了後の動作
-    class func deleteRealm(todoId: String, createTime: String?, completion: () ->Void) {
+    class func deleteRealm(todoId: String, createTime: String?,returnValue: (ToDoModel) -> Void , completion: () ->Void) {
         guard let realm = initRealm() else { return }
         let toDoModel: ToDoModel = (realm.objects(ToDoModel.self).filter("id == '\(todoId)'").first!)
+        
+        let todo = ToDoModel()
+        todo.toDoName = ""
+        todo.toDo = ""
+        todo.todoDate = ""
+        returnValue(todo)
         
         UNUserNotificationCenter
             .current()
