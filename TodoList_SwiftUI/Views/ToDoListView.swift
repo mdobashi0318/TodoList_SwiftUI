@@ -54,7 +54,7 @@ struct ToDoListView: View {
                 if self.toDoviewModel.todoModel.count == 0 {
                     Text("ToDoが登録されていません")
                 } else {
-                    ForEach(0..<self.toDoviewModel.todoModel.freeze().count, id: \.self) { row in
+                    ForEach(0..<self.toDoviewModel.todoModel.count, id: \.self) { row in
                         NavigationLink(destination: TodoDetailView(toDoModel: self.toDoviewModel.todoModel[row])) {
                             ToDoRow(todoModel: self.toDoviewModel.todoModel[row])
                         }
