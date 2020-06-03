@@ -31,4 +31,15 @@ struct Format {
         return s_Date
     }
     
+    
+    
+    /// Dateのフォーマットを設定しStringを返す
+    func dateFormat() -> Date {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd HH:mm"
+        formatter.locale = Locale(identifier: "ja_JP")
+        let s_Date:String = formatter.string(from: Date())
+        
+        return formatter.date(from: s_Date)!
+    }
 }
