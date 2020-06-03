@@ -238,7 +238,7 @@ let todomodel:[ToDoModel] = {
         
     let todo1 = ToDoModel()
     todo1.toDoName = "TODOName1"
-    todo1.todoDate = "2020/01/01 00:00:01"
+    todo1.todoDate = Format().stringFromDate(date: Date())
     todo1.toDo = "TODO詳細1"
     todo1.createTime = "2020/01/01 00:00:01"
     
