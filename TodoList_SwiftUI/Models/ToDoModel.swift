@@ -18,22 +18,7 @@ class ToDoViewModel: ObservableObject {
     
     /// Realmのモデルを参照しない時はTestデータの配列を使う
 //    @Published var todoModel: [ToDoModel] = todomodel
-    
-    
-    
-    /// 更新するTodoを返す
-    class func todoUpdate(_ model: ToDoModel) -> ToDoModel {
-        let todo = ToDoModel()
-        todo.id = model.id
-        todo.toDoName = model.toDoName
-        todo.todoDate = model.todoDate
-        todo.toDo = model.toDo
-        
-        return todo
-    }
-    
 
-    
 }
 
 
@@ -211,25 +196,7 @@ class ToDoModel: Object {
     
     
     /// 全件削除
-    /// - Parameters:
-    ///   - vc: 呼び出し元のViewController
-    ///   - completion: 削除完了後の動作
-    class func allDeleteRealm(_ vc: UIViewController, completion:@escaping () ->Void) {
-        guard let realm = initRealm() else { return }
-        
-        
-            try! realm.write {
-                realm.deleteAll()
-            }
-            completion()
-
-        
-        
-    }
-    
-    
     class func allDelete() {
-
         let realm = try! Realm()
         
         try! realm.write {
@@ -251,7 +218,7 @@ class ToDoModel: Object {
         
         
         //通知する日付を設定
-        let date:Date = ToDoModel.dateFromString(string: todoModel.todoDate)
+        let date:Date = Format().dateFromString(string: todoModel.todoDate)
         let calendar = Calendar.current
         let dateComponent = calendar.dateComponents([.year, .month, .day, .hour, .minute] , from: date)
         let trigger:UNCalendarNotificationTrigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: false)
@@ -264,57 +231,11 @@ class ToDoModel: Object {
         
     }
     
-    
-    
-    class func dateFromString(string: String) -> Date {
-           let formatter: DateFormatter = DateFormatter()
-           formatter.calendar = Calendar(identifier: .gregorian)
-           formatter.dateFormat = "yyyy/MM/dd HH:mm"
-           return formatter.date(from: string)!
-       }
-    
-    
-    
-    /// Dateのフォーマットを設定
-    class func stringFromDate(date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd HH:mm"
-        formatter.locale = Locale(identifier: "ja_JP")
-        let s_Date:String = formatter.string(from: date)
-        
-        return s_Date
-    }
-    
-    
 }
-
-import Foundation
-
-struct TableValue {
-    let id: String
-    let title:String
-    let date:String
-    let detail:String
-    let createTime:String?
-    
-    init(id:String, title:String, todoDate:String, detail: String, createTime: String? = nil) {
-        self.id = id
-        self.title = title
-        self.date = todoDate
-        self.detail = detail
-        self.createTime = createTime
-    }
-}
-
-
-
-
 
 /// テスト用の配列
 let todomodel:[ToDoModel] = {
-    
-    var todomodel = [ToDoModel]()
-    
+        
     let todo1 = ToDoModel()
     todo1.toDoName = "TODOName1"
     todo1.todoDate = "2020/01/01 00:00:01"
@@ -339,11 +260,7 @@ let todomodel:[ToDoModel] = {
     todo4.todoDate = "2020/01/01 00:00:04"
     todo4.toDo = "TODO詳細4"
     todo4.createTime = "2020/01/01 00:00:04"
+
     
-    todomodel.append(todo1)
-    todomodel.append(todo2)
-    todomodel.append(todo3)
-    todomodel.append(todo4)
-    
-    return todomodel
+    return [todo1, todo2, todo3, todo4]
 }()
