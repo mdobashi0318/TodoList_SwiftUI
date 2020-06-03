@@ -32,6 +32,20 @@ struct ToDoInputView: View {
     }
     
     
+    
+    /// 更新するTodoを返す
+    func todoUpdate(_ model: ToDoModel) -> ToDoModel {
+        let todo = ToDoModel()
+        todo.id = model.id
+        todo.toDoName = model.toDoName
+        todo.todoDate = model.todoDate
+        todo.toDo = model.toDo
+        
+        return todo
+    }
+    
+    
+    
     /// キャンセルボタン
     var cancelButton: some View {
         Button(action: {
@@ -53,7 +67,7 @@ struct ToDoInputView: View {
         Button(action: {
             
             self.isValidate = self.validateCheck()
-            self.toDoModel.todoDate = ToDoModel.stringFromDate(date: self.tododate)
+            self.toDoModel.todoDate = Format().stringFromDate(date: self.tododate)
             if !self.isValidate {
                 
                 if !self.isUpdate {
@@ -159,7 +173,7 @@ struct ToDoInputView: View {
         .padding()
         .onAppear {
             if self.isUpdate {
-                self.toDoModel = ToDoViewModel.todoUpdate(self.toDoModel)
+                self.toDoModel = self.todoUpdate(self.toDoModel)
             }
         }
         .onDisappear {
