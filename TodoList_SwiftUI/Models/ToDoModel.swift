@@ -70,21 +70,17 @@ class ToDoModel: Object {
     /// - Parameters:
     ///   - vc: 呼び出し元のViewController
     ///   - addValue: 登録するTodoの値
-    class func addRealm(addValue:TableValue, date: Date) {
+    class func addRealm(addValue:TableValue, date: Date, result: (Error?) -> () ) {
         
         guard let realm = initRealm() else { return }
         let toDoModel: ToDoModel = ToDoModel()
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
-        formatter.locale = Locale(identifier: "ja_JP")
-        let s_Date:String = formatter.string(from: Date())
         
         toDoModel.id = addValue.id
         toDoModel.toDoName = addValue.title
         toDoModel.todoDate = addValue.date
         toDoModel.toDo = addValue.detail
-        toDoModel.createTime = s_Date
+        toDoModel.createTime = Format().stringFromDate(date: Date(), addSec: true)
         
         do {
             try realm.write() {
@@ -92,9 +88,10 @@ class ToDoModel: Object {
             }
             
             ToDoModel.addNotification(todoModel: toDoModel, date: date)
+            result(nil)
         }
         catch {
-            print("エラーが発生しました")
+            result(error)
         }
     
     }
@@ -105,7 +102,7 @@ class ToDoModel: Object {
     ///   - vc: 呼び出し元のViewController
     ///   - todoId: TodoId
     ///   - updateValue: 更新する値
-    class func updateRealm(todoId: Int, updateValue: TableValue, date: Date) {
+    class func updateRealm(todoId: Int, updateValue: TableValue, date: Date, result: (Error?) -> () ) {
         guard let realm = initRealm() else { return }
         let toDoModel: ToDoModel = (realm.objects(ToDoModel.self).filter("id == '\(String(describing: todoId))'").first!)
         
@@ -116,9 +113,10 @@ class ToDoModel: Object {
                 toDoModel.toDo = updateValue.detail
             }
             ToDoModel.addNotification(todoModel: toDoModel, date: date)
+            result(nil)
         }
         catch {
-            print("エラーが発生しました")
+            result(error)
         }
         
     }
@@ -149,11 +147,6 @@ class ToDoModel: Object {
     class func allFindRealm() -> Results<ToDoModel>? {
         guard let realm = initRealm() else { return nil }
         
-        let resultModel = realm.objects(ToDoModel.self)
-        var quizModel = [ToDoModel]()
-        for model in resultModel {
-            quizModel.append(model)
-        }
         return realm.objects(ToDoModel.self)
     }
     

@@ -24,6 +24,12 @@ struct ToDoInputView: View {
     /// datePickerで選択したDateを格納
     @State var tododate = Date()
     
+    /// Todoの登録失敗アラートの表示フラグ
+    @State var isAddError = false
+    
+    /// Todoの更新失敗アラートの表示フラグ
+    @State var isUpdateError = false
+    
     
     var dateRange: ClosedRange<Date> {
         let min = Calendar.current.date(byAdding: .year, value: -1, to: Date())!
@@ -77,7 +83,17 @@ struct ToDoInputView: View {
                                    title: self.toDoModel.toDoName,
                                    todoDate: self.toDoModel.todoDate,
                                    detail: self.toDoModel.toDo
-                    ), date: self.tododate)
+                    ), date: self.tododate) { error in
+                        
+                        if let _error = error {
+                            print(_error)
+                            self.isAddError.toggle()
+                            
+                        } else {
+                            self.presentationMode.wrappedValue.dismiss()
+                            
+                        }
+                    }
                     
                 } else {
                     ToDoModel.updateRealm(todoId: Int(self.toDoModel.id)!,
@@ -85,9 +101,19 @@ struct ToDoInputView: View {
                                                                   title: self.toDoModel.toDoName,
                                                                   todoDate: self.toDoModel.todoDate,
                                                                   detail: self.toDoModel.toDo
-                    ), date: self.tododate)
+                    ), date: self.tododate) { error in
+                        
+                        if let _error = error {
+                            print(_error)
+                            self.isUpdateError.toggle()
+                            
+                        } else {
+                            self.presentationMode.wrappedValue.dismiss()
+                            
+                        }
+                    }
                 }
-                self.presentationMode.wrappedValue.dismiss()
+                
             }
             
         }) {
@@ -97,6 +123,12 @@ struct ToDoInputView: View {
         .frame(width: 20, height: 20)
         .alert(isPresented: $isValidate) {
             Alert(title: Text("入力されていない項目があります"), dismissButton: .default(Text("閉じる")))
+        }
+        .alert(isPresented: $isAddError) {
+            Alert(title: Text("Todoの登録に失敗しました"), dismissButton: .default(Text("閉じる")))
+        }
+        .alert(isPresented: $isUpdateError) {
+            Alert(title: Text("Todoの更新に失敗しました"), dismissButton: .default(Text("閉じる")))
         }
     }
     
