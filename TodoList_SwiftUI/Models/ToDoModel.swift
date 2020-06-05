@@ -160,7 +160,7 @@ class ToDoModel: Object {
     ///   - completion: 削除完了後の動作
     class func deleteRealm(todoId: String, createTime: String?,returnValue: (ToDoModel) -> Void , completion: () ->Void) {
         guard let realm = initRealm() else { return }
-        let toDoModel: ToDoModel = (realm.objects(ToDoModel.self).filter("id == '\(todoId)'").first!)
+        let toDoModel: ToDoModel = (realm.objects(ToDoModel.self).filter("createTime == '\(String(describing: createTime!))'").first!)
         
         let todo = ToDoModel()
         todo.toDoName = ""
@@ -170,7 +170,7 @@ class ToDoModel: Object {
         
         UNUserNotificationCenter
             .current()
-            .removePendingNotificationRequests(withIdentifiers: [toDoModel.toDoName])
+            .removePendingNotificationRequests(withIdentifiers: [toDoModel.createTime!])
         
         do {
             try realm.write() {
@@ -215,7 +215,7 @@ class ToDoModel: Object {
         let calendar = Calendar.current
         let dateComponent = calendar.dateComponents([.year, .month, .day, .hour, .minute] , from: date)
         let trigger:UNCalendarNotificationTrigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: false)
-        let request:UNNotificationRequest = UNNotificationRequest.init(identifier: content.title, content: content, trigger: trigger)
+        let request:UNNotificationRequest = UNNotificationRequest.init(identifier: todoModel.createTime!, content: content, trigger: trigger)
         
         let center:UNUserNotificationCenter = UNUserNotificationCenter.current()
         center.add(request) { (error) in
