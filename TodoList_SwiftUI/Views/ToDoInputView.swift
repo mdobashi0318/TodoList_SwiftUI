@@ -24,6 +24,12 @@ struct ToDoInputView: View {
     /// datePickerで選択したDateを格納
     @State var tododate = Date()
     
+    /// Todoの登録失敗アラートの表示フラグ
+    @State var isAddError = false
+    
+    /// Todoの更新失敗アラートの表示フラグ
+    @State var isUpdateError = false
+    
     
     var dateRange: ClosedRange<Date> {
         let min = Calendar.current.date(byAdding: .year, value: -1, to: Date())!
@@ -56,6 +62,7 @@ struct ToDoInputView: View {
                 .rotationEffect(.init(degrees: 45))
         }
         .frame(width: 20, height: 20)
+        .accessibility(identifier: "cancelButton")
     }
     
     
@@ -77,7 +84,17 @@ struct ToDoInputView: View {
                                    title: self.toDoModel.toDoName,
                                    todoDate: self.toDoModel.todoDate,
                                    detail: self.toDoModel.toDo
-                    ), date: self.tododate)
+                    ), date: self.tododate) { error in
+                        
+                        if let _error = error {
+                            print(_error)
+                            self.isAddError.toggle()
+                            
+                        } else {
+                            self.presentationMode.wrappedValue.dismiss()
+                            
+                        }
+                    }
                     
                 } else {
                     ToDoModel.updateRealm(todoId: Int(self.toDoModel.id)!,
@@ -85,9 +102,19 @@ struct ToDoInputView: View {
                                                                   title: self.toDoModel.toDoName,
                                                                   todoDate: self.toDoModel.todoDate,
                                                                   detail: self.toDoModel.toDo
-                    ), date: self.tododate)
+                    ), date: self.tododate) { error in
+                        
+                        if let _error = error {
+                            print(_error)
+                            self.isUpdateError.toggle()
+                            
+                        } else {
+                            self.presentationMode.wrappedValue.dismiss()
+                            
+                        }
+                    }
                 }
-                self.presentationMode.wrappedValue.dismiss()
+                
             }
             
         }) {
@@ -98,6 +125,13 @@ struct ToDoInputView: View {
         .alert(isPresented: $isValidate) {
             Alert(title: Text("入力されていない項目があります"), dismissButton: .default(Text("閉じる")))
         }
+        .alert(isPresented: $isAddError) {
+            Alert(title: Text("Todoの登録に失敗しました"), dismissButton: .default(Text("閉じる")))
+        }
+        .alert(isPresented: $isUpdateError) {
+            Alert(title: Text("Todoの更新に失敗しました"), dismissButton: .default(Text("閉じる")))
+        }
+        .accessibility(identifier: "todoAddButton")
     }
     
     
@@ -120,7 +154,9 @@ struct ToDoInputView: View {
         return VStack(alignment: .leading) {
             Text("タイトル")
                 .font(.headline)
+                .accessibility(identifier: "titlelabel")
             TextField("タイトルを入力してください", text: $toDoModel.toDoName)
+                .accessibility(identifier: "titleTextField")
         }
         .frame(height: 50, alignment: .leading)
         .padding(.top)
@@ -133,7 +169,9 @@ struct ToDoInputView: View {
             DatePicker(selection: self.$tododate, in: dateRange) {
                 Text("期限")
                     .font(.headline)
+                    .accessibility(identifier: "todoDateLabel")
             }
+            .accessibility(identifier: "todoDatePicker")
         }
         .padding(.top)
     }
@@ -144,7 +182,9 @@ struct ToDoInputView: View {
         return VStack(alignment: .leading) {
             Text("詳細")
                 .font(.headline)
+                .accessibility(identifier: "detailLabel")
             TextField("詳細を入力してください", text: $toDoModel.toDo)
+            .accessibility(identifier: "detailTextField")
             
         }
         .frame(height: 50, alignment: .leading)
@@ -181,6 +221,7 @@ struct ToDoInputView: View {
                 self.toDoModel = ToDoModel()
             }
         }
+        .accessibility(identifier: "ToDoInputView")
     }
     
     

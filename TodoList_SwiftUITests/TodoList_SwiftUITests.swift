@@ -24,7 +24,8 @@ class TodoList_SwiftUITests: XCTestCase {
         
         func test_AddModel() {
             
-            ToDoModel.addRealm(addValue: TableValue(id: "0", title: "UnitTest", todoDate: "2020/01/01 00:00", detail: "詳細"),date: Date())
+            ToDoModel.addRealm(addValue: TableValue(id: "0", title: "UnitTest", todoDate: "2020/01/01 00:00", detail: "詳細"),date: Date()) { _ in
+            }
             let todoModel = ToDoModel.findRealm(todoId: 0, createTime: nil)
             
             XCTAssert(todoModel?.id == "0", "idが登録されていない")
@@ -37,10 +38,12 @@ class TodoList_SwiftUITests: XCTestCase {
         
         
         func test_EditModel() {
-            ToDoModel.addRealm(addValue: TableValue(id: "0", title: "UnitTest", todoDate: "2020/01/01 00:00", detail: "詳細"), date: Date())
+            ToDoModel.addRealm(addValue: TableValue(id: "0", title: "UnitTest", todoDate: "2020/01/01 00:00", detail: "詳細"), date: Date()) { _ in
+                       }
         
             
-            ToDoModel.updateRealm(todoId: 0, updateValue: TableValue(id: "0", title: "EditUnitTest", todoDate: "2020/01/01 10:00", detail: "詳細編集"), date: Date())
+            ToDoModel.updateRealm(todoId: 0, updateValue: TableValue(id: "0", title: "EditUnitTest", todoDate: "2020/01/01 10:00", detail: "詳細編集"), date: Date()) { _ in
+            }
             
             
             let todoModel = ToDoModel.findRealm(todoId: 0, createTime: nil)

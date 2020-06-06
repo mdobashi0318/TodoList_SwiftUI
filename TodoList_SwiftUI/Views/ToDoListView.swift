@@ -29,6 +29,7 @@ struct ToDoListView: View {
             ToDoInputView(toDoModel: .constant(ToDoModel()), isUpdate: false)
         }
         .frame(width: 30, height: 30)
+        .accessibility(identifier: "addButton")
     }
     
     
@@ -44,6 +45,7 @@ struct ToDoListView: View {
                 ToDoModel.allDelete()
                 }, secondaryButton: .cancel(Text("キャンセル")))
         }
+        .accessibility(identifier: "allDeleteButton")
     }
     
     
@@ -68,6 +70,7 @@ struct ToDoListView: View {
             .navigationBarTitle("ToDoList")
             .navigationBarItems(leading: allDeleteButton ,trailing: addButton)
         }
+        .accessibility(identifier: "ToDoList")
     }
 }
 

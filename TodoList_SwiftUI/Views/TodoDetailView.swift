@@ -44,6 +44,7 @@ struct TodoDetailView: View {
             deleteAlert
         }
         .frame(width: 30, height: 30)
+        .accessibility(identifier: "todoActionButton")
     }
     
     
@@ -80,22 +81,35 @@ struct TodoDetailView: View {
     
     
     var body: some View {
-        List {
-            VStack(alignment: .leading) {
-                Text("期限")
+        VStack(alignment: .leading) {
+            Divider()
+            Text("期限")
                 .font(.headline)
+                .padding(.top)
+            HStack {
                 Text(toDoModel.todoDate)
+                    .accessibility(identifier: "dateLabel")
+                if toDoModel.todoDate != "" {
+                    Text(Format().dateFromString(string: toDoModel.todoDate) > Format().dateFormat() ? "" : "期限切れ")
+                        .font(.caption)
+                        .foregroundColor(.red)
+                }
             }
-            .frame(width: 300, height: 50, alignment: .leading)
-            
-            VStack(alignment: .leading) {
+                
+                    
+                Divider()
+                
                 Text("詳細")
                 .font(.headline)
+                .padding(.top)
                 Text(toDoModel.toDo)
-            }
-            .frame(width: 300, height: 50, alignment: .leading)
-            
+                .accessibility(identifier: "todoDetaillabel")
+                
+                Divider()
+                Spacer()
         }
+            .frame(width: UIScreen.main.bounds.width, alignment: .leading)
+            .padding(.leading)
         .navigationBarTitle(toDoModel.toDoName)
         .navigationBarItems(trailing: addButton)
     }
@@ -106,5 +120,8 @@ struct TodoDetailView: View {
 struct TodoDetail_Previews: PreviewProvider {
     static var previews: some View {
         TodoDetailView(toDoModel: todomodel[0])
+//            .colorScheme(.dark)
+//            .background(Color(.systemBackground))
+//            .environment(\.colorScheme, .dark)
     }
 }
