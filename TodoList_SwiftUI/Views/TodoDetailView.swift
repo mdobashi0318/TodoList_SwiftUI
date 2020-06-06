@@ -44,6 +44,7 @@ struct TodoDetailView: View {
             deleteAlert
         }
         .frame(width: 30, height: 30)
+        .accessibility(identifier: "todoActionButton")
     }
     
     
@@ -80,17 +81,21 @@ struct TodoDetailView: View {
     
     
     var body: some View {
-            VStack(alignment: .leading) {
-                Divider()
-                Text("期限")
+        VStack(alignment: .leading) {
+            Divider()
+            Text("期限")
                 .font(.headline)
                 .padding(.top)
-                HStack {
+            HStack {
                 Text(toDoModel.todoDate)
+                    .accessibility(identifier: "dateLabel")
+                if toDoModel.todoDate != "" {
                     Text(Format().dateFromString(string: toDoModel.todoDate) > Format().dateFormat() ? "" : "期限切れ")
                         .font(.caption)
                         .foregroundColor(.red)
                 }
+            }
+                
                     
                 Divider()
                 
@@ -98,6 +103,7 @@ struct TodoDetailView: View {
                 .font(.headline)
                 .padding(.top)
                 Text(toDoModel.toDo)
+                .accessibility(identifier: "todoDetaillabel")
                 
                 Divider()
                 Spacer()

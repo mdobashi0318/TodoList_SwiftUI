@@ -62,6 +62,7 @@ struct ToDoInputView: View {
                 .rotationEffect(.init(degrees: 45))
         }
         .frame(width: 20, height: 20)
+        .accessibility(identifier: "cancelButton")
     }
     
     
@@ -130,6 +131,7 @@ struct ToDoInputView: View {
         .alert(isPresented: $isUpdateError) {
             Alert(title: Text("Todoの更新に失敗しました"), dismissButton: .default(Text("閉じる")))
         }
+        .accessibility(identifier: "todoAddButton")
     }
     
     
@@ -152,7 +154,9 @@ struct ToDoInputView: View {
         return VStack(alignment: .leading) {
             Text("タイトル")
                 .font(.headline)
+                .accessibility(identifier: "titlelabel")
             TextField("タイトルを入力してください", text: $toDoModel.toDoName)
+                .accessibility(identifier: "titleTextField")
         }
         .frame(height: 50, alignment: .leading)
         .padding(.top)
@@ -165,7 +169,9 @@ struct ToDoInputView: View {
             DatePicker(selection: self.$tododate, in: dateRange) {
                 Text("期限")
                     .font(.headline)
+                    .accessibility(identifier: "todoDateLabel")
             }
+            .accessibility(identifier: "todoDatePicker")
         }
         .padding(.top)
     }
@@ -176,7 +182,9 @@ struct ToDoInputView: View {
         return VStack(alignment: .leading) {
             Text("詳細")
                 .font(.headline)
+                .accessibility(identifier: "detailLabel")
             TextField("詳細を入力してください", text: $toDoModel.toDo)
+            .accessibility(identifier: "detailTextField")
             
         }
         .frame(height: 50, alignment: .leading)
@@ -213,6 +221,7 @@ struct ToDoInputView: View {
                 self.toDoModel = ToDoModel()
             }
         }
+        .accessibility(identifier: "ToDoInputView")
     }
     
     
