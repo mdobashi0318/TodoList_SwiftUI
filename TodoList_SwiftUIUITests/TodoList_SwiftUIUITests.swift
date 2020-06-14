@@ -64,6 +64,35 @@ class TodoList_SwiftUIUITests: XCTestCase {
     }
     
     
+    func test_validateAlert() throws {
+        // UI tests must launch the application that they test.
+        let app = XCUIApplication()
+        app.launch()
+        
+        app.buttons["addButton"].tap()
+        sleep(1)
+        
+        
+        
+        app.buttons["todoAddButton"].tap()
+        sleep(1)
+        
+        XCTAssertTrue(app.alerts["入力されていない項目があります"].exists, "未入力項目あり時のアラートが表示されない")
+        app.alerts.buttons["閉じる"].tap()
+        
+        app.textFields["titleTextField"].tap()
+        app.typeText(addTitle)
+        
+        app.buttons["todoAddButton"].tap()
+        sleep(1)
+        
+        XCTAssertTrue(app.alerts["入力されていない項目があります"].exists, "未入力項目あり時のアラートが表示されない")
+        app.alerts.buttons["閉じる"].tap()
+        sleep(1)
+        
+    }
+    
+    
     func test_toDoUpdateTest() throws {
         let app = XCUIApplication()
         addTodo()
