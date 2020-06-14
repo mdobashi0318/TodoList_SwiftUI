@@ -90,13 +90,12 @@ struct TodoDetailView: View {
                 Text(toDoModel.todoDate)
                     .accessibility(identifier: "dateLabel")
                 if toDoModel.todoDate != "" {
-                    Text(Format().dateFromString(string: toDoModel.todoDate) > Format().dateFormat() ? "" : "期限切れ")
+                    Text(Format().dateFromString(string: toDoModel.todoDate)! > Format().dateFormat() ? "" : "期限切れ")
                         .font(.caption)
                         .foregroundColor(.red)
                 }
             }
-                
-                    
+    
                 Divider()
                 
                 Text("詳細")

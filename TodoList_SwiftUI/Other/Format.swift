@@ -28,9 +28,9 @@ struct Format {
     
     
     /// Stringのフォーマットを設定Dateを返す
-    func dateFromString(string: String, addSec: Bool = false) -> Date {
+    func dateFromString(string: String, addSec: Bool = false) -> Date? {
         let formatter: DateFormatter = _dateFormatter(addSec: addSec)
-        return formatter.date(from: string)!
+        return formatter.date(from: string)
     }
     
     

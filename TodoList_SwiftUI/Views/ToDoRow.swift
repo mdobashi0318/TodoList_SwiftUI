@@ -17,7 +17,7 @@ struct ToDoRow: View {
             .accessibility(identifier: "titlelabel")
             HStack {
             Text(todoModel.todoDate)
-                Text(Format().dateFromString(string: todoModel.todoDate) > Format().dateFormat() ? "" : "期限切れ")
+                Text(Format().dateFromString(string: todoModel.todoDate)! > Format().dateFormat() ? "" : "期限切れ")
                     .font(.caption)
                     .foregroundColor(.red)
                 .accessibility(identifier: "dateLabel")

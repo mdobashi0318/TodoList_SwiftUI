@@ -30,6 +30,7 @@ class TodoList_SwiftUIUITests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         app.buttons["allDeleteButton"].tap()
+        sleep(1)
         app.alerts.buttons["削除"].tap()
     }
 
@@ -48,11 +49,13 @@ class TodoList_SwiftUIUITests: XCTestCase {
         XCTAssertTrue(app.buttons["allDeleteButton"].exists, "全件削除用のボタンがない")
         
         app.buttons["addButton"].tap()
+        sleep(1)
         
         app.textFields["titleTextField"].tap()
         app.typeText(addTitle)
+        app.buttons["Return"].tap()
         
-        
+        sleep(1)
         app.textFields["detailTextField"].tap()
         app.typeText(addDetail)
         
@@ -104,16 +107,20 @@ class TodoList_SwiftUIUITests: XCTestCase {
         
         
         app.buttons["todoActionButton"].tap()
+        sleep(1)
         app.sheets.buttons["編集"].tap()
         
+        sleep(1)
         app.textFields["titleTextField"].tap()
         sleep(1)
         for _ in 0 ..< addTitle.count {
             app.keys["delete"].tap()
         }
         app.typeText(updateTitle)
+        app.buttons["Return"].tap()
         
-        app.textFields["detailTextField"].tap()
+        sleep(1)
+        app.textFields["detailTextField"].press(forDuration: 3)
         sleep(1)
         for _ in 0 ..< addDetail.count {
             app.keys["delete"].tap()
@@ -146,10 +153,12 @@ class TodoList_SwiftUIUITests: XCTestCase {
         XCTAssertTrue(app.navigationBars.staticTexts.element(boundBy: 0).label == addTitle, "タイトルが表示されていない")
         XCTAssertTrue(app.staticTexts["dateLabel"].label != "", "期限が表示されていないされていない")
         XCTAssertTrue(app.staticTexts["todoDetaillabel"].label == addDetail, "詳細が表示されていない")
-        
+        sleep(1)
         
         app.buttons["todoActionButton"].tap()
+        sleep(1)
         app.sheets.buttons["削除"].tap()
+        sleep(1)
         app.alerts.buttons["削除"].tap()
         sleep(1)
         
@@ -192,9 +201,10 @@ class TodoList_SwiftUIUITests: XCTestCase {
         
         app.textFields["titleTextField"].tap()
         app.typeText(addTitle)
-        
-        
+        app.buttons["Return"].tap()
+        sleep(1)
         app.textFields["detailTextField"].tap()
+        sleep(1)
         app.typeText(addDetail)
         
         app.buttons["todoAddButton"].tap()
