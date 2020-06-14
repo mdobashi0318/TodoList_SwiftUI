@@ -48,6 +48,17 @@ class ToDoModel: Object {
     
     
     
+    // MARK: init
+    
+    convenience init(id: String, toDoName: String, todoDate: String, toDo: String, createTime: String?) {
+        self.init()
+        
+        self.id = id
+        self.toDoName = toDoName
+        self.todoDate = todoDate
+        self.toDo = toDo
+        self.createTime = createTime
+    }
     
     
     /// Realmのインスタンス化
@@ -87,7 +98,9 @@ class ToDoModel: Object {
                 realm.add(toDoModel)
             }
             
-            ToDoModel.addNotification(todoModel: toDoModel, date: date)
+            NotificationManager().addNotification(toDoModel: toDoModel) { _ in
+                /// 何もしない
+            }
             result(nil)
         }
         catch {
@@ -112,7 +125,9 @@ class ToDoModel: Object {
                 toDoModel.todoDate = updateValue.date
                 toDoModel.toDo = updateValue.detail
             }
-            ToDoModel.addNotification(todoModel: toDoModel, date: date)
+            NotificationManager().addNotification(toDoModel: toDoModel) { _ in
+                /// 何もしない
+            }
             result(nil)
         }
         catch {
@@ -168,9 +183,7 @@ class ToDoModel: Object {
         todo.todoDate = ""
         returnValue(todo)
         
-        UNUserNotificationCenter
-            .current()
-            .removePendingNotificationRequests(withIdentifiers: [toDoModel.createTime!])
+        NotificationManager().removeNotification([toDoModel.createTime!])
         
         do {
             try realm.write() {
@@ -195,33 +208,7 @@ class ToDoModel: Object {
         try! realm.write {
             realm.deleteAll()
         }
-    }
-    
-    
-    /// 通知を設定する
-    class func addNotification(todoModel: ToDoModel, date: Date) {
-        
-        let content:UNMutableNotificationContent = UNMutableNotificationContent()
-        
-        content.title = todoModel.toDoName
-        
-        content.body = todoModel.toDo
-        
-        content.sound = UNNotificationSound.default
-        
-        
-        //通知する日付を設定
-        let date:Date = Format().dateFromString(string: todoModel.todoDate)
-        let calendar = Calendar.current
-        let dateComponent = calendar.dateComponents([.year, .month, .day, .hour, .minute] , from: date)
-        let trigger:UNCalendarNotificationTrigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: false)
-        let request:UNNotificationRequest = UNNotificationRequest.init(identifier: todoModel.createTime!, content: content, trigger: trigger)
-        
-        let center:UNUserNotificationCenter = UNUserNotificationCenter.current()
-        center.add(request) { (error) in
-            
-        }
-        
+        NotificationManager().allRemoveNotification()
     }
     
 }

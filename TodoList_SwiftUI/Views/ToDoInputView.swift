@@ -12,10 +12,7 @@ struct ToDoInputView: View {
     @Binding var toDoModel: ToDoModel
     @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
     
-    /// 項目が入力されているかの判断し、入力されていなければアラートを表示させる
-    ///
-    /// true:  入力されていない項目があるのでアラートを表示させる
-    /// false: 項目が入力されているのでTodoの追加、更新処理をする
+    /// バリデーションアラートの表示フラグ
     @State var isValidate = false
     
     /// Todoの更新か追加かを判断
@@ -29,6 +26,9 @@ struct ToDoInputView: View {
     
     /// Todoの更新失敗アラートの表示フラグ
     @State var isUpdateError = false
+    
+    /// Alertの表示フラグ
+    @State var isShowAlert = false
     
     
     var dateRange: ClosedRange<Date> {
@@ -69,92 +69,123 @@ struct ToDoInputView: View {
     
     
     
+    
+    fileprivate func addTodo() {
+        let id: String = String(ToDoModel.allFindRealm()!.count + 1)
+        ToDoModel.addRealm(addValue:
+            TableValue(id: id,
+                       title: self.toDoModel.toDoName,
+                       todoDate: self.toDoModel.todoDate,
+                       detail: self.toDoModel.toDo
+        ), date: self.tododate) { error in
+            
+            if let _error = error {
+                print(_error)
+                self.isAddError = true
+                self.isShowAlert = true
+                
+            } else {
+                self.presentationMode.wrappedValue.dismiss()
+                
+            }
+        }
+    }
+    
+    fileprivate func updateTodo() {
+        ToDoModel.updateRealm(todoId: Int(self.toDoModel.id)!,
+                              updateValue: TableValue(id: self.toDoModel.id,
+                                                      title: self.toDoModel.toDoName,
+                                                      todoDate: self.toDoModel.todoDate,
+                                                      detail: self.toDoModel.toDo
+        ), date: self.tododate) { error in
+            
+            if let _error = error {
+                print(_error)
+                self.isUpdateError = true
+                self.isShowAlert = true
+                
+            } else {
+                self.presentationMode.wrappedValue.dismiss()
+                
+            }
+        }
+    }
+    
     /// ToDo追加ボタン
     var addButton: some View {
         Button(action: {
-            
-            self.isValidate = self.validateCheck()
             self.toDoModel.todoDate = Format().stringFromDate(date: self.tododate)
-            if !self.isValidate {
-                
-                if !self.isUpdate {
-                    let id: String = String(ToDoModel.allFindRealm()!.count + 1)
-                    ToDoModel.addRealm(addValue:
-                        TableValue(id: id,
-                                   title: self.toDoModel.toDoName,
-                                   todoDate: self.toDoModel.todoDate,
-                                   detail: self.toDoModel.toDo
-                    ), date: self.tododate) { error in
+            self.validateCheck() { result in
+                if result == false {
+                    if !self.isUpdate {
+                        self.addTodo()
                         
-                        if let _error = error {
-                            print(_error)
-                            self.isAddError.toggle()
-                            
-                        } else {
-                            self.presentationMode.wrappedValue.dismiss()
-                            
-                        }
+                    } else {
+                        self.updateTodo()
+                        
                     }
-                    
                 } else {
-                    ToDoModel.updateRealm(todoId: Int(self.toDoModel.id)!,
-                                          updateValue: TableValue(id: self.toDoModel.id,
-                                                                  title: self.toDoModel.toDoName,
-                                                                  todoDate: self.toDoModel.todoDate,
-                                                                  detail: self.toDoModel.toDo
-                    ), date: self.tododate) { error in
-                        
-                        if let _error = error {
-                            print(_error)
-                            self.isUpdateError.toggle()
-                            
-                        } else {
-                            self.presentationMode.wrappedValue.dismiss()
-                            
-                        }
-                    }
-                }
-                
+                    self.isValidate = true
+                    self.isShowAlert = true
+                    
+                }   
             }
-            
         }) {
             Image(systemName: "plus")
                 .resizable()
         }
         .frame(width: 20, height: 20)
-        .alert(isPresented: $isValidate) {
-            Alert(title: Text("入力されていない項目があります"), dismissButton: .default(Text("閉じる")))
+        .alert(isPresented: $isShowAlert) {
+            if isAddError {
+                return Alert(title: Text("Todoの登録に失敗しました"), dismissButton: .default(Text("閉じる")) {
+                    self.isAddError = false
+                    })
+                
+            } else if isUpdateError {
+                return Alert(title: Text("Todoの更新に失敗しました"), dismissButton: .default(Text("閉じる")) {
+                    self.isUpdateError = false
+                    })
+                
+            } else {
+                return Alert(title: Text("入力されていない項目があります"), dismissButton: .default(Text("閉じる")) {
+                    self.isValidate = false
+                    })
+                
+            }
         }
-        .alert(isPresented: $isAddError) {
-            Alert(title: Text("Todoの登録に失敗しました"), dismissButton: .default(Text("閉じる")))
-        }
-        .alert(isPresented: $isUpdateError) {
-            Alert(title: Text("Todoの更新に失敗しました"), dismissButton: .default(Text("閉じる")))
-        }
+            
         .accessibility(identifier: "todoAddButton")
     }
     
     
     /// バリデーションチェック
     /// テキストフィールドにテキストが入っていなければtrueを返し、アラートを表示させる
-    func validateCheck() -> Bool {
-        if toDoModel.toDoName.isEmpty {
-            return true
+    func validateCheck(callBask: (Bool) -> ()) {
+        if toDoModel.toDoName.isEmpty || toDoModel.toDo.isEmpty {
+            callBask(true)
+            
+        } else {
+            callBask(false)
+            
         }
-        
-        if toDoModel.toDo.isEmpty {
-            return true
-        }
-        return false
     }
     
+    /// 「*必須」ラベル
+    fileprivate func requiredLabel() -> Text {
+        return Text("*必須")
+            .font(.caption)
+            .foregroundColor(.red)
+    }
     
     /// タイトル入力テキストフィールド
     fileprivate func todoNameTextField() -> some View {
         return VStack(alignment: .leading) {
-            Text("タイトル")
-                .font(.headline)
-                .accessibility(identifier: "titlelabel")
+            HStack {
+                Text("タイトル")
+                    .font(.headline)
+                    .accessibility(identifier: "titlelabel")
+                requiredLabel()
+            }
             TextField("タイトルを入力してください", text: $toDoModel.toDoName)
                 .accessibility(identifier: "titleTextField")
         }
@@ -180,9 +211,12 @@ struct ToDoInputView: View {
     /// 詳細入力テキストフィールド
     fileprivate func todoDetailTextField() -> some View {
         return VStack(alignment: .leading) {
-            Text("詳細")
-                .font(.headline)
-                .accessibility(identifier: "detailLabel")
+            HStack {
+                Text("詳細")
+                    .font(.headline)
+                    .accessibility(identifier: "detailLabel")
+                requiredLabel()
+            }
             TextField("詳細を入力してください", text: $toDoModel.toDo)
             .accessibility(identifier: "detailTextField")
             
