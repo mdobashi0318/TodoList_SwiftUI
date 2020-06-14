@@ -170,13 +170,22 @@ struct ToDoInputView: View {
         }
     }
     
+    /// 「*必須」ラベル
+    fileprivate func requiredLabel() -> Text {
+        return Text("*必須")
+            .font(.caption)
+            .foregroundColor(.red)
+    }
     
     /// タイトル入力テキストフィールド
     fileprivate func todoNameTextField() -> some View {
         return VStack(alignment: .leading) {
-            Text("タイトル")
-                .font(.headline)
-                .accessibility(identifier: "titlelabel")
+            HStack {
+                Text("タイトル")
+                    .font(.headline)
+                    .accessibility(identifier: "titlelabel")
+                requiredLabel()
+            }
             TextField("タイトルを入力してください", text: $toDoModel.toDoName)
                 .accessibility(identifier: "titleTextField")
         }
@@ -202,9 +211,12 @@ struct ToDoInputView: View {
     /// 詳細入力テキストフィールド
     fileprivate func todoDetailTextField() -> some View {
         return VStack(alignment: .leading) {
-            Text("詳細")
-                .font(.headline)
-                .accessibility(identifier: "detailLabel")
+            HStack {
+                Text("詳細")
+                    .font(.headline)
+                    .accessibility(identifier: "detailLabel")
+                requiredLabel()
+            }
             TextField("詳細を入力してください", text: $toDoModel.toDo)
             .accessibility(identifier: "detailTextField")
             
