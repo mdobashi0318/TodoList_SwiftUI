@@ -224,20 +224,20 @@ let todomodel:[ToDoModel] = {
     
     let todo2 = ToDoModel()
     todo2.toDoName = "TODOName2"
-    todo2.todoDate = "2020/01/01 00:00:02"
+    todo2.todoDate = Format().stringFromDate(date: Date())
     todo2.toDo = "TODO詳細2"
     todo2.createTime = "2020/01/01 00:00:02"
     
     let todo3 = ToDoModel()
     todo3.toDoName = "TODOName3"
-    todo3.todoDate = "2020/01/01 00:00:03"
+    todo3.todoDate = Format().stringFromDate(date: Date())
     todo3.toDo = "TODO詳細3"
     todo3.createTime = "2020/01/01 00:00:03"
     
     
     let todo4 = ToDoModel()
     todo4.toDoName = "TODOName4"
-    todo4.todoDate = "2020/01/01 00:00:04"
+    todo4.todoDate = Format().stringFromDate(date: Date())
     todo4.toDo = "TODO詳細4"
     todo4.createTime = "2020/01/01 00:00:04"
 
