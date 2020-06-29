@@ -73,11 +73,12 @@ struct ToDoInputView: View {
     fileprivate func addTodo() {
         let id: String = String(ToDoModel.allFindRealm()!.count + 1)
         ToDoModel.addRealm(addValue:
-            TableValue(id: id,
-                       title: self.toDoModel.toDoName,
+            ToDoModel(id: id,
+                       toDoName: self.toDoModel.toDoName,
                        todoDate: self.toDoModel.todoDate,
-                       detail: self.toDoModel.toDo
-        ), date: self.tododate) { error in
+                       toDo: self.toDoModel.toDo,
+                       createTime: nil
+        )) { error in
             
             if let _error = error {
                 print(_error)
@@ -92,12 +93,12 @@ struct ToDoInputView: View {
     }
     
     fileprivate func updateTodo() {
-        ToDoModel.updateRealm(todoId: Int(self.toDoModel.id)!,
-                              updateValue: TableValue(id: self.toDoModel.id,
-                                                      title: self.toDoModel.toDoName,
-                                                      todoDate: self.toDoModel.todoDate,
-                                                      detail: self.toDoModel.toDo
-        ), date: self.tododate) { error in
+        ToDoModel.updateRealm(updateTodo: ToDoModel(id: self.toDoModel.id,
+                                                     toDoName: self.toDoModel.toDoName,
+                                                     todoDate: self.toDoModel.todoDate,
+                                                     toDo: self.toDoModel.toDo,
+                                                     createTime: self.toDoModel.createTime
+        )) { error in
             
             if let _error = error {
                 print(_error)
