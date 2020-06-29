@@ -23,7 +23,7 @@ struct ToDoRow: View {
                 .accessibility(identifier: "dateLabel")
             }
         }
-        .frame(height: 50, alignment: .leading)
+        .frame(alignment: .leading)
         .padding()
     }
 }
@@ -31,7 +31,7 @@ struct ToDoRow: View {
 struct ToDoRow_Previews: PreviewProvider {
     static var previews: some View {
         ToDoRow(todoModel: todomodel[0])
-            .previewLayout(.fixed(width: UIScreen.main.bounds.width, height: 50))
+            .previewLayout(.fixed(width: UIScreen.main.bounds.width, height: 60))
     }
 }
 
