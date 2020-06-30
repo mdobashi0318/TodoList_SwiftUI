@@ -57,11 +57,10 @@ struct ToDoInputView: View {
         Button(action: {
             self.presentationMode.wrappedValue.dismiss()
         }) {
-            Image(systemName: "plus")
+            Image(systemName: "xmark.circle")
                 .resizable()
-                .rotationEffect(.init(degrees: 45))
         }
-        .frame(width: 20, height: 20)
+        .frame(width: 30, height: 30)
         .accessibility(identifier: "cancelButton")
     }
     
@@ -132,10 +131,10 @@ struct ToDoInputView: View {
                 }   
             }
         }) {
-            Image(systemName: "plus")
+            Image(systemName: "plus.circle")
                 .resizable()
         }
-        .frame(width: 20, height: 20)
+        .frame(width: 30, height: 30)
         .alert(isPresented: $isShowAlert) {
             if isAddError {
                 return Alert(title: Text("Todoの登録に失敗しました"), dismissButton: .default(Text("閉じる")) {

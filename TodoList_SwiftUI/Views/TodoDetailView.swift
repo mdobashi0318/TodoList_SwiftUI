@@ -29,7 +29,7 @@ struct TodoDetailView: View {
         Button(action: {
             self.isActionSheet.toggle()
         }) {
-            Image(systemName: "plus.circle")
+            Image(systemName: "ellipsis.circle")
                 .resizable()
         }
         .actionSheet(isPresented: $isActionSheet) {
