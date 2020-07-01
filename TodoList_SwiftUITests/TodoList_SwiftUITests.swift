@@ -60,4 +60,23 @@ class TodoList_SwiftUITests: XCTestCase {
     }
     
     
+    
+     func test_DeleteModel() {
+         ToDoModel.addRealm(addValue: ToDoModel(id: "0", toDoName: "UnitTest", todoDate: "2020/01/01 00:00", toDo: "詳細", createTime: nil)) { result in
+             XCTAssertNil(result, "エラーが発生している")
+         }
+         
+         let todoModel = ToDoModel.findRealm(todoId: "0", createTime: nil)
+
+        ToDoModel.deleteRealm(todoId: todoModel!.id, createTime: todoModel?.createTime, returnValue: { todo in
+            XCTAssert(todo.toDoName == "", "空文字が返されていない")
+            XCTAssert(todo.todoDate == "", "空文字が返されていない")
+            XCTAssert(todo.toDo == "", "空文字が返されていない")
+            
+        }) {
+            XCTAssert(ToDoModel.allFindRealm()?.count == 0, "Todoが削除されていない")
+        }
+        
+     }
+     
 }
