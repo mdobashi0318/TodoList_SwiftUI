@@ -35,7 +35,7 @@ struct ToDoInputView: View {
     /// Alertの表示フラグ
     @State var isShowAlert = false
     
- 
+    
     
     // MARK: Func
     
@@ -56,10 +56,10 @@ struct ToDoInputView: View {
         let id: String = String(ToDoModel.allFindRealm()!.count + 1)
         ToDoModel.addRealm(addValue:
             ToDoModel(id: id,
-                       toDoName: self.toDoModel.toDoName,
-                       todoDate: self.toDoModel.todoDate,
-                       toDo: self.toDoModel.toDo,
-                       createTime: nil
+                      toDoName: self.toDoModel.toDoName,
+                      todoDate: self.toDoModel.todoDate,
+                      toDo: self.toDoModel.toDo,
+                      createTime: nil
         )) { error in
             
             if let _error = error {
@@ -78,10 +78,10 @@ struct ToDoInputView: View {
     /// Todoのアップデート
     private func updateTodo() {
         ToDoModel.updateRealm(updateTodo: ToDoModel(id: self.toDoModel.id,
-                                                     toDoName: self.toDoModel.toDoName,
-                                                     todoDate: self.toDoModel.todoDate,
-                                                     toDo: self.toDoModel.toDo,
-                                                     createTime: self.toDoModel.createTime
+                                                    toDoName: self.toDoModel.toDoName,
+                                                    todoDate: self.toDoModel.todoDate,
+                                                    toDo: self.toDoModel.toDo,
+                                                    createTime: self.toDoModel.createTime
         )) { error in
             if let _error = error {
                 print(_error)
@@ -125,17 +125,17 @@ struct ToDoInputView: View {
             return Alert(title: Text("入力されていない項目があります"), dismissButton: .default(Text("閉じる")) {
                 self.isValidate = false
                 })
-
+            
         }
     }
     
     
-     private var dateRange: ClosedRange<Date> {
-         let min = Calendar.current.date(byAdding: .year, value: -1, to: Date())!
-         let max = Calendar.current.date(byAdding: .year, value: 1, to: Date())!
-         return min...max
-     }
-     
+    private var dateRange: ClosedRange<Date> {
+        let min = Calendar.current.date(byAdding: .year, value: -1, to: Date())!
+        let max = Calendar.current.date(byAdding: .year, value: 1, to: Date())!
+        return min...max
+    }
+    
     
     
     
@@ -186,7 +186,7 @@ struct ToDoInputView: View {
     }
     
     
-  
+    
     /// 「*必須」ラベル
     private func requiredLabel() -> Text {
         return Text("*必須")
@@ -236,7 +236,7 @@ struct ToDoInputView: View {
                 requiredLabel()
             }
             TextField("詳細を入力してください", text: $toDoModel.toDo)
-            .accessibility(identifier: "detailTextField")
+                .accessibility(identifier: "detailTextField")
             
         }
         .frame(height: 50, alignment: .leading)

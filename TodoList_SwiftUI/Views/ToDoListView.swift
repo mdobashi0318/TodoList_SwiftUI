@@ -10,12 +10,16 @@ import SwiftUI
 
 struct ToDoListView: View {
     
+    // MARK: Properties
+    
     @ObservedObject private var toDoviewModel = ToDoViewModel()
     
     @State var isShowModle = false
     
     @State var isDeleteFlag = false
     
+    
+    // MARK: UI
     
     /// ToDoの追加画面に遷移させるボタン
     var addButton: some View {
@@ -50,6 +54,8 @@ struct ToDoListView: View {
     
     
     
+    // MARK: Body
+    
     var body: some View {
         NavigationView {
             List {
@@ -76,7 +82,7 @@ struct ToDoListView: View {
 }
 
 
-
+// MARK: - Previews
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
