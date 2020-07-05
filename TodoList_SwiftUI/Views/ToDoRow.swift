@@ -14,16 +14,16 @@ struct ToDoRow: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(todoModel.toDoName)
-            .accessibility(identifier: "titlelabel")
+                .accessibility(identifier: "titlelabel")
             HStack {
-            Text(todoModel.todoDate)
+                Text(todoModel.todoDate)
                 Text(Format().dateFromString(string: todoModel.todoDate)! > Format().dateFormat() ? "" : "期限切れ")
                     .font(.caption)
                     .foregroundColor(.red)
-                .accessibility(identifier: "dateLabel")
+                    .accessibility(identifier: "dateLabel")
             }
         }
-        .frame(height: 50, alignment: .leading)
+        .frame(alignment: .leading)
         .padding()
     }
 }
@@ -31,7 +31,7 @@ struct ToDoRow: View {
 struct ToDoRow_Previews: PreviewProvider {
     static var previews: some View {
         ToDoRow(todoModel: todomodel[0])
-            .previewLayout(.fixed(width: UIScreen.main.bounds.width, height: 50))
+            .previewLayout(.fixed(width: UIScreen.main.bounds.width, height: 60))
     }
 }
 

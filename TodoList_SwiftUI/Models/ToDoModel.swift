@@ -79,18 +79,19 @@ class ToDoModel: Object {
     
     /// ToDoを追加する
     /// - Parameters:
-    ///   - vc: 呼び出し元のViewController
     ///   - addValue: 登録するTodoの値
-    class func addRealm(addValue:TableValue, date: Date, result: (Error?) -> () ) {
+    ///   - result: Todoの登録時のエラー
+    /// - Returns: エラーがなければnil、あればエラーを返す
+    class func addRealm(addValue:ToDoModel, result: (Error?) -> () ) {
         
         guard let realm = initRealm() else { return }
         let toDoModel: ToDoModel = ToDoModel()
         
         
         toDoModel.id = addValue.id
-        toDoModel.toDoName = addValue.title
-        toDoModel.todoDate = addValue.date
-        toDoModel.toDo = addValue.detail
+        toDoModel.toDoName = addValue.toDoName
+        toDoModel.todoDate = addValue.todoDate
+        toDoModel.toDo = addValue.toDo
         toDoModel.createTime = Format().stringFromDate(date: Date(), addSec: true)
         
         do {
@@ -110,20 +111,21 @@ class ToDoModel: Object {
     }
     
     
+    
     /// ToDoの更新
     /// - Parameters:
-    ///   - vc: 呼び出し元のViewController
-    ///   - todoId: TodoId
-    ///   - updateValue: 更新する値
-    class func updateRealm(todoId: Int, updateValue: TableValue, date: Date, result: (Error?) -> () ) {
+    ///   - updateTodo: 更新する値
+    ///   - result: Todoの更新時のエラー
+    /// - Returns: エラーがなければnil、あればエラーを返す
+    class func updateRealm(updateTodo: ToDoModel, result: (Error?) -> () ) {
         guard let realm = initRealm() else { return }
-        let toDoModel: ToDoModel = (realm.objects(ToDoModel.self).filter("id == '\(String(describing: todoId))'").first!)
+        let toDoModel: ToDoModel = ToDoModel.findRealm(todoId: updateTodo.id, createTime: updateTodo.createTime)!
         
         do {
             try realm.write() {
-                toDoModel.toDoName = updateValue.title
-                toDoModel.todoDate = updateValue.date
-                toDoModel.toDo = updateValue.detail
+                toDoModel.toDoName = updateTodo.toDoName
+                toDoModel.todoDate = updateTodo.todoDate
+                toDoModel.toDo = updateTodo.toDo
             }
             NotificationManager().addNotification(toDoModel: toDoModel) { _ in
                 /// 何もしない
@@ -139,25 +141,22 @@ class ToDoModel: Object {
     
     /// １件取得
     /// - Parameters:
-    ///   - vc: 呼び出し元のViewController
     ///   - todoId: TodoId
     ///   - createTime: Todoの作成時間
     /// - Returns: 取得したTodoの最初の1件を返す
-    class func findRealm(todoId: Int, createTime: String?) -> ToDoModel? {
+    class func findRealm(todoId: String, createTime: String?) -> ToDoModel? {
         guard let realm = initRealm() else { return nil }
         
         if let _createTime = createTime {
             return (realm.objects(ToDoModel.self).filter("createTime == '\(String(describing: _createTime))'").first)
         } else {
-            return(realm.objects(ToDoModel.self).filter("id == '\(String(describing: todoId))'").first!)
+            return (realm.objects(ToDoModel.self).filter("id == '\(String(describing: todoId))'").first!)
         }
-        
         
     }
     
     
     /// 全件取得
-    /// - Parameter vc: 呼び出し元のViewController
     /// - Returns: 取得したTodoを全件返す
     class func allFindRealm() -> Results<ToDoModel>? {
         guard let realm = initRealm() else { return nil }
@@ -173,9 +172,9 @@ class ToDoModel: Object {
     ///   - createTime: Todoの作成時間
     ///   - returnValue: 空のTodoを返す
     ///   - completion: 削除完了後の動作
-    class func deleteRealm(todoId: String, createTime: String?,returnValue: (ToDoModel) -> Void , completion: () ->Void) {
+    class func deleteRealm(todoId: String, createTime: String?, returnValue: (ToDoModel) -> Void , completion: () ->Void) {
         guard let realm = initRealm() else { return }
-        let toDoModel: ToDoModel = (realm.objects(ToDoModel.self).filter("createTime == '\(String(describing: createTime!))'").first!)
+        let toDoModel: ToDoModel = ToDoModel.findRealm(todoId: todoId, createTime: createTime)!
         
         let todo = ToDoModel()
         todo.toDoName = ""
@@ -195,9 +194,7 @@ class ToDoModel: Object {
         catch {
             print("エラーが発生しました")
         }
-        
-        
-        
+          
     }
     
     
@@ -224,20 +221,20 @@ let todomodel:[ToDoModel] = {
     
     let todo2 = ToDoModel()
     todo2.toDoName = "TODOName2"
-    todo2.todoDate = "2020/01/01 00:00:02"
+    todo2.todoDate = Format().stringFromDate(date: Date())
     todo2.toDo = "TODO詳細2"
     todo2.createTime = "2020/01/01 00:00:02"
     
     let todo3 = ToDoModel()
     todo3.toDoName = "TODOName3"
-    todo3.todoDate = "2020/01/01 00:00:03"
+    todo3.todoDate = Format().stringFromDate(date: Date())
     todo3.toDo = "TODO詳細3"
     todo3.createTime = "2020/01/01 00:00:03"
     
     
     let todo4 = ToDoModel()
     todo4.toDoName = "TODOName4"
-    todo4.todoDate = "2020/01/01 00:00:04"
+    todo4.todoDate = Format().stringFromDate(date: Date())
     todo4.toDo = "TODO詳細4"
     todo4.createTime = "2020/01/01 00:00:04"
 

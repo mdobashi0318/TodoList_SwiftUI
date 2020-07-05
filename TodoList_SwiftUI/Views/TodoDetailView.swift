@@ -10,6 +10,8 @@ import SwiftUI
 
 struct TodoDetailView: View {
     
+    // MARK: Properties
+    
     @State var toDoModel: ToDoModel
     
     /// Todoの編集するためのモーダルを出すフラグ
@@ -24,12 +26,16 @@ struct TodoDetailView: View {
     
     @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
     
+    
+    
+    // MARK: UI
+    
     /// ToDo追加ボタン
     var addButton: some View {
         Button(action: {
             self.isActionSheet.toggle()
         }) {
-            Image(systemName: "plus.circle")
+            Image(systemName: "ellipsis.circle")
                 .resizable()
         }
         .actionSheet(isPresented: $isActionSheet) {
@@ -79,6 +85,7 @@ struct TodoDetailView: View {
     }
     
     
+    // MARK : Body
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -95,26 +102,28 @@ struct TodoDetailView: View {
                         .foregroundColor(.red)
                 }
             }
-    
-                Divider()
-                
-                Text("詳細")
+            
+            Divider()
+            
+            Text("詳細")
                 .font(.headline)
                 .padding(.top)
-                Text(toDoModel.toDo)
+            Text(toDoModel.toDo)
                 .accessibility(identifier: "todoDetaillabel")
-                
-                Divider()
-                Spacer()
+            
+            Divider()
+            Spacer()
         }
-            .frame(width: UIScreen.main.bounds.width, alignment: .leading)
-            .padding(.leading)
+        .frame(width: UIScreen.main.bounds.width, alignment: .leading)
+        .padding(.leading)
         .navigationBarTitle(toDoModel.toDoName)
         .navigationBarItems(trailing: addButton)
     }
 }
 
 
+
+// MARK: - Previews
 
 struct TodoDetail_Previews: PreviewProvider {
     static var previews: some View {
