@@ -7,6 +7,8 @@ target 'TodoList_SwiftUI' do
 
   # Pods for TodoList_SwiftUI
   pod 'RealmSwift', '5.0.1'
+  pod 'NotificationBannerSwift', '~> 3.0.0'
+
 
   target 'TodoList_SwiftUITests' do
     inherit! :search_paths

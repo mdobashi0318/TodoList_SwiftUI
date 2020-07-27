@@ -1,22 +1,34 @@
 PODS:
+  - MarqueeLabel (4.0.2)
+  - NotificationBannerSwift (3.0.2):
+    - MarqueeLabel (~> 4.0.0)
+    - SnapKit (~> 5.0.0)
   - Realm (5.0.1):
     - Realm/Headers (= 5.0.1)
   - Realm/Headers (5.0.1)
   - RealmSwift (5.0.1):
     - Realm (= 5.0.1)
+  - SnapKit (5.0.1)
 
 DEPENDENCIES:
+  - NotificationBannerSwift (~> 3.0.0)
   - RealmSwift (= 5.0.1)
 
 SPEC REPOS:
   trunk:
+    - MarqueeLabel
+    - NotificationBannerSwift
     - Realm
     - RealmSwift
+    - SnapKit
 
 SPEC CHECKSUMS:
+  MarqueeLabel: f762aa681ae201f66c1d511858b171f75d83013a
+  NotificationBannerSwift: 713e20f21b6105f4a36a00e5d9fa414a930d3d8e
   Realm: d36cfc336d76d2e15b13651beb6050f49354de4b
   RealmSwift: f29ae0ceaf4fbaf4803c40bbebd838ea2beb903a
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: c05c74f24fdd9d6d3fb59d029b3a8f3c98c27898
+PODFILE CHECKSUM: 56be26bca7c25204fc3e1639f8b221816b03ac26
 
-COCOAPODS: 1.9.2
+COCOAPODS: 1.9.3
