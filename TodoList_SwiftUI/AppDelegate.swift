@@ -8,6 +8,7 @@
 
 import UIKit
 import UserNotifications
+import NotificationBannerSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -66,7 +67,27 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: (UNNotificationPresentationOptions) -> Void) {
         
-        completionHandler([.alert, .sound])
+        
+        completionHandler([.sound])
+        
+        setNotificationBanner(notification)
+    }
+    
+    
+    /// NotificationBannerをセットする
+    private func setNotificationBanner(_ notification: UNNotification) {
+        let banner = FloatingNotificationBanner(title: notification.request.content.title,
+                                                subtitle: notification.request.content.body,
+                                                style: .success
+        )
+        banner.autoDismiss = false
+        banner.onSwipeUp = {
+            banner.dismiss()
+        }
+        
+        banner.show(queuePosition: .front,
+                    bannerPosition: .top,
+                    cornerRadius: 10)
     }
 }
 
