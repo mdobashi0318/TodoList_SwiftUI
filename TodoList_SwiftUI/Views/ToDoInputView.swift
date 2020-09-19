@@ -247,31 +247,30 @@ struct ToDoInputView: View {
     // MARK: Body
     
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack {
-                HStack {
-                    cancelButton
+        NavigationView {
+            ScrollView(showsIndicators: false) {
+                VStack {
+                    Divider()
+                    todoNameTextField()
+                    todoDatePicker()
+                    todoDetailTextField()
                     Spacer()
-                    addButton
                 }
-                Divider()
-                todoNameTextField()
-                todoDatePicker()
-                todoDetailTextField()
-                Spacer()
+                .frame(height: UIScreen.main.bounds.height)
             }
-            .frame(height: UIScreen.main.bounds.height)
-        }
-        .padding()
-        .onAppear {
-            if self.isUpdate {
-                self.toDoModel = self.todoUpdate(self.toDoModel)
+            .padding()
+            .onAppear {
+                if self.isUpdate {
+                    self.toDoModel = self.todoUpdate(self.toDoModel)
+                }
             }
-        }
-        .onDisappear {
-            if !self.isUpdate {
-                self.toDoModel = ToDoModel()
+            .onDisappear {
+                if !self.isUpdate {
+                    self.toDoModel = ToDoModel()
+                }
             }
+            .navigationBarTitle("ToDo追加")
+            .navigationBarItems(leading: cancelButton ,trailing: addButton)
         }
         .accessibility(identifier: "ToDoInputView")
     }
