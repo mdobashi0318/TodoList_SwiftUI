@@ -30,7 +30,7 @@ struct ToDoListView: View {
             .resizable()
         }
         .sheet(isPresented: $isShowModle) {
-            ToDoInputView(toDoModel: .constant(ToDoModel()), isUpdate: false)
+            ToDoInputView(viewModel: .constant(toDoviewModel), toDoModel: .constant(ToDoModel()), isUpdate: false)
         }
         .frame(width: 30, height: 30)
         .accessibility(identifier: "addButton")

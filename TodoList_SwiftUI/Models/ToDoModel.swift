@@ -14,7 +14,28 @@ import Combine
 
 class ToDoViewModel: ObservableObject {
     
-    @Published var todoModel: Results<ToDoModel> = ToDoModel.allFindRealm()!
+    @Published var todoModel: [ToDoModel] = ToDoModel.allFindRealm()!
+    
+    
+    
+    
+    
+    func addTodo(add: ToDoModel?, success: ()->()?, failure: @escaping (String?)->()) {
+        guard let _add = add else {
+            return failure("Todoの追加に失敗しました")
+        }
+        
+        ToDoModel.addRealm(addValue: _add) { error in
+            if let _error = error {
+                print(_error)
+                failure("Todoの追加に失敗しました")
+            } else {
+                todoModel = ToDoModel.allFindRealm()!
+                success()
+            }
+        }
+    }
+    
     
     /// Realmのモデルを参照しない時はTestデータの配列を使う
 //    @Published var todoModel: [ToDoModel] = todomodel
@@ -158,10 +179,20 @@ class ToDoModel: Object {
     
     /// 全件取得
     /// - Returns: 取得したTodoを全件返す
-    class func allFindRealm() -> Results<ToDoModel>? {
+    class func allFindRealm() -> [ToDoModel]? {
         guard let realm = initRealm() else { return nil }
+        var model = [ToDoModel]()
         
-        return realm.objects(ToDoModel.self)
+        let realmModel = realm.objects(ToDoModel.self)
+        
+        realmModel.forEach { todo in
+            model.append(todo)
+        }
+        model.sort {
+            $0.todoDate < $1.todoDate
+        }
+        
+        return model
     }
     
     

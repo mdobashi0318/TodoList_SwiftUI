@@ -13,6 +13,8 @@ struct ToDoInputView: View {
     
     // MARK: Properties
     
+    @Binding var viewModel: ToDoViewModel
+    
     @Binding var toDoModel: ToDoModel
     
     @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
@@ -54,24 +56,20 @@ struct ToDoInputView: View {
     /// Todoの追加
     private func addTodo() {
         let id: String = String(ToDoModel.allFindRealm()!.count + 1)
-        ToDoModel.addRealm(addValue:
-            ToDoModel(id: id,
-                      toDoName: self.toDoModel.toDoName,
-                      todoDate: self.toDoModel.todoDate,
-                      toDo: self.toDoModel.toDo,
-                      createTime: nil
-        )) { error in
-            
+        viewModel.addTodo(add: ToDoModel(id: id,
+                                         toDoName: self.toDoModel.toDoName,
+                                         todoDate: self.toDoModel.todoDate,
+                                         toDo: self.toDoModel.toDo,
+                                         createTime: nil
+        ), success: {
+            self.presentationMode.wrappedValue.dismiss()
+        }, failure: { error in
             if let _error = error {
                 print(_error)
-                self.isAddError = true
-                self.isShowAlert = true
-                
-            } else {
-                self.presentationMode.wrappedValue.dismiss()
-                
             }
-        }
+            self.isAddError = true
+            self.isShowAlert = true
+        })
     }
     
     
@@ -287,6 +285,9 @@ struct ToDoInputView: View {
 
 struct ToDoInputView_Previews: PreviewProvider {
     static var previews: some View {
-        ToDoInputView(toDoModel: .constant(ToDoModel()), isUpdate: false)
+        Group {
+            ToDoInputView(viewModel: .constant(ToDoViewModel()), toDoModel: .constant(ToDoModel()), isUpdate: false)
+            ToDoInputView(viewModel: .constant(ToDoViewModel()), toDoModel: .constant(ToDoModel()), isUpdate: false)
+        }
     }
 }

@@ -43,7 +43,7 @@ struct TodoDetailView: View {
         }
         .sheet(isPresented: $isShowModle) {
             /// 編集を選択
-            ToDoInputView(toDoModel: self.$toDoModel, isUpdate: true)
+            ToDoInputView(viewModel: .constant(ToDoViewModel()), toDoModel: self.$toDoModel, isUpdate: true)
         }
         .alert(isPresented: $isDeleteAction) {
             /// 削除を選択
