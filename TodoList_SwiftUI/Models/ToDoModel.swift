@@ -8,88 +8,12 @@
 
 import Foundation
 import RealmSwift
-import Combine
 
+// MARK: - ToDoModel
 
-
-class ToDoViewModel: ObservableObject {
-    
-    @Published var todoModel: [ToDoModel] = ToDoModel.allFindRealm()!
-    
-    
-    /// Todoを１件検索
-    func findTodo(todoId: String, createTime: String) -> ToDoModel {
-        let model = ToDoModel.findRealm(todoId: todoId, createTime: createTime)
-        let todo = ToDoModel()
-        todo.id = model?.id ?? ""
-        todo.toDoName = model?.toDoName ?? ""
-        todo.todoDate = model?.todoDate ?? ""
-        todo.toDo = model?.toDo ?? ""
-        
-        return todo
-    }
-    
-    
-    
-    
-    
-    /// Todoの追加
-    func addTodo(add: ToDoModel?, success: ()->()?, failure: @escaping (String?)->()) {
-        guard let _add = add else {
-            return failure("Todoの追加に失敗しました")
-        }
-        
-        ToDoModel.addRealm(addValue: _add) { error in
-            if let _error = error {
-                print(_error)
-                failure("Todoの追加に失敗しました")
-            } else {
-                todoModel = ToDoModel.allFindRealm()!
-                success()
-            }
-        }
-    }
-    
-    
-    /// Todoの更新
-    func updateTodo(update: ToDoModel, success: () -> (), failure: @escaping (String?)->()) {
-        ToDoModel.updateRealm(updateTodo: update, result: { error in
-            if let _error = error {
-                failure(_error)
-                return
-            }
-            
-            todoModel = ToDoModel.allFindRealm()!
-            success()
-        })
-    }
-    
-    
-    /// Todoの削除
-    func deleteTodo(todoId: String, createTime: String, success: (ToDoModel) -> (), failure: @escaping (String?)->()) {
-        ToDoModel.deleteRealm(todoId: todoId, createTime: createTime) { error in
-            
-            if let _error = error {
-                failure(_error)
-                return
-            }
-            todoModel = ToDoModel.allFindRealm()!
-            /// 呼び出し元のTodoがnilになるとクラッシュするのでToDoの削除後に空のTodoを入れて回避する
-            success(ToDoModel(id: "", toDoName: "", todoDate: "", toDo: "", createTime: ""))
-        }
-    }
-    
-    /// Realmのモデルを参照しない時はTestデータの配列を使う
-//    @Published var todoModel: [ToDoModel] = todomodel
-
-}
-
-
-
-class ToDoModel: Object {
+final class ToDoModel: Object {
     
     @objc dynamic var id:String = ""
-    
     
     /// Todoの期限
     @objc dynamic var todoDate:String = ""
@@ -140,6 +64,46 @@ class ToDoModel: Object {
     }
     
     
+     // MARK: Todo取得
+    
+    /// 全件取得
+    /// - Returns: 取得したTodoを全件返す
+    class func allFindRealm() -> [ToDoModel]? {
+        guard let realm = initRealm() else { return nil }
+        var model = [ToDoModel]()
+        
+        let realmModel = realm.objects(ToDoModel.self)
+        
+        realmModel.forEach { todo in
+            model.append(todo)
+        }
+        model.sort {
+            $0.todoDate < $1.todoDate
+        }
+        
+        return model
+    }
+    
+    
+    /// １件取得
+    /// - Parameters:
+    ///   - todoId: TodoId
+    ///   - createTime: Todoの作成時間
+    /// - Returns: 取得したTodoの最初の1件を返す
+    class func findRealm(todoId: String, createTime: String?) -> ToDoModel? {
+        guard let realm = initRealm() else { return nil }
+        
+        if let _createTime = createTime {
+            return (realm.objects(ToDoModel.self).filter("createTime == '\(String(describing: _createTime))'").first)
+        } else {
+            return (realm.objects(ToDoModel.self).filter("id == '\(String(describing: todoId))'").first!)
+        }
+        
+    }
+    
+  
+    // MARK: Todo追加
+    
     /// ToDoを追加する
     /// - Parameters:
     ///   - addValue: 登録するTodoの値
@@ -148,9 +112,8 @@ class ToDoModel: Object {
     class func addRealm(addValue:ToDoModel, result: (Error?) -> () ) {
         
         guard let realm = initRealm() else { return }
+        
         let toDoModel: ToDoModel = ToDoModel()
-        
-        
         toDoModel.id = addValue.id
         toDoModel.toDoName = addValue.toDoName
         toDoModel.todoDate = addValue.todoDate
@@ -174,6 +137,7 @@ class ToDoModel: Object {
     }
     
     
+    // MARK: Todo更新
     
     /// ToDoの更新
     /// - Parameters:
@@ -202,41 +166,7 @@ class ToDoModel: Object {
     }
     
     
-    /// １件取得
-    /// - Parameters:
-    ///   - todoId: TodoId
-    ///   - createTime: Todoの作成時間
-    /// - Returns: 取得したTodoの最初の1件を返す
-    class func findRealm(todoId: String, createTime: String?) -> ToDoModel? {
-        guard let realm = initRealm() else { return nil }
-        
-        if let _createTime = createTime {
-            return (realm.objects(ToDoModel.self).filter("createTime == '\(String(describing: _createTime))'").first)
-        } else {
-            return (realm.objects(ToDoModel.self).filter("id == '\(String(describing: todoId))'").first!)
-        }
-        
-    }
-    
-    
-    /// 全件取得
-    /// - Returns: 取得したTodoを全件返す
-    class func allFindRealm() -> [ToDoModel]? {
-        guard let realm = initRealm() else { return nil }
-        var model = [ToDoModel]()
-        
-        let realmModel = realm.objects(ToDoModel.self)
-        
-        realmModel.forEach { todo in
-            model.append(todo)
-        }
-        model.sort {
-            $0.todoDate < $1.todoDate
-        }
-        
-        return model
-    }
-    
+    // MARK: Todo削除
     
     /// ToDoの削除
     /// - Parameters:
@@ -272,6 +202,9 @@ class ToDoModel: Object {
     }
     
 }
+
+
+// MARK: - テスト Todo
 
 /// テスト用の配列
 let todomodel:[ToDoModel] = {
