@@ -256,8 +256,9 @@ struct ToDoInputView: View {
             }
             .navigationBarTitle(isUpdate ? "ToDo更新" : "ToDo追加")
             .navigationBarItems(leading: cancelButton ,trailing: addButton)
+            .accessibility(identifier: "ToDoInputView")
         }
-        .accessibility(identifier: "ToDoInputView")
+        
     }
     
     

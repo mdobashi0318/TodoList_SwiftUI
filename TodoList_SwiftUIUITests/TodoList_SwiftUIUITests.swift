@@ -179,7 +179,11 @@ class TodoList_SwiftUIUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["titlelabel"].exists, "タイトルラベルがない")
         XCTAssertTrue(app.textFields["titleTextField"].exists, "タイトルテキストフィールドがない")
         
-        XCTAssertTrue(app.staticTexts["todoDateLabel"].exists, "期限ラベルがない")
+        if #available(iOS 14.0, *) {
+            XCTAssertTrue(app.staticTexts["期限"].exists, "期限ラベルがない")
+        } else {
+            XCTAssertTrue(app.staticTexts["todoDateLabel"].exists, "期限ラベルがない")
+        }
         XCTAssertTrue(app.datePickers["todoDatePicker"].exists, "期限登録するdatePickerがない")
         
         XCTAssertTrue(app.staticTexts["detailLabel"].exists, "詳細ラベルがない")
