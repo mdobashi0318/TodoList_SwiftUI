@@ -37,6 +37,19 @@ class ToDoViewModel: ObservableObject {
     }
     
     
+    /// Todoの更新
+    func updateTodo(update: ToDoModel, success: () -> (), failure: @escaping (String?)->()) {
+        ToDoModel.updateRealm(updateTodo: update, result: { error in
+            if let _error = error {
+                failure(_error)
+                return
+            }
+            
+            todoModel = ToDoModel.allFindRealm()!
+            success()
+        })
+    }
+    
     
     /// Todoの削除
     func deleteTodo(todoId: String, createTime: String, success: (ToDoModel) -> (), failure: @escaping (String?)->()) {
@@ -153,7 +166,7 @@ class ToDoModel: Object {
     ///   - updateTodo: 更新する値
     ///   - result: Todoの更新時のエラー
     /// - Returns: エラーがなければnil、あればエラーを返す
-    class func updateRealm(updateTodo: ToDoModel, result: (Error?) -> () ) {
+    class func updateRealm(updateTodo: ToDoModel, result: (String?) -> () ) {
         guard let realm = initRealm() else { return }
         let toDoModel: ToDoModel = ToDoModel.findRealm(todoId: updateTodo.id, createTime: updateTodo.createTime)!
         
@@ -169,7 +182,7 @@ class ToDoModel: Object {
             result(nil)
         }
         catch {
-            result(error)
+            result("Todoの更新に失敗しました")
         }
         
     }

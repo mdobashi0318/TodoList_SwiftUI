@@ -75,22 +75,18 @@ struct ToDoInputView: View {
     
     /// Todoのアップデート
     private func updateTodo() {
-        ToDoModel.updateRealm(updateTodo: ToDoModel(id: self.toDoModel.id,
-                                                    toDoName: self.toDoModel.toDoName,
-                                                    todoDate: self.toDoModel.todoDate,
-                                                    toDo: self.toDoModel.toDo,
-                                                    createTime: self.toDoModel.createTime
-        )) { error in
-            if let _error = error {
-                print(_error)
-                self.isUpdateError = true
-                self.isShowAlert = true
-                
-            } else {
-                self.presentationMode.wrappedValue.dismiss()
-                
-            }
-        }
+        viewModel.updateTodo(update: ToDoModel(id: self.toDoModel.id,
+                                               toDoName: self.toDoModel.toDoName,
+                                               todoDate: self.toDoModel.todoDate,
+                                               toDo: self.toDoModel.toDo,
+                                               createTime: self.toDoModel.createTime),
+                             success: {
+                                self.presentationMode.wrappedValue.dismiss()
+                             },
+                             failure: { error in
+                                self.isUpdateError = true
+                                self.isShowAlert = true
+                             })
     }
     
     
@@ -269,7 +265,7 @@ struct ToDoInputView: View {
                     self.toDoModel = ToDoModel()
                 }
             }
-            .navigationBarTitle("ToDo追加")
+            .navigationBarTitle(isUpdate ? "ToDo更新" : "ToDo追加")
             .navigationBarItems(leading: cancelButton ,trailing: addButton)
         }
         .accessibility(identifier: "ToDoInputView")
@@ -286,7 +282,7 @@ struct ToDoInputView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             ToDoInputView(viewModel: .constant(ToDoViewModel()), toDoModel: .constant(ToDoModel()), isUpdate: false)
-            ToDoInputView(viewModel: .constant(ToDoViewModel()), toDoModel: .constant(ToDoModel()), isUpdate: false)
+            ToDoInputView(viewModel: .constant(ToDoViewModel()), toDoModel: .constant(ToDoModel()), isUpdate: true)
         }
     }
 }
