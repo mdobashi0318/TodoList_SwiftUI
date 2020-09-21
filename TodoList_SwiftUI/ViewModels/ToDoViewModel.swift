@@ -59,6 +59,8 @@ final class ToDoViewModel: ObservableObject {
     }
     
     
+    
+    
     /// Todoの削除
     func deleteTodo(todoId: String, createTime: String, success: (ToDoModel) -> (), failure: @escaping (String?)->()) {
         ToDoModel.deleteRealm(todoId: todoId, createTime: createTime) { error in
@@ -72,6 +74,13 @@ final class ToDoViewModel: ObservableObject {
             success(ToDoModel(id: "", toDoName: "", todoDate: "", toDo: "", createTime: ""))
         }
     }
+    
+    
+    func allDeleteTodo() {
+        ToDoModel.allDelete()
+        todoModel = ToDoModel.allFindRealm()!
+    }
+    
     
     /// Realmのモデルを参照しない時はTestデータの配列を使う
 //    @Published var todoModel: [ToDoModel] = todomodel

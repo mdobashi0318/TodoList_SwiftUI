@@ -46,7 +46,7 @@ struct ToDoListView: View {
             Text("削除")
         }.alert(isPresented: self.$isDeleteFlag) {
             Alert(title: Text("全件削除しますか?"), primaryButton: .destructive(Text("削除")) {
-                ToDoModel.allDelete()
+                toDoviewModel.allDeleteTodo()
                 }, secondaryButton: .cancel(Text("キャンセル")))
         }
         .accessibility(identifier: "allDeleteButton")
