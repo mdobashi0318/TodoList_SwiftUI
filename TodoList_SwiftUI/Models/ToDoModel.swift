@@ -17,6 +17,20 @@ class ToDoViewModel: ObservableObject {
     @Published var todoModel: [ToDoModel] = ToDoModel.allFindRealm()!
     
     
+    /// Todoを１件検索
+    func findTodo(todoId: String, createTime: String) -> ToDoModel {
+        let model = ToDoModel.findRealm(todoId: todoId, createTime: createTime)
+        let todo = ToDoModel()
+        todo.id = model?.id ?? ""
+        todo.toDoName = model?.toDoName ?? ""
+        todo.todoDate = model?.todoDate ?? ""
+        todo.toDo = model?.toDo ?? ""
+        
+        return todo
+    }
+    
+    
+    
     
     
     /// Todoの追加

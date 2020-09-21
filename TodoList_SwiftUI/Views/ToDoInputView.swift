@@ -41,18 +41,6 @@ struct ToDoInputView: View {
     
     // MARK: Func
     
-    /// 更新するTodoを返す
-    private func todoUpdate(_ model: ToDoModel) -> ToDoModel {
-        let todo = ToDoModel()
-        todo.id = model.id
-        todo.toDoName = model.toDoName
-        todo.todoDate = model.todoDate
-        todo.toDo = model.toDo
-        
-        return todo
-    }
-    
-    
     /// Todoの追加
     private func addTodo() {
         let id: String = String(ToDoModel.allFindRealm()!.count + 1)
@@ -257,7 +245,8 @@ struct ToDoInputView: View {
             .padding()
             .onAppear {
                 if self.isUpdate {
-                    self.toDoModel = self.todoUpdate(self.toDoModel)
+                    /// 一度TodoModelにしてからTodoを操作する
+                    self.toDoModel = viewModel.findTodo(todoId: toDoModel.id, createTime: toDoModel.createTime ?? "")
                 }
             }
             .onDisappear {
