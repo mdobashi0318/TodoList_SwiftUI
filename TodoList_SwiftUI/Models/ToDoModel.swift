@@ -19,7 +19,7 @@ class ToDoViewModel: ObservableObject {
     
     
     
-    
+    /// Todoの追加
     func addTodo(add: ToDoModel?, success: ()->()?, failure: @escaping (String?)->()) {
         guard let _add = add else {
             return failure("Todoの追加に失敗しました")
@@ -36,6 +36,21 @@ class ToDoViewModel: ObservableObject {
         }
     }
     
+    
+    
+    /// Todoの削除
+    func deleteTodo(todoId: String, createTime: String, success: (ToDoModel) -> (), failure: @escaping (String?)->()) {
+        ToDoModel.deleteRealm(todoId: todoId, createTime: createTime) { error in
+            
+            if let _error = error {
+                failure(_error)
+                return
+            }
+            todoModel = ToDoModel.allFindRealm()!
+            /// 呼び出し元のTodoがnilになるとクラッシュするのでToDoの削除後に空のTodoを入れて回避する
+            success(ToDoModel(id: "", toDoName: "", todoDate: "", toDo: "", createTime: ""))
+        }
+    }
     
     /// Realmのモデルを参照しない時はTestデータの配列を使う
 //    @Published var todoModel: [ToDoModel] = todomodel
@@ -198,32 +213,22 @@ class ToDoModel: Object {
     
     /// ToDoの削除
     /// - Parameters:
-    ///   - vc: 呼び出し元のViewController
     ///   - todoId: TodoId
     ///   - createTime: Todoの作成時間
-    ///   - returnValue: 空のTodoを返す
-    ///   - completion: 削除完了後の動作
-    class func deleteRealm(todoId: String, createTime: String?, returnValue: (ToDoModel) -> Void , completion: () ->Void) {
+    class func deleteRealm(todoId: String, createTime: String, result: (String?) -> () ) {
         guard let realm = initRealm() else { return }
         let toDoModel: ToDoModel = ToDoModel.findRealm(todoId: todoId, createTime: createTime)!
-        
-        let todo = ToDoModel()
-        todo.toDoName = ""
-        todo.toDo = ""
-        todo.todoDate = ""
-        returnValue(todo)
-        
-        NotificationManager().removeNotification([toDoModel.createTime!])
+        NotificationManager().removeNotification([createTime])
         
         do {
             try realm.write() {
                 realm.delete(toDoModel)
             }
-            completion()
+            result(nil)
         }
             
         catch {
-            print("エラーが発生しました")
+            result("ToDoの削除に失敗しました")
         }
           
     }

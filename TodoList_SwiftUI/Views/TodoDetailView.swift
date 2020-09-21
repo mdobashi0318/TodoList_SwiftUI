@@ -12,6 +12,8 @@ struct TodoDetailView: View {
     
     // MARK: Properties
     
+    @State var viewModel: ToDoViewModel
+    
     @State var toDoModel: ToDoModel
     
     /// Todoの編集するためのモーダルを出すフラグ
@@ -72,13 +74,12 @@ struct TodoDetailView: View {
     var deleteAlert: Alert {
         Alert(title: Text("Todoを削除しますか?"),
               primaryButton: .destructive(Text("削除")) {
-                
-                ToDoModel.deleteRealm(todoId: self.toDoModel.id, createTime: self.toDoModel.createTime, returnValue: { todo in
-                    /// Todoを削除した時にText()がnilになるためかアプリが落ちるので空のTodoをいれる
+                viewModel.deleteTodo(todoId: toDoModel.id, createTime: toDoModel.createTime ?? "", success: { todo in
                     self.toDoModel = todo
-                }) {
                     self.presentationMode.wrappedValue.dismiss()
-                }
+                }, failure: { error in
+                    print(error ?? "")
+                })
             },
               secondaryButton: .cancel(Text("キャンセル"))
         )
@@ -127,7 +128,7 @@ struct TodoDetailView: View {
 
 struct TodoDetail_Previews: PreviewProvider {
     static var previews: some View {
-        TodoDetailView(toDoModel: todomodel[0])
+        TodoDetailView(viewModel: ToDoViewModel(), toDoModel: todomodel[0])
 //            .colorScheme(.dark)
 //            .background(Color(.systemBackground))
 //            .environment(\.colorScheme, .dark)

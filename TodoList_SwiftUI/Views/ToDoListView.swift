@@ -63,7 +63,7 @@ struct ToDoListView: View {
                     Text("ToDoが登録されていません")
                 } else {
                     ForEach(0..<self.toDoviewModel.todoModel.count, id: \.self) { row in
-                        NavigationLink(destination: TodoDetailView(toDoModel: self.toDoviewModel.todoModel[row])) {
+                        NavigationLink(destination: TodoDetailView(viewModel: toDoviewModel, toDoModel: self.toDoviewModel.todoModel[row])) {
                             ToDoRow(todoModel: self.toDoviewModel.todoModel[row])
                             .frame(height: 60)
                         }
