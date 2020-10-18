@@ -87,6 +87,7 @@ final class ToDoViewModel: ObservableObject {
             }
             
             todoModel = ToDoModel.allFindRealm()!
+            self.objectWillChange.send()
             success()
         })
     }
@@ -105,6 +106,7 @@ final class ToDoViewModel: ObservableObject {
             todoModel = ToDoModel.allFindRealm()!
             /// 呼び出し元のTodoがnilになるとクラッシュするのでToDoの削除後に空のTodoを入れて回避する
             success(ToDoModel(id: "", toDoName: "", todoDate: "", toDo: "", createTime: ""))
+            self.objectWillChange.send()
         }
     }
     
@@ -112,6 +114,7 @@ final class ToDoViewModel: ObservableObject {
     func allDeleteTodo() {
         ToDoModel.allDelete()
         todoModel = ToDoModel.allFindRealm()!
+        self.objectWillChange.send()
     }
     
     
