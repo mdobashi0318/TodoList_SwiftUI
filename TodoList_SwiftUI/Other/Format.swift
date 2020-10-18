@@ -20,8 +20,8 @@ struct Format {
         } else {
             formatter.dateFormat = "yyyy/MM/dd HH:mm"
         }
-        
-        formatter.locale = Locale(identifier: "ja_JP")
+        formatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         
         return formatter
     }
@@ -43,7 +43,7 @@ struct Format {
     }
     
     
-    /// Dateのフォーマットを設定して返す
+    /// 現在時間をのフォーマットを設定して返す
     func dateFormat(addSec: Bool = false) -> Date {
         let formatter = _dateFormatter(addSec: addSec)
         let s_Date:String = formatter.string(from: Date())

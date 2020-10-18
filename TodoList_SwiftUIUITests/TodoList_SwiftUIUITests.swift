@@ -62,7 +62,7 @@ class TodoList_SwiftUIUITests: XCTestCase {
         app.buttons["todoAddButton"].tap()
         sleep(1)
         
-        XCTAssertTrue(app.buttons.element(boundBy: 2).label.contains(addTitle), "登録されたタイトルが表示されていない")
+        XCTAssertTrue(app.buttons.element(boundBy: 5).label.contains(addTitle), "登録されたタイトルが表示されていない")
         
     }
     
@@ -99,7 +99,7 @@ class TodoList_SwiftUIUITests: XCTestCase {
     func test_toDoUpdateTest() throws {
         let app = XCUIApplication()
         addTodo()
-        app.buttons.element(boundBy: 2).tap()
+        app.buttons.element(boundBy: 5).tap()
         
         XCTAssertTrue(app.navigationBars.staticTexts.element(boundBy: 0).label == addTitle, "タイトルが表示されていない")
         XCTAssertTrue(app.staticTexts["dateLabel"].label != "", "期限が表示されていないされていない")
@@ -138,7 +138,7 @@ class TodoList_SwiftUIUITests: XCTestCase {
         
         app.navigationBars.buttons.element(boundBy: 0).tap()
         sleep(1)
-        XCTAssertTrue(app.buttons.element(boundBy: 2).label.contains(updateTitle), "タイトルが更新されていない")
+        XCTAssertTrue(app.buttons.element(boundBy: 5).label.contains(updateTitle), "タイトルが更新されていない")
     }
     
     
@@ -148,7 +148,7 @@ class TodoList_SwiftUIUITests: XCTestCase {
         let app = XCUIApplication()
         
         addTodo()
-        app.buttons.element(boundBy: 2).tap()
+        app.buttons.element(boundBy: 5).tap()
         
         XCTAssertTrue(app.navigationBars.staticTexts.element(boundBy: 0).label == addTitle, "タイトルが表示されていない")
         XCTAssertTrue(app.staticTexts["dateLabel"].label != "", "期限が表示されていないされていない")
