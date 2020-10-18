@@ -17,9 +17,9 @@ enum SegmentIndex: Int, CaseIterable {
 
 final class ToDoViewModel: ObservableObject {
     
-    var todoModel: [ToDoModel]!
+    private(set) var todoModel: [ToDoModel] = []
     
-    var segmentIndex: SegmentIndex = .all
+    private var segmentIndex: SegmentIndex = .all
     
     @discardableResult
     func find(index: SegmentIndex = .all) -> [ToDoModel] {
@@ -86,7 +86,7 @@ final class ToDoViewModel: ObservableObject {
                 return
             }
             
-            todoModel = ToDoModel.allFindRealm()!
+            find(index: segmentIndex)
             self.objectWillChange.send()
             success()
         })
@@ -103,7 +103,7 @@ final class ToDoViewModel: ObservableObject {
                 failure(_error)
                 return
             }
-            todoModel = ToDoModel.allFindRealm()!
+            find(index: segmentIndex)
             /// 呼び出し元のTodoがnilになるとクラッシュするのでToDoの削除後に空のTodoを入れて回避する
             success(ToDoModel(id: "", toDoName: "", todoDate: "", toDo: "", createTime: ""))
             self.objectWillChange.send()
@@ -113,7 +113,7 @@ final class ToDoViewModel: ObservableObject {
     
     func allDeleteTodo() {
         ToDoModel.allDelete()
-        todoModel = ToDoModel.allFindRealm()!
+        find(index: segmentIndex)
         self.objectWillChange.send()
     }
     
