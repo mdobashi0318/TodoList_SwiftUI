@@ -7,11 +7,43 @@
 //
 
 import Foundation
- 
+
+enum SegmentIndex: Int, CaseIterable {
+    case all = 0
+    case active = 1
+    case expired = 2
+}
+
 
 final class ToDoViewModel: ObservableObject {
     
-    @Published var todoModel: [ToDoModel] = ToDoModel.allFindRealm()!
+    private(set) var todoModel: [ToDoModel] = []
+    
+    private var segmentIndex: SegmentIndex = .all
+    
+    @discardableResult
+    func find(index: SegmentIndex = .all) -> [ToDoModel] {
+        segmentIndex = index
+        
+        guard let model = ToDoModel.allFindRealm() else {
+            return []
+        }
+        
+        switch index {
+        case .active:
+            todoModel = model.filter {
+                Format().dateFromString(string: $0.todoDate)! > Format().dateFormat()
+            }
+        case .expired:
+            todoModel = model.filter {
+                $0.todoDate <= Format().stringFromDate(date: Date())
+            }
+        default:
+            todoModel = model
+        }
+        
+        return todoModel
+    }
     
     
     /// Todoを１件検索
@@ -38,7 +70,8 @@ final class ToDoViewModel: ObservableObject {
                 print(_error)
                 failure("Todoの追加に失敗しました")
             } else {
-                todoModel = ToDoModel.allFindRealm()!
+                find(index: segmentIndex)
+                self.objectWillChange.send()
                 success()
             }
         }
@@ -53,7 +86,8 @@ final class ToDoViewModel: ObservableObject {
                 return
             }
             
-            todoModel = ToDoModel.allFindRealm()!
+            find(index: segmentIndex)
+            self.objectWillChange.send()
             success()
         })
     }
@@ -69,16 +103,18 @@ final class ToDoViewModel: ObservableObject {
                 failure(_error)
                 return
             }
-            todoModel = ToDoModel.allFindRealm()!
+            find(index: segmentIndex)
             /// 呼び出し元のTodoがnilになるとクラッシュするのでToDoの削除後に空のTodoを入れて回避する
             success(ToDoModel(id: "", toDoName: "", todoDate: "", toDo: "", createTime: ""))
+            self.objectWillChange.send()
         }
     }
     
     
     func allDeleteTodo() {
         ToDoModel.allDelete()
-        todoModel = ToDoModel.allFindRealm()!
+        find(index: segmentIndex)
+        self.objectWillChange.send()
     }
     
     

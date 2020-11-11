@@ -18,6 +18,9 @@ struct ToDoListView: View {
     
     @State var isDeleteFlag = false
     
+    @State var pickerIndex: SegmentIndex = .all
+    
+
     
     // MARK: UI
     
@@ -54,26 +57,42 @@ struct ToDoListView: View {
     
     
     
+    /// セグメントピッカー
+    private func segmentedPicker() -> some View {
+        return Picker(selection: $pickerIndex, label: Text("")) {
+            Text("全件").tag(SegmentIndex.all)
+            Text("アクティブ").tag(SegmentIndex.active)
+            Text("期限切れ").tag(SegmentIndex.expired)
+        }
+        .frame(height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+        .pickerStyle(SegmentedPickerStyle())
+        .padding(.all)
+    }
+    
+    
+    
+    
     // MARK: Body
+    
     
     var body: some View {
         NavigationView {
             List {
-                if self.toDoviewModel.todoModel.count == 0 {
+                Section() {
+                    segmentedPicker()
+                }
+                if self.toDoviewModel.find(index: pickerIndex).count == 0 {
                     Text("ToDoが登録されていません")
                 } else {
                     ForEach(0..<self.toDoviewModel.todoModel.count, id: \.self) { row in
                         NavigationLink(destination: TodoDetailView(viewModel: toDoviewModel, toDoModel: self.toDoviewModel.todoModel[row])) {
                             ToDoRow(todoModel: self.toDoviewModel.todoModel[row])
-                            .frame(height: 60)
+                                .frame(height: 60)
                         }
                     }
                 }
             }
-            .listStyle(GroupedListStyle())
-            .onAppear {
-                self.toDoviewModel.objectWillChange.send()
-            }
+            .listStyle(PlainListStyle())
             .navigationBarTitle("ToDoList")
             .navigationBarItems(leading: allDeleteButton ,trailing: addButton)
         }

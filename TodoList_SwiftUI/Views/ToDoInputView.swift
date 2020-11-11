@@ -247,6 +247,9 @@ struct ToDoInputView: View {
                 if self.isUpdate {
                     /// 一度TodoModelにしてからTodoを操作する
                     self.toDoModel = viewModel.findTodo(todoId: toDoModel.id, createTime: toDoModel.createTime ?? "")
+                    if let todoDate = Format().dateFromString(string: toDoModel.todoDate) {
+                        self.tododate = todoDate
+                    }
                 }
             }
             .onDisappear {
