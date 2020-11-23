@@ -28,9 +28,44 @@ struct TodoDetailView: View {
     
     @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
     
+
     
     
-    // MARK: UI
+    // MARK : Body
+    
+    var body: some View {
+        List {
+            Section(header: Text("期限")
+                        .font(.headline)) {
+                HStack {
+                    Text(toDoModel.todoDate)
+                        .accessibility(identifier: "dateLabel")
+                    if toDoModel.todoDate != "" {
+                        Text(Format().dateFromString(string: toDoModel.todoDate)! > Format().dateFormat() ? "" : "期限切れ")
+                            .font(.caption)
+                            .foregroundColor(.red)
+                    }
+                }
+            }
+            
+            Section(header: Text("詳細")
+                        .font(.headline)) {
+                Text(toDoModel.toDo)
+                    .accessibility(identifier: "todoDetaillabel")
+            }
+        }
+        .listStyle(GroupedListStyle())
+        .navigationBarTitle(toDoModel.toDoName)
+        .navigationBarItems(trailing: addButton)
+    }
+}
+
+
+
+
+// MARK: - UI
+
+extension TodoDetailView {
     
     /// ToDo追加ボタン
     var addButton: some View {
@@ -85,52 +120,18 @@ struct TodoDetailView: View {
         )
     }
     
-    
-    // MARK : Body
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            Divider()
-            Text("期限")
-                .font(.headline)
-                .padding(.top)
-            HStack {
-                Text(toDoModel.todoDate)
-                    .accessibility(identifier: "dateLabel")
-                if toDoModel.todoDate != "" {
-                    Text(Format().dateFromString(string: toDoModel.todoDate)! > Format().dateFormat() ? "" : "期限切れ")
-                        .font(.caption)
-                        .foregroundColor(.red)
-                }
-            }
-            
-            Divider()
-            
-            Text("詳細")
-                .font(.headline)
-                .padding(.top)
-            Text(toDoModel.toDo)
-                .accessibility(identifier: "todoDetaillabel")
-            
-            Divider()
-            Spacer()
-        }
-        .frame(width: UIScreen.main.bounds.width, alignment: .leading)
-        .padding(.leading)
-        .navigationBarTitle(toDoModel.toDoName)
-        .navigationBarItems(trailing: addButton)
-    }
 }
-
 
 
 // MARK: - Previews
 
 struct TodoDetail_Previews: PreviewProvider {
     static var previews: some View {
-        TodoDetailView(viewModel: ToDoViewModel(), toDoModel: todomodel[0])
-//            .colorScheme(.dark)
-//            .background(Color(.systemBackground))
-//            .environment(\.colorScheme, .dark)
+        NavigationView {
+            TodoDetailView(viewModel: ToDoViewModel(), toDoModel: todomodel[0])
+            //            .colorScheme(.dark)
+            //            .background(Color(.systemBackground))
+            //            .environment(\.colorScheme, .dark)
+        }
     }
 }

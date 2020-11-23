@@ -39,89 +39,51 @@ struct ToDoInputView: View {
     
     
     
-    // MARK: Func
+    // MARK: Body
     
-    /// Todoの追加
-    private func addTodo() {
-        let id: String = String(ToDoModel.allFindRealm()!.count + 1)
-        viewModel.addTodo(add: ToDoModel(id: id,
-                                         toDoName: self.toDoModel.toDoName,
-                                         todoDate: self.toDoModel.todoDate,
-                                         toDo: self.toDoModel.toDo,
-                                         createTime: nil
-        ), success: {
-            self.presentationMode.wrappedValue.dismiss()
-        }, failure: { error in
-            if let _error = error {
-                print(_error)
+    var body: some View {
+        NavigationView {
+            ScrollView(showsIndicators: false) {
+                VStack {
+                    Divider()
+                    todoNameTextField()
+                    todoDatePicker()
+                    todoDetailTextField()
+                    Spacer()
+                }
+                .frame(height: UIScreen.main.bounds.height)
             }
-            self.isAddError = true
-            self.isShowAlert = true
-        })
-    }
-    
-    
-    /// Todoのアップデート
-    private func updateTodo() {
-        viewModel.updateTodo(update: ToDoModel(id: self.toDoModel.id,
-                                               toDoName: self.toDoModel.toDoName,
-                                               todoDate: self.toDoModel.todoDate,
-                                               toDo: self.toDoModel.toDo,
-                                               createTime: self.toDoModel.createTime),
-                             success: {
-                                self.presentationMode.wrappedValue.dismiss()
-                             },
-                             failure: { error in
-                                self.isUpdateError = true
-                                self.isShowAlert = true
-                             })
-    }
-    
-    
-    /// バリデーションチェック
-    /// テキストフィールドにテキストが入っていなければtrueを返し、アラートを表示させる
-    private func validateCheck(callBack: (Bool) -> ()) {
-        if toDoModel.toDoName.isEmpty || toDoModel.toDo.isEmpty {
-            callBack(true)
-            
-        } else {
-            callBack(false)
-            
+            .padding()
+            .onAppear {
+                if self.isUpdate {
+                    /// 一度TodoModelにしてからTodoを操作する
+                    self.toDoModel = viewModel.findTodo(todoId: toDoModel.id, createTime: toDoModel.createTime ?? "")
+                    if let todoDate = Format().dateFromString(string: toDoModel.todoDate) {
+                        self.tododate = todoDate
+                    }
+                }
+            }
+            .onDisappear {
+                if !self.isUpdate {
+                    self.toDoModel = ToDoModel()
+                }
+            }
+            .navigationBarTitle(isUpdate ? "ToDo更新" : "ToDo追加")
+            .navigationBarItems(leading: cancelButton ,trailing: addButton)
+            .accessibility(identifier: "ToDoInputView")
         }
+        
     }
     
     
-    /// バリデート時の表示するアラート
-    private func showValidateAlert() -> Alert {
-        if isAddError == true {
-            return Alert(title: Text("Todoの登録に失敗しました"), dismissButton: .default(Text("閉じる")) {
-                self.isAddError = false
-                })
-            
-        } else if isUpdateError == true {
-            return Alert(title: Text("Todoの更新に失敗しました"), dismissButton: .default(Text("閉じる")) {
-                self.isUpdateError = false
-                })
-            
-        } else {
-            return Alert(title: Text("入力されていない項目があります"), dismissButton: .default(Text("閉じる")) {
-                self.isValidate = false
-                })
-            
-        }
-    }
-    
-    
-    private var dateRange: ClosedRange<Date> {
-        let min = Calendar.current.date(byAdding: .year, value: -1, to: Date())!
-        let max = Calendar.current.date(byAdding: .year, value: 1, to: Date())!
-        return min...max
-    }
-    
-    
-    
-    
-    // MARK: UI
+}
+
+
+
+
+// MARK: - UI
+
+extension ToDoInputView {
     
     /// キャンセルボタン
     private var cancelButton: some View {
@@ -153,7 +115,7 @@ struct ToDoInputView: View {
                     self.isValidate = true
                     self.isShowAlert = true
                     
-                }   
+                }
             }
         }) {
             Image(systemName: "plus.circle")
@@ -225,48 +187,93 @@ struct ToDoInputView: View {
         .padding(.top)
     }
     
+}
+
+
+
+
+// MARK: - Func
+
+extension ToDoInputView {
     
-    
-    
-    // MARK: Body
-    
-    var body: some View {
-        NavigationView {
-            ScrollView(showsIndicators: false) {
-                VStack {
-                    Divider()
-                    todoNameTextField()
-                    todoDatePicker()
-                    todoDetailTextField()
-                    Spacer()
-                }
-                .frame(height: UIScreen.main.bounds.height)
+    /// Todoの追加
+    private func addTodo() {
+        let id: String = String(ToDoModel.allFindRealm()!.count + 1)
+        viewModel.addTodo(add: ToDoModel(id: id,
+                                         toDoName: self.toDoModel.toDoName,
+                                         todoDate: self.toDoModel.todoDate,
+                                         toDo: self.toDoModel.toDo,
+                                         createTime: nil
+        ), success: {
+            self.presentationMode.wrappedValue.dismiss()
+        }, failure: { error in
+            if let _error = error {
+                print(_error)
             }
-            .padding()
-            .onAppear {
-                if self.isUpdate {
-                    /// 一度TodoModelにしてからTodoを操作する
-                    self.toDoModel = viewModel.findTodo(todoId: toDoModel.id, createTime: toDoModel.createTime ?? "")
-                    if let todoDate = Format().dateFromString(string: toDoModel.todoDate) {
-                        self.tododate = todoDate
-                    }
-                }
-            }
-            .onDisappear {
-                if !self.isUpdate {
-                    self.toDoModel = ToDoModel()
-                }
-            }
-            .navigationBarTitle(isUpdate ? "ToDo更新" : "ToDo追加")
-            .navigationBarItems(leading: cancelButton ,trailing: addButton)
-            .accessibility(identifier: "ToDoInputView")
-        }
-        
+            self.isAddError = true
+            self.isShowAlert = true
+        })
     }
     
     
+    /// Todoのアップデート
+    private func updateTodo() {
+        viewModel.updateTodo(update: ToDoModel(id: self.toDoModel.id,
+                                               toDoName: self.toDoModel.toDoName,
+                                               todoDate: self.toDoModel.todoDate,
+                                               toDo: self.toDoModel.toDo,
+                                               createTime: self.toDoModel.createTime),
+                             success: {
+                                self.presentationMode.wrappedValue.dismiss()
+                             },
+                             failure: { error in
+                                self.isUpdateError = true
+                                self.isShowAlert = true
+                             })
+    }
+    
+    
+    /// バリデーションチェック
+    /// テキストフィールドにテキストが入っていなければtrueを返し、アラートを表示させる
+    private func validateCheck(callBack: (Bool) -> ()) {
+        if toDoModel.toDoName.isEmpty || toDoModel.toDo.isEmpty {
+            callBack(true)
+            
+        } else {
+            callBack(false)
+            
+        }
+    }
+    
+    
+    /// バリデート時の表示するアラート
+    private func showValidateAlert() -> Alert {
+        if isAddError == true {
+            return Alert(title: Text("Todoの登録に失敗しました"), dismissButton: .default(Text("閉じる")) {
+                self.isAddError = false
+            })
+            
+        } else if isUpdateError == true {
+            return Alert(title: Text("Todoの更新に失敗しました"), dismissButton: .default(Text("閉じる")) {
+                self.isUpdateError = false
+            })
+            
+        } else {
+            return Alert(title: Text("入力されていない項目があります"), dismissButton: .default(Text("閉じる")) {
+                self.isValidate = false
+            })
+            
+        }
+    }
+    
+    
+    private var dateRange: ClosedRange<Date> {
+        let min = Calendar.current.date(byAdding: .year, value: -1, to: Date())!
+        let max = Calendar.current.date(byAdding: .year, value: 1, to: Date())!
+        return min...max
+    }
+    
 }
-
 
 
 // MARK: - Previews
