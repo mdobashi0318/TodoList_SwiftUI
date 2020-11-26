@@ -28,7 +28,7 @@ struct ToDoListView: View {
         NavigationView {
             List {
                 Section() {
-                    segmentedPicker()
+                    segmentedPicker
                 }
                 
                 if self.toDoviewModel.find(index: pickerIndex).count == 0 {
@@ -91,7 +91,7 @@ extension ToDoListView {
     
     
     /// セグメントピッカー
-    private func segmentedPicker() -> some View {
+    private var segmentedPicker: some View {
         return Picker(selection: $pickerIndex, label: Text("")) {
             Text("全件").tag(SegmentIndex.all)
             Text("アクティブ").tag(SegmentIndex.active)

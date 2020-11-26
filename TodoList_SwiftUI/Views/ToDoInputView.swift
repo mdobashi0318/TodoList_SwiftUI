@@ -43,17 +43,12 @@ struct ToDoInputView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView(showsIndicators: false) {
-                VStack {
-                    Divider()
-                    todoNameTextField()
-                    todoDatePicker()
-                    todoDetailTextField()
-                    Spacer()
-                }
-                .frame(height: UIScreen.main.bounds.height)
+            List {
+                todoNameSection
+                todoDatePicker
+                todoDetailSection
             }
-            .padding()
+            .listStyle(GroupedListStyle())
             .onAppear {
                 if self.isUpdate {
                     /// 一度TodoModelにしてからTodoを操作する
@@ -132,60 +127,78 @@ extension ToDoInputView {
     
     
     /// 「*必須」ラベル
-    private func requiredLabel() -> Text {
+    private var requiredLabel: some View {
         return Text("*必須")
             .font(.caption)
             .foregroundColor(.red)
     }
     
+
+    
+    /// ヘッダーラベル
+    /// - Parameters:
+    ///   - text: テキスト
+    ///   - identifier: identifier
+    ///   - isRequiredLabel: 必須ラベルの表示判定
+    private func headerLabel(text: String, identifier: String, isRequiredLabel: Bool) -> some View {
+        HStack {
+        Text(text)
+            .font(.headline)
+            .accessibility(identifier: identifier)
+        if isRequiredLabel {
+            requiredLabel
+        }
+        }
+        .frame(width: UIScreen.main.bounds.width - 30, height: 30,alignment: .leading)
+    }
+    
+
+    
+    /// テキストフィールド
+    /// - Parameters:
+    ///   - placeholder: プレースホルダー
+    ///   - text: テキスト
+    ///   - identifier: identifier
+    private func textField(placeholder: String, text: Binding<String>, identifier: String) -> some View {
+        TextField(placeholder, text: text)
+            .accessibility(identifier: identifier)
+    }
+
     
     /// タイトル入力テキストフィールド
-    private func todoNameTextField() -> some View {
-        return VStack(alignment: .leading) {
-            HStack {
-                Text("タイトル")
-                    .font(.headline)
-                    .accessibility(identifier: "titlelabel")
-                requiredLabel()
-            }
-            TextField("タイトルを入力してください", text: $toDoModel.toDoName)
-                .accessibility(identifier: "titleTextField")
-        }
-        .frame(height: 50, alignment: .leading)
-        .padding(.top)
+    private var todoNameSection: some View {
+        return Section(header:
+                        headerLabel(text: "タイトル", identifier: "titlelabel", isRequiredLabel: true)
+                       , content: {
+                        textField(placeholder: "タイトルを入力してください",
+                                  text: $toDoModel.toDoName,
+                                  identifier: "titleTextField"
+                        )
+                       })
     }
     
     
     /// 期限入力DatePicker
-    private func todoDatePicker() -> some View {
-        return VStack(alignment: .leading) {
-            DatePicker(selection: self.$tododate, in: dateRange) {
-                Text("期限")
-                    .font(.headline)
-                    .accessibility(identifier: "todoDateLabel")
-            }
+    private var todoDatePicker: some View {
+        return Section() {
+            DatePicker("期限", selection: self.$tododate)
             .accessibility(identifier: "todoDatePicker")
         }
-        .padding(.top)
     }
     
     
     /// 詳細入力テキストフィールド
-    private func todoDetailTextField() -> some View {
-        return VStack(alignment: .leading) {
-            HStack {
-                Text("詳細")
-                    .font(.headline)
-                    .accessibility(identifier: "detailLabel")
-                requiredLabel()
-            }
-            TextField("詳細を入力してください", text: $toDoModel.toDo)
-                .accessibility(identifier: "detailTextField")
-            
-        }
-        .frame(height: 50, alignment: .leading)
-        .padding(.top)
+    private var todoDetailSection: some View {
+        return Section(header:
+                        headerLabel(text: "詳細", identifier: "detailLabel", isRequiredLabel: true)
+                       , content: {
+                        textField(placeholder: "詳細を入力してください",
+                                  text: $toDoModel.toDo,
+                                  identifier: "detailTextField"
+                        )
+                       })
     }
+    
     
 }
 
