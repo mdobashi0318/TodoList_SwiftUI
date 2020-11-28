@@ -1,0 +1,17 @@
+/* 
+  AlertMessage.strings
+  TodoList_SwiftUI
+
+  Created by 土橋正晴 on 2020/11/28.
+  Copyright © 2020 m.dobashi. All rights reserved.
+*/
+
+
+// MARK: - Validate Message
+
+"Validate" = "%@が入力されていません";
+"ValidateDate" = "入力されている期限が無効です";
+
+
+// MARK: - Button
+"Close" = "閉じる";

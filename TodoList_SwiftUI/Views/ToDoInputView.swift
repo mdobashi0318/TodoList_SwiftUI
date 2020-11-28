@@ -38,6 +38,8 @@ struct ToDoInputView: View {
     @State var isShowAlert = false
     
     
+    @State var errorMessage: String = ""
+    
     
     // MARK: Body
     
@@ -97,7 +99,7 @@ extension ToDoInputView {
     private var addButton: some View {
         Button(action: {
             self.toDoModel.todoDate = Format().stringFromDate(date: self.tododate)
-            self.validateCheck() { result in
+                ToDoViewModel().validateCheck(toDoModel: toDoModel) { result, message in
                 if result == false {
                     if !self.isUpdate {
                         self.addTodo()
@@ -107,6 +109,7 @@ extension ToDoInputView {
                         
                     }
                 } else {
+                    errorMessage = message
                     self.isValidate = true
                     self.isShowAlert = true
                     
@@ -246,33 +249,23 @@ extension ToDoInputView {
     }
     
     
-    /// バリデーションチェック
-    /// テキストフィールドにテキストが入っていなければtrueを返し、アラートを表示させる
-    private func validateCheck(callBack: (Bool) -> ()) {
-        if toDoModel.toDoName.isEmpty || toDoModel.toDo.isEmpty {
-            callBack(true)
-            
-        } else {
-            callBack(false)
-            
-        }
-    }
+  
     
     
     /// バリデート時の表示するアラート
     private func showValidateAlert() -> Alert {
         if isAddError == true {
-            return Alert(title: Text("Todoの登録に失敗しました"), dismissButton: .default(Text("閉じる")) {
+            return Alert(title: Text("Todoの登録に失敗しました"), dismissButton: .default(Text(R.string.alertMessage.close())) {
                 self.isAddError = false
             })
             
         } else if isUpdateError == true {
-            return Alert(title: Text("Todoの更新に失敗しました"), dismissButton: .default(Text("閉じる")) {
+            return Alert(title: Text("Todoの更新に失敗しました"), dismissButton: .default(Text(R.string.alertMessage.close())) {
                 self.isUpdateError = false
             })
             
         } else {
-            return Alert(title: Text("入力されていない項目があります"), dismissButton: .default(Text("閉じる")) {
+            return Alert(title: Text(self.errorMessage), dismissButton: .default(Text(R.string.alertMessage.close())) {
                 self.isValidate = false
             })
             
