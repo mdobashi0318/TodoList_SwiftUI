@@ -12,8 +12,6 @@ struct TodoDetailView: View {
     
     // MARK: Properties
     
-    @State var viewModel: ToDoViewModel
-    
     @State var toDoModel: ToDoModel
     
     /// Todoの編集するためのモーダルを出すフラグ
@@ -80,7 +78,7 @@ extension TodoDetailView {
         }
         .sheet(isPresented: $isShowModle) {
             /// 編集を選択
-            ToDoInputView(viewModel: $viewModel, toDoModel: self.$toDoModel, isUpdate: true)
+            ToDoInputView(toDoModel: self.toDoModel, isUpdate: true)
         }
         .alert(isPresented: $isDeleteAction) {
             /// 削除を選択
@@ -109,7 +107,7 @@ extension TodoDetailView {
     var deleteAlert: Alert {
         Alert(title: Text("Todoを削除しますか?"),
               primaryButton: .destructive(Text("削除")) {
-                viewModel.deleteTodo(todoId: toDoModel.id, createTime: toDoModel.createTime ?? "", success: { todo in
+                ToDoViewModel().deleteTodo(todoId: toDoModel.id, createTime: toDoModel.createTime ?? "", success: { todo in
                     self.toDoModel = todo
                     self.presentationMode.wrappedValue.dismiss()
                 }, failure: { error in
@@ -128,7 +126,7 @@ extension TodoDetailView {
 struct TodoDetail_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            TodoDetailView(viewModel: ToDoViewModel(), toDoModel: todomodel[0])
+            TodoDetailView(toDoModel: todomodel[0])
             //            .colorScheme(.dark)
             //            .background(Color(.systemBackground))
             //            .environment(\.colorScheme, .dark)

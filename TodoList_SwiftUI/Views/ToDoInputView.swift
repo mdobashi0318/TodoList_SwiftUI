@@ -12,10 +12,10 @@ struct ToDoInputView: View {
     
     
     // MARK: Properties
+    @State var toDoModel: ToDoModel
     
-    @Binding var viewModel: ToDoViewModel
-    
-    @Binding var toDoModel: ToDoModel
+    /// datePickerで選択したDateを格納
+    @State var tododate = Date()
     
     @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
     
@@ -24,9 +24,6 @@ struct ToDoInputView: View {
     
     /// Todoの更新か追加かを判断
     @State var isUpdate: Bool
-    
-    /// datePickerで選択したDateを格納
-    @State var tododate = Date()
     
     /// Todoの登録失敗アラートの表示フラグ
     @State var isAddError = false
@@ -54,7 +51,7 @@ struct ToDoInputView: View {
             .onAppear {
                 if self.isUpdate {
                     /// 一度TodoModelにしてからTodoを操作する
-                    self.toDoModel = viewModel.findTodo(todoId: toDoModel.id, createTime: toDoModel.createTime ?? "")
+                    self.toDoModel = ToDoViewModel().findTodo(todoId: toDoModel.id, createTime: toDoModel.createTime ?? "")
                     if let todoDate = Format().dateFromString(string: toDoModel.todoDate) {
                         self.tododate = todoDate
                     }
@@ -98,6 +95,7 @@ extension ToDoInputView {
     /// ToDo追加ボタン
     private var addButton: some View {
         Button(action: {
+
             self.toDoModel.todoDate = Format().stringFromDate(date: self.tododate)
                 ToDoViewModel().validateCheck(toDoModel: toDoModel) { result, message in
                 if result == false {
@@ -215,10 +213,10 @@ extension ToDoInputView {
     /// Todoの追加
     private func addTodo() {
         let id: String = String(ToDoModel.allFindRealm()!.count + 1)
-        viewModel.addTodo(add: ToDoModel(id: id,
-                                         toDoName: self.toDoModel.toDoName,
-                                         todoDate: self.toDoModel.todoDate,
-                                         toDo: self.toDoModel.toDo,
+        ToDoViewModel().addTodo(add: ToDoModel(id: id,
+                                         toDoName: toDoModel.toDoName,
+                                         todoDate: toDoModel.todoDate,
+                                         toDo: toDoModel.toDo,
                                          createTime: nil
         ), success: {
             self.presentationMode.wrappedValue.dismiss()
@@ -234,11 +232,11 @@ extension ToDoInputView {
     
     /// Todoのアップデート
     private func updateTodo() {
-        viewModel.updateTodo(update: ToDoModel(id: self.toDoModel.id,
-                                               toDoName: self.toDoModel.toDoName,
-                                               todoDate: self.toDoModel.todoDate,
-                                               toDo: self.toDoModel.toDo,
-                                               createTime: self.toDoModel.createTime),
+        ToDoViewModel().updateTodo(update: ToDoModel(id: toDoModel.id,
+                                               toDoName: toDoModel.toDoName,
+                                               todoDate: toDoModel.todoDate,
+                                               toDo: toDoModel.toDo,
+                                               createTime: toDoModel.createTime),
                              success: {
                                 self.presentationMode.wrappedValue.dismiss()
                              },
@@ -287,8 +285,8 @@ extension ToDoInputView {
 struct ToDoInputView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ToDoInputView(viewModel: .constant(ToDoViewModel()), toDoModel: .constant(ToDoModel()), isUpdate: false)
-            ToDoInputView(viewModel: .constant(ToDoViewModel()), toDoModel: .constant(ToDoModel()), isUpdate: true)
+            ToDoInputView(toDoModel: ToDoModel(), isUpdate: false)
+            ToDoInputView(toDoModel: todomodel[0], isUpdate: true)
         }
     }
 }
