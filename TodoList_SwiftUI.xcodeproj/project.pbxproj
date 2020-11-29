@@ -25,6 +25,8 @@
 		D066E6B724701B10007FA3DB /* TodoList_SwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D066E6B624701B10007FA3DB /* TodoList_SwiftUITests.swift */; };
 		D066E6C224701B10007FA3DB /* TodoList_SwiftUIUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D066E6C124701B10007FA3DB /* TodoList_SwiftUIUITests.swift */; };
 		D0750DC924769BD500BAB0C9 /* TodoDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0750DC824769BD500BAB0C9 /* TodoDetailView.swift */; };
+		D0BD8D40257283BF009BCA97 /* AlertMessage.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0BD8D42257283BF009BCA97 /* AlertMessage.strings */; };
+		D0BD8D4725728415009BCA97 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BD8D4625728415009BCA97 /* R.generated.swift */; };
 		D0CB6D052518BFEC0049D10B /* ToDoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CB6D042518BFEC0049D10B /* ToDoViewModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -75,6 +77,8 @@
 		D066E6C124701B10007FA3DB /* TodoList_SwiftUIUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoList_SwiftUIUITests.swift; sourceTree = "<group>"; };
 		D066E6C324701B10007FA3DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0750DC824769BD500BAB0C9 /* TodoDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoDetailView.swift; sourceTree = "<group>"; };
+		D0BD8D41257283BF009BCA97 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AlertMessage.strings; sourceTree = "<group>"; };
+		D0BD8D4625728415009BCA97 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		D0CB6D042518BFEC0049D10B /* ToDoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoViewModel.swift; sourceTree = "<group>"; };
 		E73AE3B2CCEB9369A8B9EC83 /* Pods-TodoList_SwiftUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodoList_SwiftUITests.release.xcconfig"; path = "Target Support Files/Pods-TodoList_SwiftUITests/Pods-TodoList_SwiftUITests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -123,6 +127,7 @@
 		D00B1DFF2487AF360034FB25 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				D0BD8D3725728308009BCA97 /* Strings */,
 				D00B1E002487AF790034FB25 /* Format.swift */,
 				D02DDC242495BD5C00AE1F0B /* NotificationManager.swift */,
 			);
@@ -174,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				D066E69F24701B0B007FA3DB /* AppDelegate.swift */,
+				D0BD8D4625728415009BCA97 /* R.generated.swift */,
 				D066E6A124701B0B007FA3DB /* SceneDelegate.swift */,
 				D02D0FCE24701E1000FC1D4F /* Views */,
 				D0CB6D032518BFA70049D10B /* ViewModels */,
@@ -214,6 +220,14 @@
 			path = TodoList_SwiftUIUITests;
 			sourceTree = "<group>";
 		};
+		D0BD8D3725728308009BCA97 /* Strings */ = {
+			isa = PBXGroup;
+			children = (
+				D0BD8D42257283BF009BCA97 /* AlertMessage.strings */,
+			);
+			path = Strings;
+			sourceTree = "<group>";
+		};
 		D0CB6D032518BFA70049D10B /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -240,6 +254,7 @@
 			buildConfigurationList = D066E6C624701B10007FA3DB /* Build configuration list for PBXNativeTarget "TodoList_SwiftUI" */;
 			buildPhases = (
 				8D568270F43C63F182F60C36 /* [CP] Check Pods Manifest.lock */,
+				D0BD8D30257281B8009BCA97 /* ShellScript */,
 				D066E69824701B0B007FA3DB /* Sources */,
 				D066E69924701B0B007FA3DB /* Frameworks */,
 				D066E69A24701B0B007FA3DB /* Resources */,
@@ -301,7 +316,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1140;
-				LastUpgradeCheck = 1140;
+				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = m.dobashi;
 				TargetAttributes = {
 					D066E69B24701B0B007FA3DB = {
@@ -342,6 +357,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0BD8D40257283BF009BCA97 /* AlertMessage.strings in Resources */,
 				D066E6AC24701B0F007FA3DB /* LaunchScreen.storyboard in Resources */,
 				D066E6A924701B0F007FA3DB /* Preview Assets.xcassets in Resources */,
 				D066E6A624701B0F007FA3DB /* Assets.xcassets in Resources */,
@@ -482,6 +498,25 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TodoList_SwiftUI-TodoList_SwiftUIUITests/Pods-TodoList_SwiftUI-TodoList_SwiftUIUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		D0BD8D30257281B8009BCA97 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$TEMP_DIR/rswift-lastrun",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				$SRCROOT/R.generated.swift,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/R.generated.swift\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -498,6 +533,7 @@
 				D02D0FCD24701E0000FC1D4F /* ToDoModel.swift in Sources */,
 				D02D0FD024701E4800FC1D4F /* ToDoRow.swift in Sources */,
 				D066E6A224701B0B007FA3DB /* SceneDelegate.swift in Sources */,
+				D0BD8D4725728415009BCA97 /* R.generated.swift in Sources */,
 				D066E6A424701B0B007FA3DB /* ToDoListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -543,6 +579,14 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		D0BD8D42257283BF009BCA97 /* AlertMessage.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D0BD8D41257283BF009BCA97 /* en */,
+			);
+			name = AlertMessage.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -572,6 +616,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -632,6 +677,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -674,7 +720,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "m.dobashi.TodoList-SwiftUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -696,7 +742,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "m.dobashi.TodoList-SwiftUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

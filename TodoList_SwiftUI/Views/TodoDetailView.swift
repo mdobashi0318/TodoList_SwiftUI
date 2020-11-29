@@ -12,8 +12,6 @@ struct TodoDetailView: View {
     
     // MARK: Properties
     
-    @State var viewModel: ToDoViewModel
-    
     @State var toDoModel: ToDoModel
     
     /// Todoの編集するためのモーダルを出すフラグ
@@ -28,9 +26,44 @@ struct TodoDetailView: View {
     
     @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
     
+
     
     
-    // MARK: UI
+    // MARK : Body
+    
+    var body: some View {
+        List {
+            Section(header: Text("期限")
+                        .font(.headline)) {
+                HStack {
+                    Text(toDoModel.todoDate)
+                        .accessibility(identifier: "dateLabel")
+                    if toDoModel.todoDate != "" {
+                        Text(Format().dateFromString(string: toDoModel.todoDate)! > Format().dateFormat() ? "" : "期限切れ")
+                            .font(.caption)
+                            .foregroundColor(.red)
+                    }
+                }
+            }
+            
+            Section(header: Text("詳細")
+                        .font(.headline)) {
+                Text(toDoModel.toDo)
+                    .accessibility(identifier: "todoDetaillabel")
+            }
+        }
+        .listStyle(GroupedListStyle())
+        .navigationBarTitle(toDoModel.toDoName)
+        .navigationBarItems(trailing: addButton)
+    }
+}
+
+
+
+
+// MARK: - UI
+
+extension TodoDetailView {
     
     /// ToDo追加ボタン
     var addButton: some View {
@@ -45,7 +78,7 @@ struct TodoDetailView: View {
         }
         .sheet(isPresented: $isShowModle) {
             /// 編集を選択
-            ToDoInputView(viewModel: $viewModel, toDoModel: self.$toDoModel, isUpdate: true)
+            ToDoInputView(toDoModel: self.toDoModel, isUpdate: true)
         }
         .alert(isPresented: $isDeleteAction) {
             /// 削除を選択
@@ -74,7 +107,7 @@ struct TodoDetailView: View {
     var deleteAlert: Alert {
         Alert(title: Text("Todoを削除しますか?"),
               primaryButton: .destructive(Text("削除")) {
-                viewModel.deleteTodo(todoId: toDoModel.id, createTime: toDoModel.createTime ?? "", success: { todo in
+                ToDoViewModel().deleteTodo(todoId: toDoModel.id, createTime: toDoModel.createTime ?? "", success: { todo in
                     self.toDoModel = todo
                     self.presentationMode.wrappedValue.dismiss()
                 }, failure: { error in
@@ -85,52 +118,18 @@ struct TodoDetailView: View {
         )
     }
     
-    
-    // MARK : Body
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            Divider()
-            Text("期限")
-                .font(.headline)
-                .padding(.top)
-            HStack {
-                Text(toDoModel.todoDate)
-                    .accessibility(identifier: "dateLabel")
-                if toDoModel.todoDate != "" {
-                    Text(Format().dateFromString(string: toDoModel.todoDate)! > Format().dateFormat() ? "" : "期限切れ")
-                        .font(.caption)
-                        .foregroundColor(.red)
-                }
-            }
-            
-            Divider()
-            
-            Text("詳細")
-                .font(.headline)
-                .padding(.top)
-            Text(toDoModel.toDo)
-                .accessibility(identifier: "todoDetaillabel")
-            
-            Divider()
-            Spacer()
-        }
-        .frame(width: UIScreen.main.bounds.width, alignment: .leading)
-        .padding(.leading)
-        .navigationBarTitle(toDoModel.toDoName)
-        .navigationBarItems(trailing: addButton)
-    }
 }
-
 
 
 // MARK: - Previews
 
 struct TodoDetail_Previews: PreviewProvider {
     static var previews: some View {
-        TodoDetailView(viewModel: ToDoViewModel(), toDoModel: todomodel[0])
-//            .colorScheme(.dark)
-//            .background(Color(.systemBackground))
-//            .environment(\.colorScheme, .dark)
+        NavigationView {
+            TodoDetailView(toDoModel: todomodel[0])
+            //            .colorScheme(.dark)
+            //            .background(Color(.systemBackground))
+            //            .environment(\.colorScheme, .dark)
+        }
     }
 }

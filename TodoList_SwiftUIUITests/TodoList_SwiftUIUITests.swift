@@ -8,6 +8,7 @@
 
 import XCTest
 
+@available(iOS 14.0, *)
 class TodoList_SwiftUIUITests: XCTestCase {
     
     
@@ -56,6 +57,12 @@ class TodoList_SwiftUIUITests: XCTestCase {
         app.buttons["Return"].tap()
         
         sleep(1)
+        app.datePickers["todoDatePicker"].tap()
+        app.textFields.firstMatch.tap()
+        app.textFields.firstMatch.typeText("11:59")
+        app.textFields["titleTextField"].tap()
+        
+        sleep(1)
         app.textFields["detailTextField"].tap()
         app.typeText(addDetail)
         
@@ -80,7 +87,7 @@ class TodoList_SwiftUIUITests: XCTestCase {
         app.buttons["todoAddButton"].tap()
         sleep(1)
         
-        XCTAssertTrue(app.alerts["入力されていない項目があります"].exists, "未入力項目あり時のアラートが表示されない")
+        XCTAssertTrue(app.alerts["タイトルが入力されていません"].exists, "未入力項目あり時のアラートが表示されない")
         app.alerts.buttons["閉じる"].tap()
         
         app.textFields["titleTextField"].tap()
@@ -89,9 +96,29 @@ class TodoList_SwiftUIUITests: XCTestCase {
         app.buttons["todoAddButton"].tap()
         sleep(1)
         
-        XCTAssertTrue(app.alerts["入力されていない項目があります"].exists, "未入力項目あり時のアラートが表示されない")
+        XCTAssertTrue(app.alerts["入力されている期限が無効です"].exists, "未入力項目あり時のアラートが表示されない")
+        app.alerts.buttons["閉じる"].tap()
+        
+        app.datePickers["todoDatePicker"].tap()
+        app.textFields.firstMatch.tap()
+        app.textFields.firstMatch.typeText("11:59")
+        app.textFields["titleTextField"].tap()
+        sleep(1)
+        
+        app.buttons["todoAddButton"].tap()
+        sleep(1)
+        
+        XCTAssertTrue(app.alerts["詳細が入力されていません"].exists, "未入力項目あり時のアラートが表示されない")
         app.alerts.buttons["閉じる"].tap()
         sleep(1)
+        
+        app.textFields["detailTextField"].tap()
+        app.typeText(addTitle)
+        
+        app.buttons["todoAddButton"].tap()
+        sleep(1)
+        
+        XCTAssertTrue(!app.alerts["詳細が入力されていません"].exists, "未入力項目あり時のアラートが表示されない")
         
     }
     
@@ -172,18 +199,14 @@ class TodoList_SwiftUIUITests: XCTestCase {
         
         app.buttons["addButton"].tap()
 
-        XCTAssertTrue(app.scrollViews["ToDoInputView"].exists, "Todo入力画面が開いていない")
+        XCTAssertTrue(app.tables["ToDoInputView"].exists, "Todo入力画面が開いていない")
         XCTAssertTrue(app.buttons["todoAddButton"].exists, "Todo追加ボタンがない")
         XCTAssertTrue(app.buttons["cancelButton"].exists, "キャンセルボタンがない")
         
         XCTAssertTrue(app.staticTexts["titlelabel"].exists, "タイトルラベルがない")
         XCTAssertTrue(app.textFields["titleTextField"].exists, "タイトルテキストフィールドがない")
         
-        if #available(iOS 14.0, *) {
-            XCTAssertTrue(app.staticTexts["期限"].exists, "期限ラベルがない")
-        } else {
-            XCTAssertTrue(app.staticTexts["todoDateLabel"].exists, "期限ラベルがない")
-        }
+        XCTAssertTrue(app.staticTexts["期限"].exists, "期限ラベルがない")
         XCTAssertTrue(app.datePickers["todoDatePicker"].exists, "期限登録するdatePickerがない")
         
         XCTAssertTrue(app.staticTexts["detailLabel"].exists, "詳細ラベルがない")
@@ -206,6 +229,13 @@ class TodoList_SwiftUIUITests: XCTestCase {
         app.textFields["titleTextField"].tap()
         app.typeText(addTitle)
         app.buttons["Return"].tap()
+        
+        sleep(1)
+        app.datePickers["todoDatePicker"].tap()
+        app.textFields.firstMatch.tap()
+        app.textFields.firstMatch.typeText("11:59")
+        app.textFields["titleTextField"].tap()
+        
         sleep(1)
         app.textFields["detailTextField"].tap()
         sleep(1)
@@ -216,12 +246,4 @@ class TodoList_SwiftUIUITests: XCTestCase {
         
     }
 
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTOSSignpostMetric.applicationLaunch]) {
-                XCUIApplication().launch()
-            }
-        }
-    }
 }

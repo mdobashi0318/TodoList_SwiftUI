@@ -22,7 +22,43 @@ struct ToDoListView: View {
     
 
     
-    // MARK: UI
+    // MARK: Body
+    
+    var body: some View {
+        NavigationView {
+            List {
+                Section() {
+                    segmentedPicker
+                }
+                
+                if self.toDoviewModel.find(index: pickerIndex).count == 0 {
+                    Text("ToDoが登録されていません")
+                } else {
+                    ForEach(0..<self.toDoviewModel.todoModel.count, id: \.self) { row in
+                        NavigationLink(destination: TodoDetailView(toDoModel: self.toDoviewModel.todoModel[row])) {
+                            ToDoRow(todoModel: self.toDoviewModel.todoModel[row])
+                                .frame(height: 60)
+                        }
+                    }
+                }
+            }
+            .onAppear {
+                self.toDoviewModel.objectWillChange.send()
+            }
+            .listStyle(PlainListStyle())
+            .navigationBarTitle("ToDoList")
+            .navigationBarItems(leading: allDeleteButton ,trailing: addButton)
+        }
+        .accessibility(identifier: "ToDoList")
+    }
+}
+
+
+
+
+// MARK: - UI
+
+extension ToDoListView {
     
     /// ToDoの追加画面に遷移させるボタン
     var addButton: some View {
@@ -33,7 +69,10 @@ struct ToDoListView: View {
             .resizable()
         }
         .sheet(isPresented: $isShowModle) {
-            ToDoInputView(viewModel: .constant(toDoviewModel), toDoModel: .constant(ToDoModel()), isUpdate: false)
+            ToDoInputView(toDoModel: ToDoModel(), isUpdate: false)
+                .onDisappear {
+                    self.toDoviewModel.objectWillChange.send()
+                }
         }
         .frame(width: 30, height: 30)
         .accessibility(identifier: "addButton")
@@ -58,7 +97,7 @@ struct ToDoListView: View {
     
     
     /// セグメントピッカー
-    private func segmentedPicker() -> some View {
+    private var segmentedPicker: some View {
         return Picker(selection: $pickerIndex, label: Text("")) {
             Text("全件").tag(SegmentIndex.all)
             Text("アクティブ").tag(SegmentIndex.active)
@@ -69,36 +108,8 @@ struct ToDoListView: View {
         .padding(.all)
     }
     
-    
-    
-    
-    // MARK: Body
-    
-    
-    var body: some View {
-        NavigationView {
-            List {
-                Section() {
-                    segmentedPicker()
-                }
-                if self.toDoviewModel.find(index: pickerIndex).count == 0 {
-                    Text("ToDoが登録されていません")
-                } else {
-                    ForEach(0..<self.toDoviewModel.todoModel.count, id: \.self) { row in
-                        NavigationLink(destination: TodoDetailView(viewModel: toDoviewModel, toDoModel: self.toDoviewModel.todoModel[row])) {
-                            ToDoRow(todoModel: self.toDoviewModel.todoModel[row])
-                                .frame(height: 60)
-                        }
-                    }
-                }
-            }
-            .listStyle(PlainListStyle())
-            .navigationBarTitle("ToDoList")
-            .navigationBarItems(leading: allDeleteButton ,trailing: addButton)
-        }
-        .accessibility(identifier: "ToDoList")
-    }
 }
+
 
 
 // MARK: - Previews

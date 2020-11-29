@@ -118,6 +118,22 @@ final class ToDoViewModel: ObservableObject {
     }
     
     
+    
+    /// バリデーションチェック
+    /// - Parameter callBack: バリデーションの結果とあればエラーメッセージ
+    /// - Returns: 入力に問題がなければfalse、問題があればtrueを返す
+    func validateCheck(toDoModel: ToDoModel, callBack: (Bool, String) -> ()) {
+        if toDoModel.toDoName.isEmpty {
+            callBack(true, R.string.alertMessage.validate("タイトル"))
+        } else if toDoModel.todoDate <= Format().stringFromDate(date: Format().dateFormat()) {
+            callBack(true, R.string.alertMessage.validateDate())
+        } else if toDoModel.toDo.isEmpty {
+            callBack(true, R.string.alertMessage.validate("詳細"))
+        } else {
+            callBack(false, "")
+        }
+    }
+    
     /// Realmのモデルを参照しない時はTestデータの配列を使う
 //    @Published var todoModel: [ToDoModel] = todomodel
 
