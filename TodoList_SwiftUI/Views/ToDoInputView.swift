@@ -19,9 +19,6 @@ struct ToDoInputView: View {
     
     @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
     
-    /// バリデーションアラートの表示フラグ
-    @State var isValidate = false
-    
     /// Todoの更新か追加かを判断
     @State var isUpdate: Bool
     
@@ -108,7 +105,6 @@ extension ToDoInputView {
                     }
                 } else {
                     errorMessage = message
-                    self.isValidate = true
                     self.isShowAlert = true
                     
                 }
@@ -263,18 +259,9 @@ extension ToDoInputView {
             })
             
         } else {
-            return Alert(title: Text(self.errorMessage), dismissButton: .default(Text(R.string.alertMessage.close())) {
-                self.isValidate = false
-            })
+            return Alert(title: Text(self.errorMessage), dismissButton: .default(Text(R.string.alertMessage.close())))
             
         }
-    }
-    
-    
-    private var dateRange: ClosedRange<Date> {
-        let min = Calendar.current.date(byAdding: .year, value: -1, to: Date())!
-        let max = Calendar.current.date(byAdding: .year, value: 1, to: Date())!
-        return min...max
     }
     
 }
