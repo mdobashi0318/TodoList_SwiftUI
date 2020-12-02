@@ -53,8 +53,9 @@ final class ToDoModel: Object {
         
         let realm: Realm
         do {
-            realm = try Realm()
-            
+//            realm = try Realm()
+            realm = try Realm(fileURL: (FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "TodoList-SwiftUI")?.appendingPathComponent("db.realm"))!)
+//            realm = try Realm(fileURL: Realm.Configuration.defaultConfiguration.fileURL!)
             return realm
         }
         catch {
@@ -193,12 +194,13 @@ final class ToDoModel: Object {
     
     /// 全件削除
     class func allDelete() {
-        let realm = try! Realm()
+        guard let realm = initRealm() else { return }
         
         try! realm.write {
             realm.deleteAll()
         }
         NotificationManager().allRemoveNotification()
+        
     }
     
 }

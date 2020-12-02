@@ -47,10 +47,13 @@ struct TodoWidgetEntryView : View {
     var todomodel: ToDoModel?
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Text("Next Todo")
+                .font(.caption)
             Text(todomodel?.toDoName ?? "No Todo")
+            Text(todomodel?.todoDate ?? "")
         }
+        .padding()
     }
 }
 
@@ -75,7 +78,12 @@ struct TodoWidget: Widget {
 
 struct TodoWidget_Previews: PreviewProvider {
     static var previews: some View {
-        TodoWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()), todomodel: todomodel[0])
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
+        Group {
+            TodoWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()), todomodel: todomodel[0])
+                .previewContext(WidgetPreviewContext(family: .systemSmall))
+            
+            TodoWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()), todomodel: nil)
+                .previewContext(WidgetPreviewContext(family: .systemSmall))
+        }
     }
 }
