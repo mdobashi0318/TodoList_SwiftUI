@@ -50,12 +50,13 @@ final class ToDoModel: Object {
     
     /// Realmのインスタンス化
     class func initRealm() -> Realm? {
-        
+        var configuration: Realm.Configuration
         let realm: Realm
         do {
-//            realm = try Realm()
-            realm = try Realm(fileURL: (FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "TodoList-SwiftUI")?.appendingPathComponent("db.realm"))!)
-//            realm = try Realm(fileURL: Realm.Configuration.defaultConfiguration.fileURL!)
+            configuration = Realm.Configuration()
+            let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.TodoList-SwiftUI")
+            configuration.fileURL = url!.appendingPathComponent("db.realm")
+            realm = try Realm(configuration: configuration)
             return realm
         }
         catch {
