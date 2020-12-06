@@ -6,17 +6,17 @@ PODS:
   - R.swift (5.3.0):
     - R.swift.Library (~> 5.3.0)
   - R.swift.Library (5.3.0)
-  - Realm (5.3.2):
-    - Realm/Headers (= 5.3.2)
-  - Realm/Headers (5.3.2)
-  - RealmSwift (5.3.2):
-    - Realm (= 5.3.2)
+  - Realm (10.2.0):
+    - Realm/Headers (= 10.2.0)
+  - Realm/Headers (10.2.0)
+  - RealmSwift (10.2.0):
+    - Realm (= 10.2.0)
   - SnapKit (5.0.1)
 
 DEPENDENCIES:
   - NotificationBannerSwift (~> 3.0.0)
   - R.swift (= 5.3.0)
-  - RealmSwift (= 5.3.2)
+  - RealmSwift (= 10.2.0)
 
 SPEC REPOS:
   trunk:
@@ -33,10 +33,10 @@ SPEC CHECKSUMS:
   NotificationBannerSwift: 713e20f21b6105f4a36a00e5d9fa414a930d3d8e
   R.swift: 4170fb7161c67be3bc1a847040b79367d69c419f
   R.swift.Library: 0fc583cb55a99e28901299cc451614cad1161962
-  Realm: c6794276ca8884808ba168a22f9d71362b170b85
-  RealmSwift: 42ec6cec3170aeeda407f797f07268a7d055ebc7
+  Realm: d7914ebf66bb182469726f997c4c38eff286aab0
+  RealmSwift: aad08b7dc8c732b7b5794286e9df83739bf834f1
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: 8099042b8bf53a070eeb181624169d9d0e0713b0
+PODFILE CHECKSUM: a4f1aff3a4929920f506b6c01286a64c147eea1b
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0
