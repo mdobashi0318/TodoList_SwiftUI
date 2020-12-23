@@ -30,12 +30,14 @@ struct ToDoListView: View {
                 Section() {
                     segmentedPicker
                 }
-                
                 if self.toDoviewModel.find(index: pickerIndex).count == 0 {
                     Text("ToDoが登録されていません")
                 } else {
                     ForEach(0..<self.toDoviewModel.todoModel.count, id: \.self) { row in
-                        NavigationLink(destination: TodoDetailView(toDoModel: self.toDoviewModel.todoModel[row])) {
+                        NavigationLink(destination:
+                                        TodoDetailView(toDoModel: self.$toDoviewModel.todoModel[row])
+                                        
+                        ) {
                             ToDoRow(todoModel: self.toDoviewModel.todoModel[row])
                                 .frame(height: 60)
                         }
@@ -69,7 +71,7 @@ extension ToDoListView {
             .resizable()
         }
         .sheet(isPresented: $isShowModle) {
-            ToDoInputView(toDoModel: ToDoModel(), isUpdate: false)
+            ToDoInputView(toDoModel: .constant(ToDoModel()), isUpdate: false)
                 .onDisappear {
                     self.toDoviewModel.objectWillChange.send()
                 }

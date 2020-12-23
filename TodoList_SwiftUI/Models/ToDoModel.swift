@@ -207,7 +207,7 @@ final class ToDoModel: Object {
 // MARK: - テスト Todo
 
 /// テスト用の配列
-let todomodel:[ToDoModel] = {
+let testModel:[ToDoModel] = {
         
     let todo1 = ToDoModel()
     todo1.toDoName = "TODOName1"

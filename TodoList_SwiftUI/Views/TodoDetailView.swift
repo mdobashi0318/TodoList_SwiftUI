@@ -12,7 +12,7 @@ struct TodoDetailView: View {
     
     // MARK: Properties
     
-    @State var toDoModel: ToDoModel
+    @Binding var toDoModel: ToDoModel
     
     /// Todoの編集するためのモーダルを出すフラグ
     @State var isShowModle = false
@@ -78,7 +78,7 @@ extension TodoDetailView {
         }
         .sheet(isPresented: $isShowModle) {
             /// 編集を選択
-            ToDoInputView(toDoModel: self.toDoModel, isUpdate: true)
+            ToDoInputView(toDoModel: self.$toDoModel, isUpdate: true)
         }
         .alert(isPresented: $isDeleteAction) {
             /// 削除を選択
@@ -126,7 +126,7 @@ extension TodoDetailView {
 struct TodoDetail_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            TodoDetailView(toDoModel: todomodel[0])
+            TodoDetailView(toDoModel: .constant(testModel[0]))
             //            .colorScheme(.dark)
             //            .background(Color(.systemBackground))
             //            .environment(\.colorScheme, .dark)

@@ -12,7 +12,7 @@ struct ToDoInputView: View {
     
     
     // MARK: Properties
-    @State var toDoModel: ToDoModel
+    @Binding var toDoModel: ToDoModel
     
     /// datePickerで選択したDateを格納
     @State var tododate = Date()
@@ -228,13 +228,16 @@ extension ToDoInputView {
     
     /// Todoのアップデート
     private func updateTodo() {
-        ToDoViewModel().updateTodo(update: ToDoModel(id: toDoModel.id,
-                                               toDoName: toDoModel.toDoName,
-                                               todoDate: toDoModel.todoDate,
-                                               toDo: toDoModel.toDo,
-                                               createTime: toDoModel.createTime),
+        let update = ToDoModel(id: toDoModel.id,
+                               toDoName: toDoModel.toDoName,
+                               todoDate: toDoModel.todoDate,
+                               toDo: toDoModel.toDo,
+                               createTime: toDoModel.createTime)
+        
+        ToDoViewModel().updateTodo(update: update,
                              success: {
                                 self.presentationMode.wrappedValue.dismiss()
+                                self.toDoModel = update
                              },
                              failure: { error in
                                 self.isUpdateError = true
@@ -272,8 +275,8 @@ extension ToDoInputView {
 struct ToDoInputView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ToDoInputView(toDoModel: ToDoModel(), isUpdate: false)
-            ToDoInputView(toDoModel: todomodel[0], isUpdate: true)
+            ToDoInputView(toDoModel: .constant(ToDoModel()), isUpdate: false)
+            ToDoInputView(toDoModel: .constant(testModel[0]), isUpdate: true)
         }
     }
 }
