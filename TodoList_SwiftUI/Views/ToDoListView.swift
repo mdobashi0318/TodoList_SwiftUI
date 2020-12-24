@@ -36,16 +36,14 @@ struct ToDoListView: View {
                     ForEach(0..<self.toDoviewModel.todoModel.count, id: \.self) { row in
                         NavigationLink(destination:
                                         TodoDetailView(toDoModel: self.$toDoviewModel.todoModel[row])
-                                        
-                        ) {
+                                        .onDisappear {
+                                            self.toDoviewModel.objectWillChange.send()
+                                        }) {
                             ToDoRow(todoModel: self.toDoviewModel.todoModel[row])
                                 .frame(height: 60)
                         }
                     }
                 }
-            }
-            .onAppear {
-                self.toDoviewModel.objectWillChange.send()
             }
             .listStyle(PlainListStyle())
             .navigationBarTitle("ToDoList")

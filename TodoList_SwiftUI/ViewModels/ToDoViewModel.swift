@@ -46,6 +46,21 @@ final class ToDoViewModel: ObservableObject {
     }
     
     
+    func updateModel() {
+        switch segmentIndex {
+        case .active:
+            todoModel = todoModel.filter {
+                Format().dateFromString(string: $0.todoDate)! > Format().dateFormat()
+            }
+        case .expired:
+            todoModel = todoModel.filter {
+                $0.todoDate <= Format().stringFromDate(date: Date())
+            }
+        default:
+            break
+        }
+    }
+    
     /// Todoを１件検索
     func findTodo(todoId: String, createTime: String) -> ToDoModel {
         let model = ToDoModel.findRealm(todoId: todoId, createTime: createTime)
