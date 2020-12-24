@@ -231,16 +231,9 @@ extension ToDoInputView {
     
     /// Todoのアップデート
     private func updateTodo() {
-        let update = ToDoModel(id: toDoModel.id,
-                               toDoName: toDoModel.toDoName,
-                               todoDate: toDoModel.todoDate,
-                               toDo: toDoModel.toDo,
-                               createTime: toDoModel.createTime)
-        
-        ToDoViewModel().updateTodo(update: update,
+        ToDoViewModel().updateTodo(update: toDoModel,
                              success: {
                                 self.presentationMode.wrappedValue.dismiss()
-                                self.toDoModel = update
                              },
                              failure: { error in
                                 self.isUpdateError = true
