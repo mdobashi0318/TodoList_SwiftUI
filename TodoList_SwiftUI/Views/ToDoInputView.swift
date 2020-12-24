@@ -79,6 +79,9 @@ extension ToDoInputView {
     /// キャンセルボタン
     private var cancelButton: some View {
         Button(action: {
+            if isUpdate {
+                toDoModel = ToDoModel.findRealm(todoId: toDoModel.id, createTime: toDoModel.createTime)!
+            }
             self.presentationMode.wrappedValue.dismiss()
         }) {
             Image(systemName: "xmark.circle")
