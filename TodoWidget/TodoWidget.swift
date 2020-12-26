@@ -79,7 +79,7 @@ struct TodoWidget: Widget {
 struct TodoWidget_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            TodoWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()), todomodel: todomodel[0])
+            TodoWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()), todomodel: testModel[0])
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
             
             TodoWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()), todomodel: nil)

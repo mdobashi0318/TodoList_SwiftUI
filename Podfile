@@ -7,7 +7,6 @@ target 'TodoList_SwiftUI' do
 
   # Pods for TodoList_SwiftUI
   pod 'RealmSwift', '10.2.0'
-  pod 'NotificationBannerSwift', '~> 3.0.0'
   pod 'R.swift','5.3.0'
 
   target 'TodoList_SwiftUITests' do
@@ -17,6 +16,11 @@ target 'TodoList_SwiftUI' do
   end
 
   target 'TodoList_SwiftUIUITests' do
+    # Pods for testing
+    pod 'RealmSwift', '10.2.0'
+  end
+  
+  target 'TodoWidgetExtension' do
     # Pods for testing
     pod 'RealmSwift', '10.2.0'
   end
