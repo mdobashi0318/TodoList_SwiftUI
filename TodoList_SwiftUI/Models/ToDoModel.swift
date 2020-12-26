@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import WidgetKit
 
 // MARK: - ToDoModel
 
@@ -128,6 +129,11 @@ final class ToDoModel: Object {
             NotificationManager().addNotification(toDoModel: toDoModel) { _ in
                 /// 何もしない
             }
+            
+            if #available(iOS 14.0, *) {
+                WidgetCenter.shared.reloadAllTimelines()
+            }
+            
             result(nil)
         }
         catch {
@@ -157,6 +163,11 @@ final class ToDoModel: Object {
             NotificationManager().addNotification(toDoModel: toDoModel) { _ in
                 /// 何もしない
             }
+            
+            if #available(iOS 14.0, *) {
+                WidgetCenter.shared.reloadAllTimelines()
+            }
+            
             result(nil)
         }
         catch {
@@ -181,6 +192,11 @@ final class ToDoModel: Object {
             try realm.write() {
                 realm.delete(toDoModel)
             }
+            
+            if #available(iOS 14.0, *) {
+                WidgetCenter.shared.reloadAllTimelines()
+            }
+            
             result(nil)
         }
             
@@ -198,6 +214,11 @@ final class ToDoModel: Object {
         try! realm.write {
             realm.deleteAll()
         }
+        
+        if #available(iOS 14.0, *) {
+            WidgetCenter.shared.reloadAllTimelines()
+        }
+        
         NotificationManager().allRemoveNotification()
         
     }
