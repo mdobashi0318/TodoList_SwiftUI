@@ -12,7 +12,7 @@ struct ToDoInputView: View {
     
     
     // MARK: Properties
-    @State var toDoModel: ToDoModel
+    @Binding var toDoModel: ToDoModel
     
     /// datePickerで選択したDateを格納
     @State var tododate = Date()
@@ -54,11 +54,6 @@ struct ToDoInputView: View {
                     }
                 }
             }
-            .onDisappear {
-                if !self.isUpdate {
-                    self.toDoModel = ToDoModel()
-                }
-            }
             .navigationBarTitle(isUpdate ? "ToDo更新" : "ToDo追加")
             .navigationBarItems(leading: cancelButton ,trailing: addButton)
             .accessibility(identifier: "ToDoInputView")
@@ -79,6 +74,9 @@ extension ToDoInputView {
     /// キャンセルボタン
     private var cancelButton: some View {
         Button(action: {
+            if isUpdate {
+                toDoModel = ToDoModel.findRealm(todoId: toDoModel.id, createTime: toDoModel.createTime)!
+            }
             self.presentationMode.wrappedValue.dismiss()
         }) {
             Image(systemName: "xmark.circle")
@@ -228,11 +226,7 @@ extension ToDoInputView {
     
     /// Todoのアップデート
     private func updateTodo() {
-        ToDoViewModel().updateTodo(update: ToDoModel(id: toDoModel.id,
-                                               toDoName: toDoModel.toDoName,
-                                               todoDate: toDoModel.todoDate,
-                                               toDo: toDoModel.toDo,
-                                               createTime: toDoModel.createTime),
+        ToDoViewModel().updateTodo(update: toDoModel,
                              success: {
                                 self.presentationMode.wrappedValue.dismiss()
                              },
@@ -272,8 +266,8 @@ extension ToDoInputView {
 struct ToDoInputView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ToDoInputView(toDoModel: ToDoModel(), isUpdate: false)
-            ToDoInputView(toDoModel: todomodel[0], isUpdate: true)
+            ToDoInputView(toDoModel: .constant(ToDoModel()), isUpdate: false)
+            ToDoInputView(toDoModel: .constant(testModel[0]), isUpdate: true)
         }
     }
 }

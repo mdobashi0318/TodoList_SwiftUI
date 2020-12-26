@@ -30,7 +30,7 @@ struct ToDoRow: View {
 
 struct ToDoRow_Previews: PreviewProvider {
     static var previews: some View {
-        ToDoRow(todoModel: todomodel[0])
+        ToDoRow(todoModel: testModel[0])
             .previewLayout(.fixed(width: UIScreen.main.bounds.width, height: 60))
     }
 }
