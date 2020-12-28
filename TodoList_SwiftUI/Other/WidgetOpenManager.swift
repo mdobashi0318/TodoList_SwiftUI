@@ -24,9 +24,7 @@ final class WidgetOpenManager: ObservableObject {
     }
     
     @objc private func didTapWidgetTodo(notification: Notification) {
-        DispatchQueue.main.async { [weak self] in
-            self?.openTodoModal()
-        }
+        self.openTodoModal()
     }
     
     private func openTodoModal() {
