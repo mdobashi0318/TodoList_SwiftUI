@@ -58,6 +58,16 @@ final class ToDoViewModel: ObservableObject {
     }
     
     
+    /// 次に来るのTodoを検索する
+    func findNextTodo() -> ToDoModel? {
+        guard let nextTodo = find(index: .active).first,
+              !nextTodo.id.isEmpty else {
+            return nil
+        }
+        return nextTodo
+    }
+    
+    
     /// Todoの追加
     func addTodo(add: ToDoModel?, success: ()->()?, failure: @escaping (String?)->()) {
         guard let _add = add else {

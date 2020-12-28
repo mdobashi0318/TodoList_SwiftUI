@@ -46,6 +46,8 @@ struct TodoWidgetEntryView : View {
     
     var todomodel: ToDoModel?
 
+    private static let deeplinkURL: URL = URL(string: "widget-deeplink://")!
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text("Next Todo")
@@ -53,6 +55,7 @@ struct TodoWidgetEntryView : View {
             Text(todomodel?.toDoName ?? "No Todo")
             Text(todomodel?.todoDate ?? "")
         }
+        .widgetURL(Self.deeplinkURL)
         .padding()
     }
 }

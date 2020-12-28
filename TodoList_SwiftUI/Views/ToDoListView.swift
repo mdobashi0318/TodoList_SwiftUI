@@ -20,6 +20,7 @@ struct ToDoListView: View {
     
     @State var pickerIndex: SegmentIndex = .all
     
+    @ObservedObject var openWidget = WidgetOpenManager()
 
     
     // MARK: Body
@@ -48,6 +49,20 @@ struct ToDoListView: View {
             .listStyle(PlainListStyle())
             .navigationBarTitle("ToDoList")
             .navigationBarItems(leading: allDeleteButton ,trailing: addButton)
+            .sheet(isPresented: $openWidget.isOpneTodo) {
+                NavigationView {
+                    TodoDetailView(toDoModel: .constant(openWidget.nextTodo))
+                        .onDisappear {
+                            openWidget.closeTodoModal()
+                        }
+                        .navigationBarTitle(openWidget.nextTodo.toDoName)
+                        .navigationBarItems(leading: Button(action: {
+                            openWidget.closeTodoModal()
+                        }, label: {
+                            Image(systemName: "xmark")
+                        }), trailing: Button(""){})
+                }
+            }
         }
         .accessibility(identifier: "ToDoList")
     }

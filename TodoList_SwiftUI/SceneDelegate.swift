@@ -61,5 +61,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
 
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: R.string.notifications.opneTodo()), object: nil)
+    }
+
+
 }
 
