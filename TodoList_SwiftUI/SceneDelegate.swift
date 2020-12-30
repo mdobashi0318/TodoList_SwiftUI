@@ -22,7 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Create the SwiftUI view that provides the window contents.
         
         let toDoListView = ToDoListView()
-
+        openedFromWidget(connectionOptions.urlContexts)
+        
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
@@ -61,5 +62,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
 
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        openedFromWidget(URLContexts)
+    }
+
+
+    private func openedFromWidget(_ urlContexts: Set<UIOpenURLContext>) {
+        guard let _: UIOpenURLContext = urlContexts.first(where: { $0.url.scheme == "widget-deeplink-todolist" }) else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: R.string.notifications.openedFromWidget()), object: nil)
+        }
+    }
+    
 }
 
