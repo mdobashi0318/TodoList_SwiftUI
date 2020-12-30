@@ -68,9 +68,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     private func openedFromWidget(_ urlContexts: Set<UIOpenURLContext>) {
-        guard let _: UIOpenURLContext = urlContexts.first(where: { $0.url.scheme == "widget-deeplink" }) else { return }
+        guard let _: UIOpenURLContext = urlContexts.first(where: { $0.url.scheme == "widget-deeplink-todolist" }) else { return }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: R.string.notifications.opneTodo()), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: R.string.notifications.openedFromWidget()), object: nil)
         }
     }
     

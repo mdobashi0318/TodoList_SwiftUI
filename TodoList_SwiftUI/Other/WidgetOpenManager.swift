@@ -20,7 +20,7 @@ final class WidgetOpenManager: ObservableObject {
     
     /// NotificationCenterを追加する
     private func setNotificationCenter() {
-        NotificationCenter.default.addObserver(self, selector: #selector(didTapWidgetTodo(notification:)), name: NSNotification.Name(rawValue: R.string.notifications.opneTodo()), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didTapWidgetTodo(notification:)), name: NSNotification.Name(rawValue: R.string.notifications.openedFromWidget()), object: nil)
     }
     
     @objc private func didTapWidgetTodo(notification: Notification) {
