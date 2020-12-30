@@ -232,7 +232,7 @@ final class ToDoModel: Object {
             return oldRealm
         }
         catch {
-            print("エラーが発生しました")
+            devPrint("エラーが発生しました")
         }
         return nil
     }
@@ -240,7 +240,7 @@ final class ToDoModel: Object {
     
     /// Realmの保存場所にFileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.TodoList-SwiftUI")を設定したので、設定前の値をFileManagerに移行してから以前の値を削除
     func change_TodoModel_Ver() {
-        print("v1.3.0以前に作成したTodoの移行と削除を開始")
+        devPrint("v1.3.0以前に作成したTodoの移行と削除を開始")
         let oldRealm = self.oldRealm()
         let oldTodoModel = oldRealm?.objects(ToDoModel.self)
         var comNum: Int = 0
@@ -256,18 +256,25 @@ final class ToDoModel: Object {
                 }
             }
         }
-        print("移行に成功した件数: \(String(describing: comNum))/\(String(describing: oldTodoModel?.count ?? 0))")
+        devPrint("移行に成功した件数: \(String(describing: comNum))/\(String(describing: oldTodoModel?.count ?? 0))")
         
         do {
             try oldRealm?.write {
                 /// 前バージョンのModelを削除
                 oldRealm?.deleteAll()
                 UserDefaults.standard.setInt(key: .RealmFileVer, value: 1)
-                print("v1.3.0以前に作成したTodoの移行と削除を完了")
+                devPrint("v1.3.0以前に作成したTodoの移行と削除を完了")
             }
         } catch {
-            print("エラーが発生しました")
+            devPrint("エラーが発生しました")
         }
+    }
+    
+    
+    private func devPrint(_ message: String) {
+        #if DEBUG
+        print(message)
+        #endif
     }
     
     
