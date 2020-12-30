@@ -57,11 +57,10 @@ struct TodoWidgetEntryView : View {
         VStack(alignment: .leading) {
             Text("次の予定")
                 .font(.caption)
-            Text(entry.todomodel?.toDoName ?? "No Todo")
+            Text(entry.todomodel?.toDoName ?? "予定はありません")
             Text(entry.todomodel?.todoDate ?? "")
         }
         .widgetURL(Self.deeplinkURL)
-        .padding()
     }
 }
 
