@@ -16,7 +16,7 @@ struct Format {
     private func _dateFormatter(addSec: Bool) -> DateFormatter {
         let formatter: DateFormatter = DateFormatter()
         if addSec {
-            formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
+            formatter.dateFormat = "yyyy/MM/dd HH:mm:SSSS"
         } else {
             formatter.dateFormat = "yyyy/MM/dd HH:mm"
         }
