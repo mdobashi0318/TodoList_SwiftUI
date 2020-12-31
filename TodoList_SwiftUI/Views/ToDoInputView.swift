@@ -12,15 +12,12 @@ struct ToDoInputView: View {
     
     
     // MARK: Properties
-    @State var toDoModel: ToDoModel
+    @Binding var toDoModel: ToDoModel
     
     /// datePickerで選択したDateを格納
     @State var tododate = Date()
     
     @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
-    
-    /// バリデーションアラートの表示フラグ
-    @State var isValidate = false
     
     /// Todoの更新か追加かを判断
     @State var isUpdate: Bool
@@ -57,11 +54,6 @@ struct ToDoInputView: View {
                     }
                 }
             }
-            .onDisappear {
-                if !self.isUpdate {
-                    self.toDoModel = ToDoModel()
-                }
-            }
             .navigationBarTitle(isUpdate ? "ToDo更新" : "ToDo追加")
             .navigationBarItems(leading: cancelButton ,trailing: addButton)
             .accessibility(identifier: "ToDoInputView")
@@ -82,6 +74,9 @@ extension ToDoInputView {
     /// キャンセルボタン
     private var cancelButton: some View {
         Button(action: {
+            if isUpdate {
+                toDoModel = ToDoModel.findRealm(todoId: toDoModel.id, createTime: toDoModel.createTime)!
+            }
             self.presentationMode.wrappedValue.dismiss()
         }) {
             Image(systemName: "xmark.circle")
@@ -108,7 +103,6 @@ extension ToDoInputView {
                     }
                 } else {
                     errorMessage = message
-                    self.isValidate = true
                     self.isShowAlert = true
                     
                 }
@@ -232,11 +226,7 @@ extension ToDoInputView {
     
     /// Todoのアップデート
     private func updateTodo() {
-        ToDoViewModel().updateTodo(update: ToDoModel(id: toDoModel.id,
-                                               toDoName: toDoModel.toDoName,
-                                               todoDate: toDoModel.todoDate,
-                                               toDo: toDoModel.toDo,
-                                               createTime: toDoModel.createTime),
+        ToDoViewModel().updateTodo(update: toDoModel,
                              success: {
                                 self.presentationMode.wrappedValue.dismiss()
                              },
@@ -263,18 +253,9 @@ extension ToDoInputView {
             })
             
         } else {
-            return Alert(title: Text(self.errorMessage), dismissButton: .default(Text(R.string.alertMessage.close())) {
-                self.isValidate = false
-            })
+            return Alert(title: Text(self.errorMessage), dismissButton: .default(Text(R.string.alertMessage.close())))
             
         }
-    }
-    
-    
-    private var dateRange: ClosedRange<Date> {
-        let min = Calendar.current.date(byAdding: .year, value: -1, to: Date())!
-        let max = Calendar.current.date(byAdding: .year, value: 1, to: Date())!
-        return min...max
     }
     
 }
@@ -285,8 +266,8 @@ extension ToDoInputView {
 struct ToDoInputView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ToDoInputView(toDoModel: ToDoModel(), isUpdate: false)
-            ToDoInputView(toDoModel: todomodel[0], isUpdate: true)
+            ToDoInputView(toDoModel: .constant(ToDoModel()), isUpdate: false)
+            ToDoInputView(toDoModel: .constant(testModel[0]), isUpdate: true)
         }
     }
 }
