@@ -20,7 +20,7 @@ struct ToDoListView: View {
     
     @State var pickerIndex: SegmentIndex = .all
     
-    @ObservedObject var openWidget = WidgetOpenManager()
+    @ObservedObject var openWidget = WidgetOpenManager.shared
 
     
     // MARK: Body
@@ -53,11 +53,11 @@ struct ToDoListView: View {
                 NavigationView {
                     TodoDetailView(toDoModel: .constant(openWidget.nextTodo))
                         .onDisappear {
-                            openWidget.closeTodoModal()
+                            openWidget.isOpneTodo = false
                         }
                         .navigationBarTitle(openWidget.nextTodo.toDoName)
                         .navigationBarItems(leading: Button(action: {
-                            openWidget.closeTodoModal()
+                            openWidget.isOpneTodo = false
                         }, label: {
                             Image(systemName: "xmark")
                         }), trailing: Button(""){})
