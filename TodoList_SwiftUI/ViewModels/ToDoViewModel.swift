@@ -74,12 +74,13 @@ final class ToDoViewModel: ObservableObject {
             return failure("Todoの追加に失敗しました")
         }
         
-        ToDoModel.addRealm(addValue: _add) { error in
-            if let _error = error {
-                print(_error)
-                failure("Todoの追加に失敗しました")
-            } else {
+        ToDoModel.addRealm(addValue: _add) { result in
+            switch result {
+            case .success(_):
                 success()
+            case .failure(let error):
+                print(error.localizedDescription)
+                failure("Todoの追加に失敗しました")
             }
         }
     }
@@ -87,12 +88,14 @@ final class ToDoViewModel: ObservableObject {
     
     /// Todoの更新
     func updateTodo(update: ToDoModel, success: () -> (), failure: @escaping (String?)->()) {
-        ToDoModel.updateRealm(updateTodo: update, result: { error in
-            if let _error = error {
-                failure(_error)
-                return
+        ToDoModel.updateRealm(updateTodo: update, result: { result in
+            switch result {
+            case .success(_):
+                success()
+            case .failure(let error):
+                print(error.localizedDescription)
+                failure("Todoの更新に失敗しました")
             }
-            success()
         })
     }
     
@@ -101,14 +104,14 @@ final class ToDoViewModel: ObservableObject {
     
     /// Todoの削除
     func deleteTodo(todoId: String, createTime: String, success: (ToDoModel) -> (), failure: @escaping (String?)->()) {
-        ToDoModel.deleteRealm(todoId: todoId, createTime: createTime) { error in
-            
-            if let _error = error {
-                failure(_error)
-                return
+        ToDoModel.deleteRealm(todoId: todoId, createTime: createTime) { result in
+            switch result {
+            case .success(let model):
+                success(model)
+            case .failure(let error):
+                print(error.localizedDescription)
+                failure("Todoの削除に失敗しました")
             }
-            /// 呼び出し元のTodoがnilになるとクラッシュするのでToDoの削除後に空のTodoを入れて回避する
-            success(ToDoModel(id: "", toDoName: "", todoDate: "", toDo: "", createTime: ""))
             self.objectWillChange.send()
         }
     }
