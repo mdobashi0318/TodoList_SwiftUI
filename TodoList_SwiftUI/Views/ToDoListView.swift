@@ -18,8 +18,6 @@ struct ToDoListView: View {
     
     @State var isDeleteFlag = false
     
-    @State var pickerIndex: SegmentIndex = .all
-    
     @ObservedObject var openWidget = WidgetOpenManager.shared
 
     
@@ -31,14 +29,14 @@ struct ToDoListView: View {
                 Section() {
                     segmentedPicker
                 }
-                if self.toDoviewModel.find(index: pickerIndex).count == 0 {
+                if self.toDoviewModel.todoModel.count == 0 {
                     Text("ToDoが登録されていません")
                 } else {
                     ForEach(0..<self.toDoviewModel.todoModel.count, id: \.self) { row in
                         NavigationLink(destination:
                                         TodoDetailView(toDoModel: self.$toDoviewModel.todoModel[row])
                                         .onDisappear {
-                                            self.toDoviewModel.objectWillChange.send()
+                                            self.toDoviewModel.sinkAllTodoModel()
                                         }) {
                             ToDoRow(todoModel: self.toDoviewModel.todoModel[row])
                                 .frame(height: 60)
@@ -63,6 +61,11 @@ struct ToDoListView: View {
                         }), trailing: Button(""){})
                 }
             }
+        }.alert(isPresented: $toDoviewModel.isAlertError) {
+            Alert(title: Text("Todoの取得に失敗しました"), dismissButton: .default(Text("閉じる")) {
+                self.toDoviewModel.isAlertError = false
+                self.toDoviewModel.sinkAllTodoModel()
+            })
         }
         .accessibility(identifier: "ToDoList")
     }
@@ -86,7 +89,7 @@ extension ToDoListView {
         .sheet(isPresented: $isShowModle) {
             ToDoInputView(toDoModel: .constant(ToDoModel()), isUpdate: false)
                 .onDisappear {
-                    self.toDoviewModel.objectWillChange.send()
+                    toDoviewModel.sinkAllTodoModel()
                 }
         }
         .frame(width: 30, height: 30)
@@ -113,7 +116,7 @@ extension ToDoListView {
     
     /// セグメントピッカー
     private var segmentedPicker: some View {
-        return Picker(selection: $pickerIndex, label: Text("")) {
+        return Picker(selection: $toDoviewModel.segmentIndex, label: Text("")) {
             Text("全件").tag(SegmentIndex.all)
             Text("アクティブ").tag(SegmentIndex.active)
             Text("期限切れ").tag(SegmentIndex.expired)

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 enum SegmentIndex: Int, CaseIterable {
     case all = 0
@@ -19,12 +20,18 @@ final class ToDoViewModel: ObservableObject {
     
     var todoModel: [ToDoModel] = []
     
-    private var segmentIndex: SegmentIndex = .all
+    @Published var segmentIndex: SegmentIndex = .all
+    
+    var segmentPub: AnyCancellable?
+        
+    var isAlertError: Bool = false
+    
+    init() {
+        setSegmentPab()
+    }
     
     @discardableResult
     func find(index: SegmentIndex = .all) -> [ToDoModel] {
-        segmentIndex = index
-        
         guard let model = ToDoModel.allFindRealm() else {
             return []
         }
@@ -112,14 +119,13 @@ final class ToDoViewModel: ObservableObject {
                 print(error.localizedDescription)
                 failure("Todoの削除に失敗しました")
             }
-            self.objectWillChange.send()
         }
     }
     
     
     func allDeleteTodo() {
         ToDoModel.allDelete()
-        find(index: segmentIndex)
+        self.todoModel = []
         self.objectWillChange.send()
     }
     
@@ -139,9 +145,59 @@ final class ToDoViewModel: ObservableObject {
             callBack(false, "")
         }
     }
-    
-    /// Realmのモデルを参照しない時はTestデータの配列を使う
-//    @Published var todoModel: [ToDoModel] = todomodel
 
+    private func setSegmentPab() {
+        segmentPub = $segmentIndex.sink(receiveValue: { value in
+            print("$segmentIndex: \(value)")
+            self.sinkAllTodoModel()
+            switch value {
+            case .active:
+                self.todoModel = self.todoModel.filter {
+                    Format().dateFromString(string: $0.todoDate)! > Format().dateFormat()
+                }
+            case .expired:
+                self.todoModel = self.todoModel.filter {
+                    $0.todoDate <= Format().stringFromDate(date: Date())
+                }
+            case .all:
+                break
+            }
+        })
+    }
+
+    
+    
+    func fetchAllTodoModel() -> Future<[ToDoModel], TodModelError> {
+        return Future<[ToDoModel], TodModelError> { promise in
+            guard let model = ToDoModel.allFindRealm() else {
+                promise(.failure(.init(isError: true)))
+                return
+            }
+            promise(.success(model))
+        }
+    }
+    
+    
+    func sinkAllTodoModel() {
+        fetchAllTodoModel().sink(receiveCompletion: { complet in
+            switch complet {
+            case .finished:
+                self.objectWillChange.send()
+                print("完了")
+            case .failure(let error):
+                self.isAlertError = error.isError
+                print("失敗")
+            }
+        }, receiveValue: { model in
+            print("model: \(model)")
+            self.todoModel = model
+        }).cancel()
+        
+    }
+
+    struct TodModelError: Error {
+        var isError: Bool = false
+    }
+    
 }
 

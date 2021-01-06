@@ -26,8 +26,8 @@ final class ToDoModel: Object {
         }
         catch {
             print("エラーが発生しました")
+            return nil
         }
-        return nil
     }()
     
     
