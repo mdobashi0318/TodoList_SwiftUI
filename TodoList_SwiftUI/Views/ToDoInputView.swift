@@ -22,12 +22,6 @@ struct ToDoInputView: View {
     /// Todoの更新か追加かを判断
     @State var isUpdate: Bool
     
-    /// Todoの登録失敗アラートの表示フラグ
-    @State var isAddError = false
-    
-    /// Todoの更新失敗アラートの表示フラグ
-    @State var isUpdateError = false
-    
     /// Alertの表示フラグ
     @State var isShowAlert = false
     
@@ -206,34 +200,35 @@ extension ToDoInputView {
     
     /// Todoの追加
     private func addTodo() {
-        let id: String = String(ToDoModel.allFindRealm()!.count + 1)
-        ToDoViewModel().addTodo(add: ToDoModel(id: id,
-                                         toDoName: toDoModel.toDoName,
-                                         todoDate: toDoModel.todoDate,
-                                         toDo: toDoModel.toDo,
-                                         createTime: nil
-        ), success: {
-            self.presentationMode.wrappedValue.dismiss()
-        }, failure: { error in
-            if let _error = error {
-                print(_error)
-            }
-            self.isAddError = true
-            self.isShowAlert = true
-        })
+        ToDoViewModel().addTodo(add: toDoModel)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    self.presentationMode.wrappedValue.dismiss()
+                case .failure(let error):
+                    print(error)
+                    self.errorMessage = error.message
+                    self.isShowAlert = true
+                }
+            }, receiveValue: {
+            }).cancel()
     }
     
     
     /// Todoのアップデート
     private func updateTodo() {
-        ToDoViewModel().updateTodo(update: toDoModel,
-                             success: {
-                                self.presentationMode.wrappedValue.dismiss()
-                             },
-                             failure: { error in
-                                self.isUpdateError = true
-                                self.isShowAlert = true
-                             })
+        ToDoViewModel().updateTodo(update: toDoModel)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    self.presentationMode.wrappedValue.dismiss()
+                case .failure(let error):
+                    print(error)
+                    self.errorMessage = error.message
+                    self.isShowAlert = true
+                }
+            }, receiveValue: {
+            }).cancel()
     }
     
     
@@ -242,20 +237,7 @@ extension ToDoInputView {
     
     /// バリデート時の表示するアラート
     private func showValidateAlert() -> Alert {
-        if isAddError == true {
-            return Alert(title: Text("Todoの登録に失敗しました"), dismissButton: .default(Text(R.string.alertMessage.close())) {
-                self.isAddError = false
-            })
-            
-        } else if isUpdateError == true {
-            return Alert(title: Text("Todoの更新に失敗しました"), dismissButton: .default(Text(R.string.alertMessage.close())) {
-                self.isUpdateError = false
-            })
-            
-        } else {
-            return Alert(title: Text(self.errorMessage), dismissButton: .default(Text(R.string.alertMessage.close())))
-            
-        }
+        return Alert(title: Text(self.errorMessage), dismissButton: .default(Text(R.string.alertMessage.close())))
     }
     
 }

@@ -27,7 +27,7 @@ final class ToDoViewModel: ObservableObject {
     var isAlertError: Bool = false
     
     init() {
-        setSegmentPab()
+        setSegmentPub()
     }
     
     @discardableResult
@@ -51,6 +51,36 @@ final class ToDoViewModel: ObservableObject {
         
         return todoModel
     }
+    
+    
+    
+    func fetchAllTodoModel() -> Future<[ToDoModel], TodoModelError> {
+        return Future<[ToDoModel], TodoModelError> { promise in
+            guard let model = ToDoModel.allFindRealm() else {
+                promise(.failure(.init(isError: true)))
+                return
+            }
+            promise(.success(model))
+        }
+    }
+    
+    
+    func sinkAllTodoModel() {
+        fetchAllTodoModel()
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    self.objectWillChange.send()
+                case .failure(let error):
+                    self.isAlertError = error.isError
+                }
+            }, receiveValue: { model in
+                self.todoModel = model
+            })
+            .cancel()
+    }
+
+    
     
     /// Todoを１件検索
     func findTodo(todoId: String, createTime: String) -> ToDoModel {
@@ -76,48 +106,53 @@ final class ToDoViewModel: ObservableObject {
     
     
     /// Todoの追加
-    func addTodo(add: ToDoModel?, success: ()->()?, failure: @escaping (String?)->()) {
-        guard let _add = add else {
-            return failure("Todoの追加に失敗しました")
-        }
-        
-        ToDoModel.addRealm(addValue: _add) { result in
-            switch result {
-            case .success(_):
-                success()
-            case .failure(let error):
-                print(error.localizedDescription)
-                failure("Todoの追加に失敗しました")
+    func addTodo(add: ToDoModel?) -> Future<Void, TodoModelError> {
+        return Future<Void, TodoModelError> { promiss in
+            guard let _add = add else {
+                return promiss(.failure(.init(message: "Todoの追加に失敗しました")))
+            }
+            ToDoModel.addRealm(addValue: _add) { result in
+                switch result {
+                case .success(_):
+                    return promiss(.success(Void()))
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    return promiss(.failure(.init(message: "Todoの追加に失敗しました")))
+                }
             }
         }
     }
     
     
-    /// Todoの更新
-    func updateTodo(update: ToDoModel, success: () -> (), failure: @escaping (String?)->()) {
-        ToDoModel.updateRealm(updateTodo: update, result: { result in
-            switch result {
-            case .success(_):
-                success()
-            case .failure(let error):
-                print(error.localizedDescription)
-                failure("Todoの更新に失敗しました")
+    func updateTodo(update: ToDoModel) -> Future<Void, TodoModelError> {
+        return Future<Void, TodoModelError> { promiss in
+            ToDoModel.updateRealm(updateTodo: update) { result in
+                switch result {
+                case .success(_):
+                    return promiss(.success(Void()))
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    return promiss(.failure(.init(message: "Todoの更新に失敗しました")))
+                }
             }
-        })
+        }
     }
     
     
     
     
     /// Todoの削除
-    func deleteTodo(todoId: String, createTime: String, success: (ToDoModel) -> (), failure: @escaping (String?)->()) {
-        ToDoModel.deleteRealm(todoId: todoId, createTime: createTime) { result in
-            switch result {
-            case .success(let model):
-                success(model)
-            case .failure(let error):
-                print(error.localizedDescription)
-                failure("Todoの削除に失敗しました")
+    func deleteTodo(delete: ToDoModel) -> Future<ToDoModel, DeleteError> {
+        return Future<ToDoModel, DeleteError> { promiss in
+            ToDoModel.deleteRealm(deleteTodo: delete) { result in
+                switch result {
+                case .success(_):
+                    /// 呼び出し元のTodoがnilになるとクラッシュするのでToDoの削除後に空のTodoを入れて回避する
+                    return promiss(.success(ToDoModel()))
+                case .failure(let error):
+                    print(error)
+                    return promiss(.failure(.init(model: delete, message: "Todoの削除に失敗しました")))
+                }
             }
         }
     }
@@ -146,7 +181,7 @@ final class ToDoViewModel: ObservableObject {
         }
     }
 
-    private func setSegmentPab() {
+    private func setSegmentPub() {
         segmentPub = $segmentIndex.sink(receiveValue: { value in
             print("$segmentIndex: \(value)")
             self.sinkAllTodoModel()
@@ -166,38 +201,26 @@ final class ToDoViewModel: ObservableObject {
     }
 
     
+   
     
-    func fetchAllTodoModel() -> Future<[ToDoModel], TodModelError> {
-        return Future<[ToDoModel], TodModelError> { promise in
-            guard let model = ToDoModel.allFindRealm() else {
-                promise(.failure(.init(isError: true)))
-                return
-            }
-            promise(.success(model))
+    // MARK: Error
+    
+    struct TodoModelError: Error {
+        var isError: Bool = false
+        var message: String = ""
+        
+        init(isError: Bool) {
+            self.isError = isError
+        }
+        
+        init(message: String) {
+            self.message = message
         }
     }
     
-    
-    func sinkAllTodoModel() {
-        fetchAllTodoModel().sink(receiveCompletion: { complet in
-            switch complet {
-            case .finished:
-                self.objectWillChange.send()
-                print("完了")
-            case .failure(let error):
-                self.isAlertError = error.isError
-                print("失敗")
-            }
-        }, receiveValue: { model in
-            print("model: \(model)")
-            self.todoModel = model
-        }).cancel()
-        
+    struct DeleteError: Error {
+        var model: ToDoModel
+        var message: String
     }
-
-    struct TodModelError: Error {
-        var isError: Bool = false
-    }
-    
 }
 
