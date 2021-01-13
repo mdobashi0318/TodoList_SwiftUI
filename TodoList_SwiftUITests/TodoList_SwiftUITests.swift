@@ -23,81 +23,103 @@ class TodoList_SwiftUITests: XCTestCase {
     }
     
     
-    func test_AddModel() {
+    
+    func test_AddViewModel() {
         
-        ToDoModel.addRealm(addValue: ToDoModel(toDoName: "UnitTest", todoDate: "2020/01/01 00:00", toDo: "詳細", createTime: nil)) { result in
-            switch result {
-            case .success(let todomodel):
-                XCTAssertNotNil(todomodel, "エラーが発生している")
+        ToDoViewModel().addTodo(add: ToDoModel(toDoName: "UnitTest", todoDate: "2020/01/01 00:00", toDo: "詳細")).sink(receiveCompletion: { completion in
+            switch completion {
+            case .finished:
+                let todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
+                XCTAssert(todoModel?.id == "1", "idが登録されていない")
+                XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
+                XCTAssert(todoModel?.todoDate == "2020/01/01 00:00", "Todoの期限が登録されていない")
+                XCTAssert(todoModel?.toDo == "詳細", "　Todoの詳細が登録されていない")
+                let createTime = todoModel?.createTime ?? ""
+                XCTAssert(!createTime.isEmpty, "Todo作成時間が登録されていない")
             case .failure(let error):
-                XCTAssertNil(error, "エラーが発生している")
+                XCTAssertNil(error, "エラーが発生している\(error)")
             }
-        }
+        }, receiveValue: {
+            /// 何もしない
+        }).cancel()
+    }
+    
+    
+    func test_EditViewModel() {
+        ToDoViewModel().addTodo(add: ToDoModel(toDoName: "UnitTest", todoDate: "2020/01/01 00:00", toDo: "詳細"))
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    let todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
+                    XCTAssert(todoModel?.id == "1", "idが登録されていない")
+                    XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
+                    XCTAssert(todoModel?.todoDate == "2020/01/01 00:00", "Todoの期限が登録されていない")
+                    XCTAssert(todoModel?.toDo == "詳細", "　Todoの詳細が登録されていない")
+                    let createTime = todoModel?.createTime ?? ""
+                    XCTAssert(!createTime.isEmpty, "Todo作成時間が登録されていない")
+                case .failure(let error):
+                    XCTAssertNil(error, "エラーが発生している\(error)")
+                }
+            }, receiveValue: {
+                /// 何もしない
+            }).cancel()
         
-        let todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
         
-        XCTAssert(todoModel?.id == "1", "idが登録されていない")
-        XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
-        XCTAssert(todoModel?.todoDate == "2020/01/01 00:00", "Todoの期限が登録されていない")
-        XCTAssert(todoModel?.toDo == "詳細", "　Todoの詳細が登録されていない")
-        let createTime = todoModel?.createTime ?? ""
-        XCTAssert(!createTime.isEmpty, "Todo作成時間が登録されていない")
+        
+        ToDoViewModel().updateTodo(update: ToDoModel(id: "1", toDoName: "EditUnitTest", todoDate: "2020/01/01 10:00", toDo: "詳細編集", createTime: nil))
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    let todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
+                    XCTAssert(todoModel?.id == "1", "idが登録されていない")
+                    XCTAssert(todoModel?.toDoName == "EditUnitTest", "Todoのタイトルが登録されていない")
+                    XCTAssert(todoModel?.todoDate == "2020/01/01 10:00", "　Todoの期限が登録されていない")
+                    XCTAssert(todoModel?.toDo == "詳細編集", "　Todoの詳細が登録されていない")
+                    XCTAssert(!(todoModel?.createTime!.isEmpty)!, "Todo作成時間が登録されていない")
+                case .failure(let error):
+                    XCTAssertNil(error, "エラーが発生している")
+                }
+                
+            }, receiveValue: {})
+            .cancel()
     }
     
     
     
-    func test_EditModel() {
-        ToDoModel.addRealm(addValue: ToDoModel(toDoName: "UnitTest", todoDate: "2020/01/01 00:00", toDo: "詳細", createTime: nil)) { result in
-            switch result {
-            case .success(let todomodel):
-                XCTAssertNotNil(todomodel, "エラーが発生している")
-            case .failure(let error):
-                XCTAssertNil(error, "エラーが発生している")
-            }
-        }
+    func test_DeleteViewModel() {
+        var todoModel: ToDoModel?
+        
+        ToDoViewModel().addTodo(add: ToDoModel(toDoName: "UnitTest", todoDate: "2020/01/01 00:00", toDo: "詳細"))
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
+                    XCTAssert(todoModel?.id == "1", "idが登録されていない")
+                    XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
+                    XCTAssert(todoModel?.todoDate == "2020/01/01 00:00", "Todoの期限が登録されていない")
+                    XCTAssert(todoModel?.toDo == "詳細", "　Todoの詳細が登録されていない")
+                    let createTime = todoModel?.createTime ?? ""
+                    XCTAssert(!createTime.isEmpty, "Todo作成時間が登録されていない")
+                case .failure(let error):
+                    XCTAssertNil(error, "エラーが発生している\(error)")
+                }
+            }, receiveValue: {
+                /// 何もしない
+            }).cancel()
         
         
-        ToDoModel.updateRealm(updateTodo: ToDoModel(id: "1", toDoName: "EditUnitTest", todoDate: "2020/01/01 10:00", toDo: "詳細編集", createTime: nil)) { result in
-            switch result {
-            case .success(let todomodel):
-                XCTAssertNotNil(todomodel, "エラーが発生している")
-            case .failure(let error):
-                XCTAssertNil(error, "エラーが発生している")
-            }
-        }
-        
-        
-        let todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
-        XCTAssert(todoModel?.id == "1", "idが登録されていない")
-        XCTAssert(todoModel?.toDoName == "EditUnitTest", "Todoのタイトルが登録されていない")
-        XCTAssert(todoModel?.todoDate == "2020/01/01 10:00", "　Todoの期限が登録されていない")
-        XCTAssert(todoModel?.toDo == "詳細編集", "　Todoの詳細が登録されていない")
-        XCTAssert(!(todoModel?.createTime!.isEmpty)!, "Todo作成時間が登録されていない")
+        ToDoViewModel().deleteTodo(delete: todoModel!)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    XCTAssertNil(ToDoModel.findRealm(todoId: "1", createTime: nil), "Todoの削除ができていない")
+                case .failure(let error):
+                    XCTAssertNil(error, "エラーが発生している\(error)")
+                }
+            }, receiveValue: { dummy in
+                XCTAssertNotNil(dummy, "ダミー用のモデルが入っていない")
+            })
+            .cancel()
     }
     
-    
-    
-    func test_DeleteModel() {
-        ToDoModel.addRealm(addValue: ToDoModel(toDoName: "UnitTest", todoDate: "2020/01/01 00:00", toDo: "詳細", createTime: nil)) { result in
-            switch result {
-            case .success(let todomodel):
-                XCTAssertNotNil(todomodel, "エラーが発生している")
-            case .failure(let error):
-                XCTAssertNil(error, "エラーが発生している")
-            }
-        }
-        
-        let todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
-        
-        ToDoModel.deleteRealm(deleteTodo: todoModel!, result: { result in
-            switch result {
-            case .success(let todomodel):
-                XCTAssertNotNil(todomodel, "エラーが発生している")
-            case .failure(let error):
-                XCTAssertNil(error, "エラーが発生している")
-            }
-        })
-        
-     }
-     
 }
