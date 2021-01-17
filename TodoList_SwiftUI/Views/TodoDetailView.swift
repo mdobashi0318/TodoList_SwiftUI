@@ -83,7 +83,12 @@ extension TodoDetailView {
         }
         .sheet(isPresented: $isShowModle) {
             /// 編集を選択
-            ToDoInputView(toDoModel: self.$toDoModel, isUpdate: true)
+            ToDoInputView(inputViewModel: InputViewModel(model: toDoModel),
+                          isUpdate: true
+            )
+            .onDisappear {
+                self.toDoModel = ToDoViewModel().findTodo(todoId: self.toDoModel.id, createTime: self.toDoModel.createTime ?? "")
+            }
         }
         .alert(isPresented: $isDeleteAction) {
             /// 削除を選択

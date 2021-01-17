@@ -87,7 +87,7 @@ extension ToDoListView {
             .resizable()
         }
         .sheet(isPresented: $isShowModle) {
-            ToDoInputView(toDoModel: .constant(ToDoModel()), isUpdate: false)
+            ToDoInputView(inputViewModel: InputViewModel(), isUpdate: false)
                 .onDisappear {
                     toDoviewModel.sinkAllTodoModel()
                 }

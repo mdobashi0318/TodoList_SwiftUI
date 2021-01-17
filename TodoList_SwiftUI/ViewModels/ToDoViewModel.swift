@@ -105,41 +105,8 @@ final class ToDoViewModel: ObservableObject {
     }
     
     
-    /// Todoの追加
-    func addTodo(add: ToDoModel?) -> Future<Void, TodoModelError> {
-        return Future<Void, TodoModelError> { promiss in
-            guard let _add = add else {
-                return promiss(.failure(.init(message: "Todoの追加に失敗しました")))
-            }
-            ToDoModel.addRealm(addValue: _add) { result in
-                switch result {
-                case .success(_):
-                    return promiss(.success(Void()))
-                case .failure(let error):
-                    print(error.localizedDescription)
-                    return promiss(.failure(.init(message: "Todoの追加に失敗しました")))
-                }
-            }
-        }
-    }
-    
-    
-    func updateTodo(update: ToDoModel) -> Future<Void, TodoModelError> {
-        return Future<Void, TodoModelError> { promiss in
-            ToDoModel.updateRealm(updateTodo: update) { result in
-                switch result {
-                case .success(_):
-                    return promiss(.success(Void()))
-                case .failure(let error):
-                    print(error.localizedDescription)
-                    return promiss(.failure(.init(message: "Todoの更新に失敗しました")))
-                }
-            }
-        }
-    }
-    
-    
-    
+ 
+  
     
     /// Todoの削除
     func deleteTodo(delete: ToDoModel) -> Future<ToDoModel, DeleteError> {
@@ -165,21 +132,7 @@ final class ToDoViewModel: ObservableObject {
     }
     
     
-    
-    /// バリデーションチェック
-    /// - Parameter callBack: バリデーションの結果とあればエラーメッセージ
-    /// - Returns: 入力に問題がなければfalse、問題があればtrueを返す
-    func validateCheck(toDoModel: ToDoModel, callBack: (Bool, String) -> ()) {
-        if toDoModel.toDoName.isEmpty {
-            callBack(true, R.string.alertMessage.validate("タイトル"))
-        } else if toDoModel.todoDate <= Format().stringFromDate(date: Format().dateFormat()) {
-            callBack(true, R.string.alertMessage.validateDate())
-        } else if toDoModel.toDo.isEmpty {
-            callBack(true, R.string.alertMessage.validate("詳細"))
-        } else {
-            callBack(false, "")
-        }
-    }
+   
 
     private func setSegmentPub() {
         segmentPub = $segmentIndex.sink(receiveValue: { value in
@@ -200,27 +153,5 @@ final class ToDoViewModel: ObservableObject {
         })
     }
 
-    
-   
-    
-    // MARK: Error
-    
-    struct TodoModelError: Error {
-        var isError: Bool = false
-        var message: String = ""
-        
-        init(isError: Bool) {
-            self.isError = isError
-        }
-        
-        init(message: String) {
-            self.message = message
-        }
-    }
-    
-    struct DeleteError: Error {
-        var model: ToDoModel
-        var message: String
-    }
 }
 

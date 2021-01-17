@@ -26,13 +26,14 @@ class TodoList_SwiftUITests: XCTestCase {
     
     func test_AddViewModel() {
         
-        ToDoViewModel().addTodo(add: ToDoModel(toDoName: "UnitTest", todoDate: "2020/01/01 00:00", toDo: "詳細")).sink(receiveCompletion: { completion in
+        let inputViewModel = InputViewModel(model: ToDoModel(toDoName: "UnitTest", todoDate: "2022/01/01 00:00", toDo: "詳細"))
+        inputViewModel.addTodo().sink(receiveCompletion: { completion in
             switch completion {
             case .finished:
                 let todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
                 XCTAssert(todoModel?.id == "1", "idが登録されていない")
                 XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
-                XCTAssert(todoModel?.todoDate == "2020/01/01 00:00", "Todoの期限が登録されていない")
+                XCTAssert(todoModel?.todoDate == "2022/01/01 00:00", "Todoの期限が登録されていない")
                 XCTAssert(todoModel?.toDo == "詳細", "　Todoの詳細が登録されていない")
                 let createTime = todoModel?.createTime ?? ""
                 XCTAssert(!createTime.isEmpty, "Todo作成時間が登録されていない")
@@ -46,14 +47,15 @@ class TodoList_SwiftUITests: XCTestCase {
     
     
     func test_EditViewModel() {
-        ToDoViewModel().addTodo(add: ToDoModel(toDoName: "UnitTest", todoDate: "2020/01/01 00:00", toDo: "詳細"))
+        var inputViewModel = InputViewModel(model: ToDoModel(toDoName: "UnitTest", todoDate: "2022/01/01 00:00", toDo: "詳細"))
+        inputViewModel.addTodo()
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
                     let todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
                     XCTAssert(todoModel?.id == "1", "idが登録されていない")
                     XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
-                    XCTAssert(todoModel?.todoDate == "2020/01/01 00:00", "Todoの期限が登録されていない")
+                    XCTAssert(todoModel?.todoDate == "2022/01/01 00:00", "Todoの期限が登録されていない")
                     XCTAssert(todoModel?.toDo == "詳細", "　Todoの詳細が登録されていない")
                     let createTime = todoModel?.createTime ?? ""
                     XCTAssert(!createTime.isEmpty, "Todo作成時間が登録されていない")
@@ -63,17 +65,17 @@ class TodoList_SwiftUITests: XCTestCase {
             }, receiveValue: {
                 /// 何もしない
             }).cancel()
+        inputViewModel = InputViewModel(model: ToDoModel(id: "1", toDoName: "EditUnitTest", todoDate: "2022/01/01 10:00", toDo: "詳細編集", createTime: nil))
         
         
-        
-        ToDoViewModel().updateTodo(update: ToDoModel(id: "1", toDoName: "EditUnitTest", todoDate: "2020/01/01 10:00", toDo: "詳細編集", createTime: nil))
+        inputViewModel.updateTodo()
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
                     let todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
                     XCTAssert(todoModel?.id == "1", "idが登録されていない")
                     XCTAssert(todoModel?.toDoName == "EditUnitTest", "Todoのタイトルが登録されていない")
-                    XCTAssert(todoModel?.todoDate == "2020/01/01 10:00", "　Todoの期限が登録されていない")
+                    XCTAssert(todoModel?.todoDate == "2022/01/01 10:00", "　Todoの期限が登録されていない")
                     XCTAssert(todoModel?.toDo == "詳細編集", "　Todoの詳細が登録されていない")
                     XCTAssert(!(todoModel?.createTime!.isEmpty)!, "Todo作成時間が登録されていない")
                 case .failure(let error):
@@ -89,14 +91,15 @@ class TodoList_SwiftUITests: XCTestCase {
     func test_DeleteViewModel() {
         var todoModel: ToDoModel?
         
-        ToDoViewModel().addTodo(add: ToDoModel(toDoName: "UnitTest", todoDate: "2020/01/01 00:00", toDo: "詳細"))
+        let inputViewModel = InputViewModel(model: ToDoModel(toDoName: "UnitTest", todoDate: "2022/01/01 00:00", toDo: "詳細"))
+        inputViewModel.addTodo()
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
                     todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
                     XCTAssert(todoModel?.id == "1", "idが登録されていない")
                     XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
-                    XCTAssert(todoModel?.todoDate == "2020/01/01 00:00", "Todoの期限が登録されていない")
+                    XCTAssert(todoModel?.todoDate == "2022/01/01 00:00", "Todoの期限が登録されていない")
                     XCTAssert(todoModel?.toDo == "詳細", "　Todoの詳細が登録されていない")
                     let createTime = todoModel?.createTime ?? ""
                     XCTAssert(!createTime.isEmpty, "Todo作成時間が登録されていない")
@@ -106,7 +109,6 @@ class TodoList_SwiftUITests: XCTestCase {
             }, receiveValue: {
                 /// 何もしない
             }).cancel()
-        
         
         ToDoViewModel().deleteTodo(delete: todoModel!)
             .sink(receiveCompletion: { completion in

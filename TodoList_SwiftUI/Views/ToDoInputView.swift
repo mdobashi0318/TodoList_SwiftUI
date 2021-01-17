@@ -12,7 +12,8 @@ struct ToDoInputView: View {
     
     
     // MARK: Properties
-    @Binding var toDoModel: ToDoModel
+    
+    @ObservedObject var inputViewModel: InputViewModel
     
     /// datePickerで選択したDateを格納
     @State var tododate = Date()
@@ -39,15 +40,6 @@ struct ToDoInputView: View {
                 todoDetailSection
             }
             .listStyle(GroupedListStyle())
-            .onAppear {
-                if self.isUpdate {
-                    /// 一度TodoModelにしてからTodoを操作する
-                    self.toDoModel = ToDoViewModel().findTodo(todoId: toDoModel.id, createTime: toDoModel.createTime ?? "")
-                    if let todoDate = Format().dateFromString(string: toDoModel.todoDate) {
-                        self.tododate = todoDate
-                    }
-                }
-            }
             .navigationBarTitle(isUpdate ? "ToDo更新" : "ToDo追加")
             .navigationBarItems(leading: cancelButton ,trailing: addButton)
             .accessibility(identifier: "ToDoInputView")
@@ -68,9 +60,6 @@ extension ToDoInputView {
     /// キャンセルボタン
     private var cancelButton: some View {
         Button(action: {
-            if isUpdate {
-                toDoModel = ToDoModel.findRealm(todoId: toDoModel.id, createTime: toDoModel.createTime)!
-            }
             self.presentationMode.wrappedValue.dismiss()
         }) {
             Image(systemName: "xmark.circle")
@@ -84,22 +73,10 @@ extension ToDoInputView {
     /// ToDo追加ボタン
     private var addButton: some View {
         Button(action: {
-
-            self.toDoModel.todoDate = Format().stringFromDate(date: self.tododate)
-                ToDoViewModel().validateCheck(toDoModel: toDoModel) { result, message in
-                if result == false {
-                    if !self.isUpdate {
-                        self.addTodo()
-                        
-                    } else {
-                        self.updateTodo()
-                        
-                    }
-                } else {
-                    errorMessage = message
-                    self.isShowAlert = true
-                    
-                }
+            if !self.isUpdate {
+                self.addTodo()
+            } else {
+                self.updateTodo()
             }
         }) {
             Image(systemName: "plus.circle")
@@ -160,7 +137,7 @@ extension ToDoInputView {
                         headerLabel(text: "タイトル", identifier: "titlelabel", isRequiredLabel: true)
                        , content: {
                         textField(placeholder: "タイトルを入力してください",
-                                  text: $toDoModel.toDoName,
+                                  text: $inputViewModel.toDoName,
                                   identifier: "titleTextField"
                         )
                        })
@@ -170,7 +147,7 @@ extension ToDoInputView {
     /// 期限入力DatePicker
     private var todoDatePicker: some View {
         return Section() {
-            DatePicker("期限", selection: self.$tododate)
+            DatePicker("期限", selection: $inputViewModel.toDoDate)
             .accessibility(identifier: "todoDatePicker")
         }
     }
@@ -182,7 +159,7 @@ extension ToDoInputView {
                         headerLabel(text: "詳細", identifier: "detailLabel", isRequiredLabel: true)
                        , content: {
                         textField(placeholder: "詳細を入力してください",
-                                  text: $toDoModel.toDo,
+                                  text: $inputViewModel.toDo,
                                   identifier: "detailTextField"
                         )
                        })
@@ -200,7 +177,7 @@ extension ToDoInputView {
     
     /// Todoの追加
     private func addTodo() {
-        ToDoViewModel().addTodo(add: toDoModel)
+        inputViewModel.addTodo()
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -217,7 +194,7 @@ extension ToDoInputView {
     
     /// Todoのアップデート
     private func updateTodo() {
-        ToDoViewModel().updateTodo(update: toDoModel)
+        inputViewModel.updateTodo()
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -248,8 +225,8 @@ extension ToDoInputView {
 struct ToDoInputView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ToDoInputView(toDoModel: .constant(ToDoModel()), isUpdate: false)
-            ToDoInputView(toDoModel: .constant(testModel[0]), isUpdate: true)
+            ToDoInputView(inputViewModel: InputViewModel(), isUpdate: false)
+            ToDoInputView(inputViewModel: InputViewModel(model: testModel[0]), isUpdate: true)
         }
     }
 }
