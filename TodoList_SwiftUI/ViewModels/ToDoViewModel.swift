@@ -22,7 +22,7 @@ final class ToDoViewModel: ObservableObject {
     
     @Published var segmentIndex: SegmentIndex = .all
     
-    var segmentPub: AnyCancellable?
+    var cancellable: Set<AnyCancellable> = []
         
     var isAlertError: Bool = false
     
@@ -135,8 +135,9 @@ final class ToDoViewModel: ObservableObject {
    
 
     private func setSegmentPub() {
-        segmentPub = $segmentIndex.sink(receiveValue: { value in
-            print("$segmentIndex: \(value)")
+        $segmentIndex
+            .print()
+            .sink(receiveValue: { value in
             self.sinkAllTodoModel()
             switch value {
             case .active:
@@ -151,6 +152,7 @@ final class ToDoViewModel: ObservableObject {
                 break
             }
         })
+        .store(in: &cancellable)
     }
 
 }

@@ -27,10 +27,17 @@ final class InputViewModel: ObservableObject {
     
     var createTime: String?
     
-    var toDoDataPub: AnyCancellable?
+    var cancellable: Set<AnyCancellable> = []
     
-    
+ 
+
     init(model: ToDoModel? = nil) {
+        setModelValue(model)
+        setDatePub()
+    }
+    
+    
+    private func setModelValue(_ model: ToDoModel?) {
         if let _model = model {
             id = _model.id
             toDoName = _model.toDoName
@@ -41,14 +48,18 @@ final class InputViewModel: ObservableObject {
             toDo = _model.toDo
             createTime = _model.createTime
         }
-        setDatePub()
     }
     
-    
     private func setDatePub() {
-        toDoDataPub = $toDoDate.sink(receiveValue: { toDoDate in
-            self.todoDateStr = Format().stringFromDate(date: toDoDate)
-        })
+        $toDoDate
+            .map { date in
+                Format().stringFromDate(date: date)
+            }
+            .print()
+            .sink(receiveValue: { toDoDate in
+                self.todoDateStr = toDoDate
+            })
+            .store(in: &cancellable)
     }
     
     
