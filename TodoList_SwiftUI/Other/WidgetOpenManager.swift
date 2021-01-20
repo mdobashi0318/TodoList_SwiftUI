@@ -14,7 +14,19 @@ final class WidgetOpenManager: ObservableObject {
     
     @Published var isOpneTodo: Bool = false
     
-    var nextTodo: ToDoModel!
+    private(set) var nextTodo: ToDoModel!
+    
+    /// 次に来るのTodoを検索する
+    var findNextTodo: ToDoModel? {
+        get {
+            guard let model = ToDoModel.allFindRealm(),
+                  let _nextTodo = model.filter({ Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() }).first,
+                  !_nextTodo.id.isEmpty else {
+                return nil
+            }
+            return _nextTodo
+        }
+    }
     
     
     private let openedFromWidget = NotificationCenter.default.publisher(for: Notification.Name(rawValue: R.string.notifications.openedFromWidget()))
@@ -24,7 +36,7 @@ final class WidgetOpenManager: ObservableObject {
     
     
     private func openTodoModal() {
-        guard let _nextTodo = ToDoViewModel().findNextTodo() else {
+        guard let _nextTodo = findNextTodo else {
             return
         }
         nextTodo = _nextTodo

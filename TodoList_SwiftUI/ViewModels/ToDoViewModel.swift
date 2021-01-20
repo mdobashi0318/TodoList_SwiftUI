@@ -30,29 +30,6 @@ final class ToDoViewModel: ObservableObject {
         setSegmentPub()
     }
     
-    @discardableResult
-    func find(index: SegmentIndex = .all) -> [ToDoModel] {
-        guard let model = ToDoModel.allFindRealm() else {
-            return []
-        }
-        
-        switch index {
-        case .active:
-            todoModel = model.filter {
-                Format().dateFromString(string: $0.todoDate)! > Format().dateFormat()
-            }
-        case .expired:
-            todoModel = model.filter {
-                $0.todoDate <= Format().stringFromDate(date: Date())
-            }
-        default:
-            todoModel = model
-        }
-        
-        return todoModel
-    }
-    
-    
     
     func fetchAllTodoModel() -> Future<[ToDoModel], TodoModelError> {
         return Future<[ToDoModel], TodoModelError> { promise in
@@ -94,19 +71,6 @@ final class ToDoViewModel: ObservableObject {
         return todo
     }
     
-    
-    /// 次に来るのTodoを検索する
-    func findNextTodo() -> ToDoModel? {
-        guard let nextTodo = find(index: .active).first,
-              !nextTodo.id.isEmpty else {
-            return nil
-        }
-        return nextTodo
-    }
-    
-    
- 
-  
     
     /// Todoの削除
     func deleteTodo(delete: ToDoModel) -> Future<ToDoModel, DeleteError> {
