@@ -128,6 +128,7 @@
 		D066E6C324701B10007FA3DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D06C910E25B48F8E007D6D08 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		D0750DC824769BD500BAB0C9 /* TodoDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoDetailView.swift; sourceTree = "<group>"; };
+		D08042B825B88B9E003F99F8 /* TodoWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TodoWidgetExtension.entitlements; sourceTree = "<group>"; };
 		D0A3858B257BC3F8007332CD /* TodoList_SwiftUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TodoList_SwiftUI.entitlements; sourceTree = "<group>"; };
 		D0BD8D41257283BF009BCA97 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AlertMessage.strings; sourceTree = "<group>"; };
 		D0BD8D4625728415009BCA97 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
@@ -243,6 +244,7 @@
 		D066E69324701B0B007FA3DB = {
 			isa = PBXGroup;
 			children = (
+				D08042B825B88B9E003F99F8 /* TodoWidgetExtension.entitlements */,
 				D066E69E24701B0B007FA3DB /* TodoList_SwiftUI */,
 				D066E6B524701B10007FA3DB /* TodoList_SwiftUITests */,
 				D066E6C024701B10007FA3DB /* TodoList_SwiftUIUITests */,
@@ -778,6 +780,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = TodoWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7RPFL7EXKD;
 				INFOPLIST_FILE = TodoWidget/Info.plist;
@@ -802,6 +805,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = TodoWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7RPFL7EXKD;
 				INFOPLIST_FILE = TodoWidget/Info.plist;
