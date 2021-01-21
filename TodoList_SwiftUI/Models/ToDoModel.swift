@@ -26,8 +26,8 @@ final class ToDoModel: Object {
         }
         catch {
             print("エラーが発生しました")
+            return nil
         }
-        return nil
     }()
     
     
@@ -55,7 +55,7 @@ final class ToDoModel: Object {
     
     // MARK: init
     
-    convenience init(id: String, toDoName: String, todoDate: String, toDo: String, createTime: String?) {
+    convenience init(id: String = "", toDoName: String, todoDate: String, toDo: String, createTime: String? = nil) {
         self.init()
         
         self.id = id
@@ -97,7 +97,7 @@ final class ToDoModel: Object {
         if let _createTime = createTime {
             return (realm.objects(ToDoModel.self).filter("createTime == '\(String(describing: _createTime))'").first)
         } else {
-            return (realm.objects(ToDoModel.self).filter("id == '\(String(describing: todoId))'").first!)
+            return (realm.objects(ToDoModel.self).filter("id == '\(String(describing: todoId))'").first)
         }
         
     }
@@ -110,12 +110,12 @@ final class ToDoModel: Object {
     ///   - addValue: 登録するTodoの値
     ///   - result: Todoの登録時のエラー
     /// - Returns: エラーがなければnil、あればエラーを返す
-    static func addRealm(addValue:ToDoModel, result: (Error?) -> () ) {
+    static func addRealm(addValue:ToDoModel, result: (Result<Void, Error>) -> () ) {
         
         guard let realm = initRealm else { return }
         
         let toDoModel: ToDoModel = ToDoModel()
-        toDoModel.id = addValue.id
+        toDoModel.id = String(ToDoModel.allFindRealm()!.count + 1)
         toDoModel.toDoName = addValue.toDoName
         toDoModel.todoDate = addValue.todoDate
         toDoModel.toDo = addValue.toDo
@@ -133,11 +133,10 @@ final class ToDoModel: Object {
             if #available(iOS 14.0, *) {
                 WidgetCenter.shared.reloadAllTimelines()
             }
-            
-            result(nil)
+            result(.success(Void()))
         }
         catch {
-            result(error)
+            result(.failure(error))
         }
     
     }
@@ -150,7 +149,7 @@ final class ToDoModel: Object {
     ///   - updateTodo: 更新する値
     ///   - result: Todoの更新時のエラー
     /// - Returns: エラーがなければnil、あればエラーを返す
-    static func updateRealm(updateTodo: ToDoModel, result: (String?) -> () ) {
+    static func updateRealm(updateTodo: ToDoModel, result: (Result<Void, Error>) -> () ) {
         guard let realm = initRealm else { return }
         let toDoModel: ToDoModel = ToDoModel.findRealm(todoId: updateTodo.id, createTime: updateTodo.createTime)!
         
@@ -168,10 +167,10 @@ final class ToDoModel: Object {
                 WidgetCenter.shared.reloadAllTimelines()
             }
             
-            result(nil)
+            result(.success(Void()))
         }
         catch {
-            result("Todoの更新に失敗しました")
+            result(.failure(error))
         }
         
     }
@@ -183,25 +182,25 @@ final class ToDoModel: Object {
     /// - Parameters:
     ///   - todoId: TodoId
     ///   - createTime: Todoの作成時間
-    static func deleteRealm(todoId: String, createTime: String, result: (String?) -> () ) {
+    static func deleteRealm(deleteTodo: ToDoModel, result: (Result<Void, Error>) -> () ) {
         guard let realm = initRealm else { return }
-        let toDoModel: ToDoModel = ToDoModel.findRealm(todoId: todoId, createTime: createTime)!
-        NotificationManager().removeNotification([createTime])
+        if let _createTime = deleteTodo.createTime {
+            NotificationManager().removeNotification([_createTime])
+        }
         
         do {
             try realm.write() {
-                realm.delete(toDoModel)
+                realm.delete(deleteTodo)
             }
             
             if #available(iOS 14.0, *) {
                 WidgetCenter.shared.reloadAllTimelines()
             }
             
-            result(nil)
+            result(.success(Void()))
         }
-            
         catch {
-            result("ToDoの削除に失敗しました")
+            result(.failure(error))
         }
           
     }
@@ -249,10 +248,13 @@ final class ToDoModel: Object {
         NotificationManager().allRemoveNotification()
         
         oldTodoModel?.forEach { todo in
-            ToDoModel.addRealm(addValue: todo) { resul in
-                if resul == nil {
-                    print("追加に成功: \(todo)")
-                    comNum += 1
+            ToDoModel.addRealm(addValue: todo) { result in
+                switch result {
+                case .success(_):
+                print("追加に成功: \(todo)")
+                comNum += 1
+                case .failure(let error):
+                    devPrint(error.localizedDescription)
                 }
             }
         }

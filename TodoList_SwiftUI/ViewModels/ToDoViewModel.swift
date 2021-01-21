@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 enum SegmentIndex: Int, CaseIterable {
     case all = 0
@@ -19,31 +20,44 @@ final class ToDoViewModel: ObservableObject {
     
     var todoModel: [ToDoModel] = []
     
-    private var segmentIndex: SegmentIndex = .all
+    @Published var segmentIndex: SegmentIndex = .all
     
-    @discardableResult
-    func find(index: SegmentIndex = .all) -> [ToDoModel] {
-        segmentIndex = index
+    var cancellable: Set<AnyCancellable> = []
         
-        guard let model = ToDoModel.allFindRealm() else {
-            return []
-        }
-        
-        switch index {
-        case .active:
-            todoModel = model.filter {
-                Format().dateFromString(string: $0.todoDate)! > Format().dateFormat()
-            }
-        case .expired:
-            todoModel = model.filter {
-                $0.todoDate <= Format().stringFromDate(date: Date())
-            }
-        default:
-            todoModel = model
-        }
-        
-        return todoModel
+    var isAlertError: Bool = false
+    
+    init() {
+        setSegmentPub()
     }
+    
+    
+    func fetchAllTodoModel() -> Future<[ToDoModel], TodoModelError> {
+        return Future<[ToDoModel], TodoModelError> { promise in
+            guard let model = ToDoModel.allFindRealm() else {
+                promise(.failure(.init(isError: true)))
+                return
+            }
+            promise(.success(model))
+        }
+    }
+    
+    
+    func sinkAllTodoModel() {
+        fetchAllTodoModel()
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    self.objectWillChange.send()
+                case .failure(let error):
+                    self.isAlertError = error.isError
+                }
+            }, receiveValue: { model in
+                self.todoModel = model
+            })
+            .cancel()
+    }
+
+    
     
     /// Todoを１件検索
     func findTodo(todoId: String, createTime: String) -> ToDoModel {
@@ -58,87 +72,52 @@ final class ToDoViewModel: ObservableObject {
     }
     
     
-    /// 次に来るのTodoを検索する
-    func findNextTodo() -> ToDoModel? {
-        guard let nextTodo = find(index: .active).first,
-              !nextTodo.id.isEmpty else {
-            return nil
-        }
-        return nextTodo
-    }
-    
-    
-    /// Todoの追加
-    func addTodo(add: ToDoModel?, success: ()->()?, failure: @escaping (String?)->()) {
-        guard let _add = add else {
-            return failure("Todoの追加に失敗しました")
-        }
-        
-        ToDoModel.addRealm(addValue: _add) { error in
-            if let _error = error {
-                print(_error)
-                failure("Todoの追加に失敗しました")
-            } else {
-                success()
-            }
-        }
-    }
-    
-    
-    /// Todoの更新
-    func updateTodo(update: ToDoModel, success: () -> (), failure: @escaping (String?)->()) {
-        ToDoModel.updateRealm(updateTodo: update, result: { error in
-            if let _error = error {
-                failure(_error)
-                return
-            }
-            success()
-        })
-    }
-    
-    
-    
-    
     /// Todoの削除
-    func deleteTodo(todoId: String, createTime: String, success: (ToDoModel) -> (), failure: @escaping (String?)->()) {
-        ToDoModel.deleteRealm(todoId: todoId, createTime: createTime) { error in
-            
-            if let _error = error {
-                failure(_error)
-                return
+    func deleteTodo(delete: ToDoModel) -> Future<ToDoModel, DeleteError> {
+        return Future<ToDoModel, DeleteError> { promiss in
+            ToDoModel.deleteRealm(deleteTodo: delete) { result in
+                switch result {
+                case .success(_):
+                    /// 呼び出し元のTodoがnilになるとクラッシュするのでToDoの削除後に空のTodoを入れて回避する
+                    return promiss(.success(ToDoModel()))
+                case .failure(let error):
+                    print(error)
+                    return promiss(.failure(.init(model: delete, message: "Todoの削除に失敗しました")))
+                }
             }
-            /// 呼び出し元のTodoがnilになるとクラッシュするのでToDoの削除後に空のTodoを入れて回避する
-            success(ToDoModel(id: "", toDoName: "", todoDate: "", toDo: "", createTime: ""))
-            self.objectWillChange.send()
         }
     }
     
     
     func allDeleteTodo() {
         ToDoModel.allDelete()
-        find(index: segmentIndex)
+        self.todoModel = []
         self.objectWillChange.send()
     }
     
     
-    
-    /// バリデーションチェック
-    /// - Parameter callBack: バリデーションの結果とあればエラーメッセージ
-    /// - Returns: 入力に問題がなければfalse、問題があればtrueを返す
-    func validateCheck(toDoModel: ToDoModel, callBack: (Bool, String) -> ()) {
-        if toDoModel.toDoName.isEmpty {
-            callBack(true, R.string.alertMessage.validate("タイトル"))
-        } else if toDoModel.todoDate <= Format().stringFromDate(date: Format().dateFormat()) {
-            callBack(true, R.string.alertMessage.validateDate())
-        } else if toDoModel.toDo.isEmpty {
-            callBack(true, R.string.alertMessage.validate("詳細"))
-        } else {
-            callBack(false, "")
-        }
+   
+
+    private func setSegmentPub() {
+        $segmentIndex
+            .print()
+            .sink(receiveValue: { value in
+            self.sinkAllTodoModel()
+            switch value {
+            case .active:
+                self.todoModel = self.todoModel.filter {
+                    Format().dateFromString(string: $0.todoDate)! > Format().dateFormat()
+                }
+            case .expired:
+                self.todoModel = self.todoModel.filter {
+                    $0.todoDate <= Format().stringFromDate(date: Date())
+                }
+            case .all:
+                break
+            }
+        })
+        .store(in: &cancellable)
     }
-    
-    /// Realmのモデルを参照しない時はTestデータの配列を使う
-//    @Published var todoModel: [ToDoModel] = todomodel
 
 }
 

@@ -10,36 +10,37 @@ import Foundation
 
 final class WidgetOpenManager: ObservableObject {
         
-    var isOpneTodo: Bool = false
+    static let shared = WidgetOpenManager()
     
-    var nextTodo: ToDoModel!
+    @Published var isOpneTodo: Bool = false
     
-    init() {
-        setNotificationCenter()
+    private(set) var nextTodo: ToDoModel!
+    
+    /// 次に来るのTodoを検索する
+    var findNextTodo: ToDoModel? {
+        get {
+            guard let model = ToDoModel.allFindRealm(),
+                  let _nextTodo = model.filter({ Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() }).first,
+                  !_nextTodo.id.isEmpty else {
+                return nil
+            }
+            return _nextTodo
+        }
     }
     
-    /// NotificationCenterを追加する
-    private func setNotificationCenter() {
-        NotificationCenter.default.addObserver(self, selector: #selector(didTapWidgetTodo(notification:)), name: NSNotification.Name(rawValue: R.string.notifications.openedFromWidget()), object: nil)
-    }
     
-    @objc private func didTapWidgetTodo(notification: Notification) {
-        self.openTodoModal()
-    }
+    private let openedFromWidget = NotificationCenter.default.publisher(for: Notification.Name(rawValue: R.string.notifications.openedFromWidget()))
+        .sink(receiveValue: { notification in
+            shared.openTodoModal()
+        })
+    
     
     private func openTodoModal() {
-        guard let _nextTodo = ToDoViewModel().findNextTodo() else {
+        guard let _nextTodo = findNextTodo else {
             return
         }
         nextTodo = _nextTodo
         isOpneTodo = true
-        objectWillChange.send()
-    }
-    
-    
-    func closeTodoModal() {
-        isOpneTodo = false
-        objectWillChange.send()
     }
     
 }

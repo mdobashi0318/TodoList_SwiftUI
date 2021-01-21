@@ -12,26 +12,19 @@ struct ToDoInputView: View {
     
     
     // MARK: Properties
-    @Binding var toDoModel: ToDoModel
     
-    /// datePickerで選択したDateを格納
-    @State var tododate = Date()
+    @ObservedObject var inputViewModel: InputViewModel
+    
     
     @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
     
     /// Todoの更新か追加かを判断
     @State var isUpdate: Bool
     
-    /// Todoの登録失敗アラートの表示フラグ
-    @State var isAddError = false
-    
-    /// Todoの更新失敗アラートの表示フラグ
-    @State var isUpdateError = false
-    
     /// Alertの表示フラグ
     @State var isShowAlert = false
     
-    
+    /// エラーメッセージ
     @State var errorMessage: String = ""
     
     
@@ -45,15 +38,6 @@ struct ToDoInputView: View {
                 todoDetailSection
             }
             .listStyle(GroupedListStyle())
-            .onAppear {
-                if self.isUpdate {
-                    /// 一度TodoModelにしてからTodoを操作する
-                    self.toDoModel = ToDoViewModel().findTodo(todoId: toDoModel.id, createTime: toDoModel.createTime ?? "")
-                    if let todoDate = Format().dateFromString(string: toDoModel.todoDate) {
-                        self.tododate = todoDate
-                    }
-                }
-            }
             .navigationBarTitle(isUpdate ? "ToDo更新" : "ToDo追加")
             .navigationBarItems(leading: cancelButton ,trailing: addButton)
             .accessibility(identifier: "ToDoInputView")
@@ -74,9 +58,6 @@ extension ToDoInputView {
     /// キャンセルボタン
     private var cancelButton: some View {
         Button(action: {
-            if isUpdate {
-                toDoModel = ToDoModel.findRealm(todoId: toDoModel.id, createTime: toDoModel.createTime)!
-            }
             self.presentationMode.wrappedValue.dismiss()
         }) {
             Image(systemName: "xmark.circle")
@@ -90,22 +71,10 @@ extension ToDoInputView {
     /// ToDo追加ボタン
     private var addButton: some View {
         Button(action: {
-
-            self.toDoModel.todoDate = Format().stringFromDate(date: self.tododate)
-                ToDoViewModel().validateCheck(toDoModel: toDoModel) { result, message in
-                if result == false {
-                    if !self.isUpdate {
-                        self.addTodo()
-                        
-                    } else {
-                        self.updateTodo()
-                        
-                    }
-                } else {
-                    errorMessage = message
-                    self.isShowAlert = true
-                    
-                }
+            if !self.isUpdate {
+                self.addTodo()
+            } else {
+                self.updateTodo()
             }
         }) {
             Image(systemName: "plus.circle")
@@ -113,7 +82,7 @@ extension ToDoInputView {
         }
         .frame(width: 30, height: 30)
         .alert(isPresented: $isShowAlert) {
-            return showValidateAlert()
+            return showValidateAlert
         }
         .accessibility(identifier: "todoAddButton")
         
@@ -137,14 +106,11 @@ extension ToDoInputView {
     ///   - isRequiredLabel: 必須ラベルの表示判定
     private func headerLabel(text: String, identifier: String, isRequiredLabel: Bool) -> some View {
         HStack {
-        Text(text)
-            .font(.headline)
-            .accessibility(identifier: identifier)
-        if isRequiredLabel {
-            requiredLabel
+            Text(text)
+                .font(.headline)
+                .accessibility(identifier: identifier)
+            if isRequiredLabel { requiredLabel }
         }
-        }
-        .frame(width: UIScreen.main.bounds.width - 30, height: 30,alignment: .leading)
     }
     
 
@@ -162,21 +128,19 @@ extension ToDoInputView {
     
     /// タイトル入力テキストフィールド
     private var todoNameSection: some View {
-        return Section(header:
-                        headerLabel(text: "タイトル", identifier: "titlelabel", isRequiredLabel: true)
-                       , content: {
-                        textField(placeholder: "タイトルを入力してください",
-                                  text: $toDoModel.toDoName,
-                                  identifier: "titleTextField"
-                        )
-                       })
+        return Section(header: headerLabel(text: "タイトル", identifier: "titlelabel", isRequiredLabel: true)) {
+            textField(placeholder: "タイトルを入力してください",
+                      text: $inputViewModel.toDoName,
+                      identifier: "titleTextField"
+            )
+        }
     }
     
     
     /// 期限入力DatePicker
     private var todoDatePicker: some View {
         return Section() {
-            DatePicker("期限", selection: self.$tododate)
+            DatePicker("期限", selection: $inputViewModel.toDoDate)
             .accessibility(identifier: "todoDatePicker")
         }
     }
@@ -184,16 +148,19 @@ extension ToDoInputView {
     
     /// 詳細入力テキストフィールド
     private var todoDetailSection: some View {
-        return Section(header:
-                        headerLabel(text: "詳細", identifier: "detailLabel", isRequiredLabel: true)
-                       , content: {
-                        textField(placeholder: "詳細を入力してください",
-                                  text: $toDoModel.toDo,
-                                  identifier: "detailTextField"
-                        )
-                       })
+        return Section(header: headerLabel(text: "詳細", identifier: "detailLabel", isRequiredLabel: true)) {
+            textField(placeholder: "詳細を入力してください",
+                      text: $inputViewModel.toDo,
+                      identifier: "detailTextField"
+            )
+        }
     }
     
+    
+    /// バリデート時の表示するアラート
+    private var showValidateAlert: Alert {
+        return Alert(title: Text(self.errorMessage), dismissButton: .default(Text(R.string.alertMessage.close())))
+    }
     
 }
 
@@ -206,56 +173,35 @@ extension ToDoInputView {
     
     /// Todoの追加
     private func addTodo() {
-        let id: String = String(ToDoModel.allFindRealm()!.count + 1)
-        ToDoViewModel().addTodo(add: ToDoModel(id: id,
-                                         toDoName: toDoModel.toDoName,
-                                         todoDate: toDoModel.todoDate,
-                                         toDo: toDoModel.toDo,
-                                         createTime: nil
-        ), success: {
-            self.presentationMode.wrappedValue.dismiss()
-        }, failure: { error in
-            if let _error = error {
-                print(_error)
-            }
-            self.isAddError = true
-            self.isShowAlert = true
-        })
+        inputViewModel.addTodo()
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    self.presentationMode.wrappedValue.dismiss()
+                case .failure(let error):
+                    print(error)
+                    self.errorMessage = error.message
+                    self.isShowAlert = true
+                }
+            }, receiveValue: {
+            }).cancel()
     }
     
     
     /// Todoのアップデート
     private func updateTodo() {
-        ToDoViewModel().updateTodo(update: toDoModel,
-                             success: {
-                                self.presentationMode.wrappedValue.dismiss()
-                             },
-                             failure: { error in
-                                self.isUpdateError = true
-                                self.isShowAlert = true
-                             })
-    }
-    
-    
-  
-    
-    
-    /// バリデート時の表示するアラート
-    private func showValidateAlert() -> Alert {
-        if isAddError == true {
-            return Alert(title: Text("Todoの登録に失敗しました"), dismissButton: .default(Text(R.string.alertMessage.close())) {
-                self.isAddError = false
-            })
-            
-        } else if isUpdateError == true {
-            return Alert(title: Text("Todoの更新に失敗しました"), dismissButton: .default(Text(R.string.alertMessage.close())) {
-                self.isUpdateError = false
-            })
-            
-        } else {
-            return Alert(title: Text(self.errorMessage), dismissButton: .default(Text(R.string.alertMessage.close())))
-            
-        }
+        inputViewModel.updateTodo()
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    self.presentationMode.wrappedValue.dismiss()
+                case .failure(let error):
+                    print(error)
+                    self.errorMessage = error.message
+                    self.isShowAlert = true
+                }
+            }, receiveValue: {
+            }).cancel()
     }
     
 }
@@ -266,8 +212,8 @@ extension ToDoInputView {
 struct ToDoInputView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ToDoInputView(toDoModel: .constant(ToDoModel()), isUpdate: false)
-            ToDoInputView(toDoModel: .constant(testModel[0]), isUpdate: true)
+            ToDoInputView(inputViewModel: InputViewModel(), isUpdate: false)
+            ToDoInputView(inputViewModel: InputViewModel(model: testModel[0]), isUpdate: true)
         }
     }
 }

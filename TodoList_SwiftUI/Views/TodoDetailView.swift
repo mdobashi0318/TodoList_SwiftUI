@@ -23,6 +23,8 @@ struct TodoDetailView: View {
     /// 削除確認アラートを出すフラグ
     @State var isDeleteAction = false
     
+    @State var isShowErrorAlert = false
+    
     
     @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
     
@@ -52,6 +54,9 @@ struct TodoDetailView: View {
                     .accessibility(identifier: "todoDetaillabel")
             }
         }
+        .alert(isPresented: $isShowErrorAlert) {
+            Alert(title: Text("削除に失敗しました"))
+        }
         .listStyle(GroupedListStyle())
         .navigationBarTitle(toDoModel.toDoName)
         .navigationBarItems(trailing: addButton)
@@ -78,7 +83,12 @@ extension TodoDetailView {
         }
         .sheet(isPresented: $isShowModle) {
             /// 編集を選択
-            ToDoInputView(toDoModel: self.$toDoModel, isUpdate: true)
+            ToDoInputView(inputViewModel: InputViewModel(model: toDoModel),
+                          isUpdate: true
+            )
+            .onDisappear {
+                self.toDoModel = ToDoViewModel().findTodo(todoId: self.toDoModel.id, createTime: self.toDoModel.createTime ?? "")
+            }
         }
         .alert(isPresented: $isDeleteAction) {
             /// 削除を選択
@@ -97,8 +107,7 @@ extension TodoDetailView {
                         self.isShowModle.toggle()
                         }, .destructive(Text("削除")) {
                             self.isDeleteAction.toggle()
-                        },
-                           .cancel(Text("キャンセル"))
+                        }, .cancel(Text("キャンセル"))
         ])
     }
     
@@ -107,13 +116,19 @@ extension TodoDetailView {
     var deleteAlert: Alert {
         Alert(title: Text("Todoを削除しますか?"),
               primaryButton: .destructive(Text("削除")) {
-                ToDoViewModel().deleteTodo(todoId: toDoModel.id, createTime: toDoModel.createTime ?? "", success: { todo in
-                    self.toDoModel = todo
-                    self.presentationMode.wrappedValue.dismiss()
-                }, failure: { error in
-                    print(error ?? "")
-                })
-            },
+                ToDoViewModel().deleteTodo(delete: toDoModel)
+                    .sink(receiveCompletion: { completion in
+                        switch completion {
+                        case .finished:
+                            self.presentationMode.wrappedValue.dismiss()
+                        case .failure(let error):
+                            self.isShowErrorAlert = true
+                            print(error)
+                        }
+                    }, receiveValue: { dummy in
+                        self.toDoModel = dummy
+                    }).cancel()
+              },
               secondaryButton: .cancel(Text("キャンセル"))
         )
     }
