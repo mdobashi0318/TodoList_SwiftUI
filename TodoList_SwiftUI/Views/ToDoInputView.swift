@@ -140,7 +140,7 @@ extension ToDoInputView {
     /// 期限入力DatePicker
     private var todoDatePicker: some View {
         return Section() {
-            DatePicker("期限", selection: $inputViewModel.toDoDate)
+            DatePicker("期限", selection: $inputViewModel.toDoDate, in: Date()...)
             .accessibility(identifier: "todoDatePicker")
         }
     }
