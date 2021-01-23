@@ -64,8 +64,7 @@ extension ToDoListView {
         Button(action: {
             self.isShowModle.toggle()
         }) {
-            Image(systemName: "plus.circle")
-            .resizable()
+            Image(systemName: "plus")
         }
         .sheet(isPresented: $isShowModle) {
             ToDoInputView(inputViewModel: InputViewModel(), isUpdate: false)
@@ -73,7 +72,6 @@ extension ToDoListView {
                     toDoviewModel.sinkAllTodoModel()
                 }
         }
-        .frame(width: 30, height: 30)
         .disabled(self.toDoviewModel.isAlertError)
         .accessibility(identifier: "addButton")
     }
@@ -85,8 +83,9 @@ extension ToDoListView {
         Button(action: {
             self.isDeleteFlag.toggle()
         }) {
-            Text("削除")
-        }.alert(isPresented: self.$isDeleteFlag) {
+            Image(systemName: "trash")
+        }
+        .alert(isPresented: self.$isDeleteFlag) {
             Alert(title: Text("全件削除しますか?"), primaryButton: .destructive(Text("削除")) {
                 toDoviewModel.allDeleteTodo()
                 }, secondaryButton: .cancel(Text("キャンセル")))

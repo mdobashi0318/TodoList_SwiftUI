@@ -60,10 +60,8 @@ extension ToDoInputView {
         Button(action: {
             self.presentationMode.wrappedValue.dismiss()
         }) {
-            Image(systemName: "xmark.circle")
-                .resizable()
+            Image(systemName: "xmark")
         }
-        .frame(width: 30, height: 30)
         .accessibility(identifier: "cancelButton")
     }
     
@@ -77,10 +75,9 @@ extension ToDoInputView {
                 self.updateTodo()
             }
         }) {
-            Image(systemName: "plus.circle")
+            Image(systemName: "plus")
                 .resizable()
         }
-        .frame(width: 30, height: 30)
         .alert(isPresented: $isShowAlert) {
             return showValidateAlert
         }
