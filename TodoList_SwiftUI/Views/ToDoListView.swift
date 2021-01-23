@@ -46,10 +46,7 @@ struct ToDoListView: View {
             .navigationBarItems(leading: allDeleteButton ,trailing: addButton)
             .sheet(isPresented: $openWidget.isOpneTodo) { openWidgetView }
         }.alert(isPresented: $toDoviewModel.isAlertError) {
-            Alert(title: Text("Todoの取得に失敗しました"), dismissButton: .default(Text("閉じる")) {
-                self.toDoviewModel.isAlertError = false
-                self.toDoviewModel.sinkAllTodoModel()
-            })
+            Alert(title: Text("Todoの取得に失敗しました"), dismissButton: .default(Text("閉じる")))
         }
         .accessibility(identifier: "ToDoList")
     }
@@ -77,6 +74,7 @@ extension ToDoListView {
                 }
         }
         .frame(width: 30, height: 30)
+        .disabled(self.toDoviewModel.isAlertError)
         .accessibility(identifier: "addButton")
     }
     
@@ -93,6 +91,7 @@ extension ToDoListView {
                 toDoviewModel.allDeleteTodo()
                 }, secondaryButton: .cancel(Text("キャンセル")))
         }
+        .disabled(self.toDoviewModel.isAlertError)
         .accessibility(identifier: "allDeleteButton")
     }
     
