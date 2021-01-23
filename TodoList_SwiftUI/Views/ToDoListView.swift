@@ -14,30 +14,27 @@ struct ToDoListView: View {
     
     @ObservedObject private var toDoviewModel = ToDoViewModel()
     
+    @ObservedObject private var openWidget = WidgetOpenManager.shared
+    
     @State var isShowModle = false
     
     @State var isDeleteFlag = false
     
-    @ObservedObject var openWidget = WidgetOpenManager.shared
-
     
     // MARK: Body
     
     var body: some View {
         NavigationView {
             List {
-                Section() {
-                    segmentedPicker
-                }
+                segmenteSection
                 if self.toDoviewModel.todoModel.count == 0 {
                     Text("ToDoが登録されていません")
                 } else {
                     ForEach(0..<self.toDoviewModel.todoModel.count, id: \.self) { row in
                         NavigationLink(destination:
                                         TodoDetailView(toDoModel: self.$toDoviewModel.todoModel[row])
-                                        .onDisappear {
-                                            self.toDoviewModel.sinkAllTodoModel()
-                                        }) {
+                                        .onDisappear { self.toDoviewModel.sinkAllTodoModel() }
+                        ) {
                             ToDoRow(todoModel: self.toDoviewModel.todoModel[row])
                                 .frame(height: 60)
                         }
@@ -47,20 +44,7 @@ struct ToDoListView: View {
             .listStyle(PlainListStyle())
             .navigationBarTitle("ToDoList")
             .navigationBarItems(leading: allDeleteButton ,trailing: addButton)
-            .sheet(isPresented: $openWidget.isOpneTodo) {
-                NavigationView {
-                    TodoDetailView(toDoModel: .constant(openWidget.nextTodo))
-                        .onDisappear {
-                            openWidget.isOpneTodo = false
-                        }
-                        .navigationBarTitle(openWidget.nextTodo.toDoName)
-                        .navigationBarItems(leading: Button(action: {
-                            openWidget.isOpneTodo = false
-                        }, label: {
-                            Image(systemName: "xmark")
-                        }), trailing: Button(""){})
-                }
-            }
+            .sheet(isPresented: $openWidget.isOpneTodo) { openWidgetView }
         }.alert(isPresented: $toDoviewModel.isAlertError) {
             Alert(title: Text("Todoの取得に失敗しました"), dismissButton: .default(Text("閉じる")) {
                 self.toDoviewModel.isAlertError = false
@@ -114,16 +98,33 @@ extension ToDoListView {
     
     
     
-    /// セグメントピッカー
-    private var segmentedPicker: some View {
-        return Picker(selection: $toDoviewModel.segmentIndex, label: Text("")) {
-            Text("全件").tag(SegmentIndex.all)
-            Text("アクティブ").tag(SegmentIndex.active)
-            Text("期限切れ").tag(SegmentIndex.expired)
+    /// セグメントピッカーセクション
+    private var segmenteSection: some View {
+        return Section() {
+            Picker(selection: $toDoviewModel.segmentIndex, label: Text("")) {
+                Text("全件").tag(SegmentIndex.all)
+                Text("アクティブ").tag(SegmentIndex.active)
+                Text("期限切れ").tag(SegmentIndex.expired)
+            }
+            .frame(height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            .pickerStyle(SegmentedPickerStyle())
+            .padding(.all)
         }
-        .frame(height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-        .pickerStyle(SegmentedPickerStyle())
-        .padding(.all)
+    }
+    
+    
+    /// WidgetでタップしたTodoをモーダルで表示する
+    private var openWidgetView: some View {
+        return NavigationView {
+            TodoDetailView(toDoModel: .constant(openWidget.nextTodo))
+                .onDisappear { openWidget.isOpneTodo = false }
+                .navigationBarTitle(openWidget.nextTodo.toDoName)
+                .navigationBarItems(leading: Button(action: {
+                    openWidget.isOpneTodo = false
+                }, label: {
+                    Image(systemName: "xmark")
+                }), trailing: Button(""){})
+        }
     }
     
 }
