@@ -75,8 +75,7 @@ extension TodoDetailView {
         Button(action: {
             self.isActionSheet.toggle()
         }) {
-            Image(systemName: "ellipsis.circle")
-                .resizable()
+            Image(systemName: "ellipsis")
         }
         .actionSheet(isPresented: $isActionSheet) {
             actionSheet
