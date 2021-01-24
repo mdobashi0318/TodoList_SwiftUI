@@ -31,19 +31,24 @@ final class ToDoModel: Object {
     }()
     
     
-    @objc dynamic var id:String = ""
+    @objc dynamic var id: String = ""
     
     /// Todoの期限
-    @objc dynamic var todoDate:String = ""
+    @objc dynamic var todoDate: String = ""
     
     /// Todoのタイトル
-    @objc dynamic var toDoName:String = ""
+    @objc dynamic var toDoName: String = ""
     
     /// Todoの詳細
-    @objc dynamic var toDo:String = ""
+    @objc dynamic var toDo: String = ""
+    
+    /// Todoの完了フラグ
+    /// - 0: 未完
+    /// - 1: 完了
+    @objc dynamic var completionFlag: String = ""
     
     /// Todoの作成日時
-    @objc dynamic var createTime:String?
+    @objc dynamic var createTime: String?
     
     
     // idをプライマリキーに設定
@@ -119,6 +124,7 @@ final class ToDoModel: Object {
         toDoModel.toDoName = addValue.toDoName
         toDoModel.todoDate = addValue.todoDate
         toDoModel.toDo = addValue.toDo
+        toDoModel.completionFlag = CompletionFlag.unfinished.rawValue
         toDoModel.createTime = Format().stringFromDate(date: Date(), addSec: true)
         
         do {
@@ -158,6 +164,7 @@ final class ToDoModel: Object {
                 toDoModel.toDoName = updateTodo.toDoName
                 toDoModel.todoDate = updateTodo.todoDate
                 toDoModel.toDo = updateTodo.toDo
+                toDoModel.completionFlag = updateTodo.completionFlag
             }
             NotificationManager().addNotification(toDoModel: toDoModel) { _ in
                 /// 何もしない
