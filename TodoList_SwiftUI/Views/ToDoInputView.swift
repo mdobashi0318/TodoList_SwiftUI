@@ -36,6 +36,7 @@ struct ToDoInputView: View {
                 todoNameSection
                 todoDatePicker
                 todoDetailSection
+                if isUpdate { completeToggleSection }
             }
             .listStyle(GroupedListStyle())
             .navigationBarTitle(isUpdate ? "ToDo更新" : "ToDo追加")
@@ -153,6 +154,14 @@ extension ToDoInputView {
         }
     }
     
+    
+    /// Todoの未完・完了トグル
+    private var completeToggleSection: some View {
+        return Section {
+            Toggle("完了", isOn: $inputViewModel.completionFlag)
+                .accessibility(identifier: "completeSwitch")
+        }
+    }
     
     /// バリデート時の表示するアラート
     private var showValidateAlert: Alert {

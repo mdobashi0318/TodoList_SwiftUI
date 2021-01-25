@@ -25,6 +25,10 @@ final class InputViewModel: ObservableObject {
     /// Todoの詳細
     @Published var toDo: String = ""
     
+    @Published var completionFlag: Bool = false
+    
+    @Published var completionFlagStr: CompletionFlag = .unfinished
+    
     var createTime: String?
     
     var cancellable: Set<AnyCancellable> = []
@@ -34,6 +38,7 @@ final class InputViewModel: ObservableObject {
     init(model: ToDoModel? = nil) {
         setModelValue(model)
         setDatePub()
+        setCompletionFlagPub()
     }
     
     
@@ -46,6 +51,7 @@ final class InputViewModel: ObservableObject {
                 toDoDate = date
             }
             toDo = _model.toDo
+            completionFlag = _model.completionFlag == CompletionFlag.completion.rawValue ? true : false
             createTime = _model.createTime
         }
     }
@@ -62,6 +68,14 @@ final class InputViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
+    private func setCompletionFlagPub() {
+        $completionFlag
+            .print()
+            .sink(receiveValue: { flag in
+                self.completionFlagStr = flag ? .completion : .unfinished
+            })
+            .store(in: &cancellable)
+    }
     
     
     /// Todoの追加
@@ -91,7 +105,7 @@ final class InputViewModel: ObservableObject {
                 return promiss(.failure(.init(message: message)))
             }
             
-            ToDoModel.updateRealm(updateTodo: ToDoModel(id: self.id,toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo, createTime: self.createTime)) { result in
+            ToDoModel.updateRealm(updateTodo: ToDoModel(id: self.id,toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo, completionFlag: self.completionFlagStr.rawValue, createTime: self.createTime)) { result in
                 switch result {
                 case .success(_):
                     return promiss(.success(Void()))
