@@ -17,10 +17,17 @@ struct ToDoRow: View {
                 .accessibility(identifier: "titlelabel")
             HStack {
                 Text(todoModel.todoDate)
-                Text(Format().dateFromString(string: todoModel.todoDate)! > Format().dateFormat() ? "" : "期限切れ")
-                    .font(.caption)
-                    .foregroundColor(.red)
-                    .accessibility(identifier: "dateLabel")
+                if todoModel.completionFlag == CompletionFlag.completion.rawValue {
+                    Text("完了")
+                        .font(.subheadline)
+                        .foregroundColor(.red)
+                        .accessibility(identifier: "completeLabel")
+                } else {
+                    Text(Format().dateFromString(string: todoModel.todoDate)! > Format().dateFormat() ? "" : "期限切れ")
+                        .font(.caption)
+                        .foregroundColor(.red)
+                        .accessibility(identifier: "dateLabel")
+                }
             }
         }
         .frame(alignment: .leading)
@@ -31,7 +38,10 @@ struct ToDoRow: View {
 struct ToDoRow_Previews: PreviewProvider {
     static var previews: some View {
         ToDoRow(todoModel: testModel[0])
-            .previewLayout(.fixed(width: UIScreen.main.bounds.width, height: 60))
+            .previewLayout(.sizeThatFits)
+        
+        ToDoRow(todoModel: testModel[1])
+            .previewLayout(.sizeThatFits)
     }
 }
 

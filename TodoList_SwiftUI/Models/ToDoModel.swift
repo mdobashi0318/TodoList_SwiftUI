@@ -314,6 +314,7 @@ let testModel:[ToDoModel] = {
     todo2.todoDate = Format().stringFromDate(date: Date())
     todo2.toDo = "TODO詳細2"
     todo2.createTime = "2020/01/01 00:00:02"
+    todo2.completionFlag = CompletionFlag.completion.rawValue
     
     let todo3 = ToDoModel()
     todo3.toDoName = "TODOName3"
