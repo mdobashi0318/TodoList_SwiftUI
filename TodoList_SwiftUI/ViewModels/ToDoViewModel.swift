@@ -13,6 +13,7 @@ enum SegmentIndex: Int, CaseIterable {
     case all = 0
     case active = 1
     case expired = 2
+    case complete = 3
 }
 
 
@@ -106,11 +107,15 @@ final class ToDoViewModel: ObservableObject {
             switch value {
             case .active:
                 self.todoModel = self.todoModel.filter {
-                    Format().dateFromString(string: $0.todoDate)! > Format().dateFormat()
+                    Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() && $0.completionFlag == CompletionFlag.unfinished.rawValue
                 }
             case .expired:
                 self.todoModel = self.todoModel.filter {
-                    $0.todoDate <= Format().stringFromDate(date: Date())
+                    $0.todoDate <= Format().stringFromDate(date: Date()) && $0.completionFlag == CompletionFlag.unfinished.rawValue
+                }
+            case .complete:
+                self.todoModel = self.todoModel.filter {
+                    $0.completionFlag == CompletionFlag.completion.rawValue
                 }
             case .all:
                 break

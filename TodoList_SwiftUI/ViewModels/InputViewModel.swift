@@ -123,7 +123,8 @@ final class InputViewModel: ObservableObject {
     func validateCheck() -> String? {
         if self.toDoName.isEmpty {
             return  R.string.alertMessage.validate("タイトル")
-        } else if self.todoDateStr <= Format().stringFromDate(date: Format().dateFormat()) {
+        } else if self.completionFlagStr == CompletionFlag.unfinished && self.todoDateStr <= Format().stringFromDate(date: Format().dateFormat()) {
+            /// 完了フラグの未完であればあれば期限のバリデーションチェックを行う
             return R.string.alertMessage.validateDate()
         } else if self.toDo.isEmpty {
             return R.string.alertMessage.validate("詳細")
