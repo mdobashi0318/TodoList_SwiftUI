@@ -102,7 +102,7 @@ extension ToDoListView {
             Picker(selection: $toDoviewModel.segmentIndex, label: Text("")) {
                 Text("全件").tag(SegmentIndex.all)
                 Text("アクティブ").tag(SegmentIndex.active)
-                Text("完了").tag(SegmentIndex.complete)
+                Text(R.string.labels.complete()).tag(SegmentIndex.complete)
                 Text("期限切れ").tag(SegmentIndex.expired)
             }
             .frame(height: 30, alignment: .center)

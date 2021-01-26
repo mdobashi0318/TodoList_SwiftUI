@@ -18,7 +18,7 @@ struct ToDoRow: View {
             HStack {
                 Text(todoModel.todoDate)
                 if todoModel.completionFlag == CompletionFlag.completion.rawValue {
-                    Text("完了")
+                    Text(R.string.labels.complete())
                         .font(.subheadline)
                         .foregroundColor(.red)
                         .accessibility(identifier: "completeLabel")

@@ -40,7 +40,12 @@ struct TodoDetailView: View {
                 HStack {
                     Text(toDoModel.todoDate)
                         .accessibility(identifier: "dateLabel")
-                    if toDoModel.todoDate != "" {
+                    if toDoModel.completionFlag == CompletionFlag.completion.rawValue {
+                        Text(R.string.labels.complete())
+                            .font(.subheadline)
+                            .foregroundColor(.red)
+                            .accessibility(identifier: "completeLabel")
+                    } else if toDoModel.todoDate != "" {
                         Text(Format().dateFromString(string: toDoModel.todoDate)! > Format().dateFormat() ? "" : "期限切れ")
                             .font(.caption)
                             .foregroundColor(.red)

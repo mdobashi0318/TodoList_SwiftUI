@@ -158,7 +158,7 @@ extension ToDoInputView {
     /// Todoの未完・完了トグル
     private var completeToggleSection: some View {
         return Section {
-            Toggle("完了", isOn: $inputViewModel.completionFlag)
+            Toggle(R.string.labels.complete(), isOn: $inputViewModel.completionFlag)
                 .accessibility(identifier: "completeSwitch")
         }
     }
