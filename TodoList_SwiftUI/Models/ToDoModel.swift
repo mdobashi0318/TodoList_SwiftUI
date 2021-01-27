@@ -19,6 +19,7 @@ final class ToDoModel: Object {
         let realm: Realm
         do {
             configuration = Realm.Configuration()
+            configuration.schemaVersion = UInt64(1)
             let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.TodoList-SwiftUI")
             configuration.fileURL = url!.appendingPathComponent("db.realm")
             realm = try Realm(configuration: configuration)
@@ -31,19 +32,24 @@ final class ToDoModel: Object {
     }()
     
     
-    @objc dynamic var id:String = ""
+    @objc dynamic var id: String = ""
     
     /// Todoの期限
-    @objc dynamic var todoDate:String = ""
+    @objc dynamic var todoDate: String = ""
     
     /// Todoのタイトル
-    @objc dynamic var toDoName:String = ""
+    @objc dynamic var toDoName: String = ""
     
     /// Todoの詳細
-    @objc dynamic var toDo:String = ""
+    @objc dynamic var toDo: String = ""
+    
+    /// Todoの完了フラグ
+    /// - 0: 未完
+    /// - 1: 完了
+    @objc dynamic var completionFlag: String = ""
     
     /// Todoの作成日時
-    @objc dynamic var createTime:String?
+    @objc dynamic var createTime: String?
     
     
     // idをプライマリキーに設定
@@ -55,13 +61,14 @@ final class ToDoModel: Object {
     
     // MARK: init
     
-    convenience init(id: String = "", toDoName: String, todoDate: String, toDo: String, createTime: String? = nil) {
+    convenience init(id: String = "", toDoName: String, todoDate: String, toDo: String, completionFlag: String = CompletionFlag.unfinished.rawValue, createTime: String? = nil) {
         self.init()
         
         self.id = id
         self.toDoName = toDoName
         self.todoDate = todoDate
         self.toDo = toDo
+        self.completionFlag = completionFlag
         self.createTime = createTime
     }
     
@@ -119,6 +126,7 @@ final class ToDoModel: Object {
         toDoModel.toDoName = addValue.toDoName
         toDoModel.todoDate = addValue.todoDate
         toDoModel.toDo = addValue.toDo
+        toDoModel.completionFlag = CompletionFlag.unfinished.rawValue
         toDoModel.createTime = Format().stringFromDate(date: Date(), addSec: true)
         
         do {
@@ -158,9 +166,16 @@ final class ToDoModel: Object {
                 toDoModel.toDoName = updateTodo.toDoName
                 toDoModel.todoDate = updateTodo.todoDate
                 toDoModel.toDo = updateTodo.toDo
+                toDoModel.completionFlag = updateTodo.completionFlag
             }
-            NotificationManager().addNotification(toDoModel: toDoModel) { _ in
-                /// 何もしない
+            
+            
+            if updateTodo.completionFlag == CompletionFlag.completion.rawValue {
+                NotificationManager().removeNotification([toDoModel.createTime ?? ""])
+            } else {
+                NotificationManager().addNotification(toDoModel: toDoModel) { _ in
+                    /// 何もしない
+                }
             }
             
             if #available(iOS 14.0, *) {
@@ -299,6 +314,7 @@ let testModel:[ToDoModel] = {
     todo2.todoDate = Format().stringFromDate(date: Date())
     todo2.toDo = "TODO詳細2"
     todo2.createTime = "2020/01/01 00:00:02"
+    todo2.completionFlag = CompletionFlag.completion.rawValue
     
     let todo3 = ToDoModel()
     todo3.toDoName = "TODOName3"

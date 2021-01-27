@@ -35,6 +35,7 @@ class TodoList_SwiftUITests: XCTestCase {
                 XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
                 XCTAssert(todoModel?.todoDate == "2022/01/01 00:00", "Todoの期限が登録されていない")
                 XCTAssert(todoModel?.toDo == "詳細", "　Todoの詳細が登録されていない")
+                XCTAssert(todoModel?.completionFlag == CompletionFlag.unfinished.rawValue, "完了フラグが未完が登録されていない")
                 let createTime = todoModel?.createTime ?? ""
                 XCTAssert(!createTime.isEmpty, "Todo作成時間が登録されていない")
             case .failure(let error):
@@ -57,6 +58,7 @@ class TodoList_SwiftUITests: XCTestCase {
                     XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
                     XCTAssert(todoModel?.todoDate == "2022/01/01 00:00", "Todoの期限が登録されていない")
                     XCTAssert(todoModel?.toDo == "詳細", "　Todoの詳細が登録されていない")
+                    XCTAssert(todoModel?.completionFlag == CompletionFlag.unfinished.rawValue, "完了フラグが未完が登録されていない")
                     let createTime = todoModel?.createTime ?? ""
                     XCTAssert(!createTime.isEmpty, "Todo作成時間が登録されていない")
                 case .failure(let error):
@@ -77,6 +79,7 @@ class TodoList_SwiftUITests: XCTestCase {
                     XCTAssert(todoModel?.toDoName == "EditUnitTest", "Todoのタイトルが登録されていない")
                     XCTAssert(todoModel?.todoDate == "2022/01/01 10:00", "　Todoの期限が登録されていない")
                     XCTAssert(todoModel?.toDo == "詳細編集", "　Todoの詳細が登録されていない")
+                    XCTAssert(todoModel?.completionFlag == CompletionFlag.unfinished.rawValue, "完了フラグが未完が登録されていない")
                     XCTAssert(!(todoModel?.createTime!.isEmpty)!, "Todo作成時間が登録されていない")
                 case .failure(let error):
                     XCTAssertNil(error, "エラーが発生している")
@@ -85,6 +88,60 @@ class TodoList_SwiftUITests: XCTestCase {
             }, receiveValue: {})
             .cancel()
     }
+    
+    
+    
+    func test_EditCompletionFlag() {
+        var inputViewModel = InputViewModel(model: ToDoModel(toDoName: "UnitTest", todoDate: "2022/01/01 00:00", toDo: "詳細"))
+        inputViewModel.addTodo()
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    let todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
+                    XCTAssert(todoModel?.id == "1", "idが登録されていない")
+                    XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
+                    XCTAssert(todoModel?.todoDate == "2022/01/01 00:00", "Todoの期限が登録されていない")
+                    XCTAssert(todoModel?.toDo == "詳細", "　Todoの詳細が登録されていない")
+                    XCTAssert(todoModel?.completionFlag == CompletionFlag.unfinished.rawValue, "完了フラグが未完が登録されていない")
+                    let createTime = todoModel?.createTime ?? ""
+                    XCTAssert(!createTime.isEmpty, "Todo作成時間が登録されていない")
+                    
+                    UNUserNotificationCenter.current().getPendingNotificationRequests { notification in
+                        XCTAssertTrue(notification[0].identifier == createTime, "Todoが登録されていない")
+                    }
+                case .failure(let error):
+                    XCTAssertNil(error, "エラーが発生している\(error)")
+                }
+            }, receiveValue: {
+                /// 何もしない
+            }).cancel()
+        inputViewModel = InputViewModel(model: ToDoModel(id: "1", toDoName: "EditUnitTest", todoDate: "2022/01/01 10:00", toDo: "詳細編集",completionFlag: CompletionFlag.completion.rawValue, createTime: nil))
+        
+        
+        inputViewModel.updateTodo()
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    let todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
+                    XCTAssert(todoModel?.id == "1", "idが登録されていない")
+                    XCTAssert(todoModel?.toDoName == "EditUnitTest", "Todoのタイトルが登録されていない")
+                    XCTAssert(todoModel?.todoDate == "2022/01/01 10:00", "　Todoの期限が登録されていない")
+                    XCTAssert(todoModel?.toDo == "詳細編集", "　Todoの詳細が登録されていない")
+                    XCTAssert(todoModel?.completionFlag == CompletionFlag.completion.rawValue, "完了フラグが完了が登録されていない")
+                    let createTime = todoModel?.createTime ?? ""
+                    XCTAssert(!createTime.isEmpty, "Todo作成時間が登録されていない")
+                    
+                    UNUserNotificationCenter.current().getPendingNotificationRequests { notification in
+                        XCTAssertTrue(notification.isEmpty, "Todoが削除されていない")
+                    }
+                case .failure(let error):
+                    XCTAssertNil(error, "エラーが発生している")
+                }
+                
+            }, receiveValue: {})
+            .cancel()
+    }
+    
     
     
     
