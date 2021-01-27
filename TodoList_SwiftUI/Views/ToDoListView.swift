@@ -33,7 +33,7 @@ struct ToDoListView: View {
                     ForEach(0..<self.toDoviewModel.todoModel.count, id: \.self) { row in
                         NavigationLink(destination:
                                         TodoDetailView(toDoModel: self.$toDoviewModel.todoModel[row])
-                                        .onDisappear { self.toDoviewModel.sinkAllTodoModel() }
+                                        .onDisappear { self.toDoviewModel.sinkAllTodoModel(index: $toDoviewModel.segmentIndex.wrappedValue) }
                         ) {
                             ToDoRow(todoModel: self.toDoviewModel.todoModel[row])
                                 .frame(height: 60)
@@ -69,7 +69,7 @@ extension ToDoListView {
         .sheet(isPresented: $isShowModle) {
             ToDoInputView(inputViewModel: InputViewModel(), isUpdate: false)
                 .onDisappear {
-                    toDoviewModel.sinkAllTodoModel()
+                    toDoviewModel.sinkAllTodoModel(index: $toDoviewModel.segmentIndex.wrappedValue)
                 }
         }
         .disabled(self.toDoviewModel.isAlertError)
