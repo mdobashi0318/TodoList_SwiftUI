@@ -13,6 +13,7 @@ enum SegmentIndex: Int, CaseIterable {
     case all = 0
     case active = 1
     case expired = 2
+    case complete = 3
 }
 
 
@@ -42,7 +43,7 @@ final class ToDoViewModel: ObservableObject {
     }
     
     
-    func sinkAllTodoModel() {
+    func sinkAllTodoModel(index: SegmentIndex) {
         fetchAllTodoModel()
             .sink(receiveCompletion: { completion in
                 switch completion {
@@ -52,7 +53,22 @@ final class ToDoViewModel: ObservableObject {
                     self.isAlertError = error.isError
                 }
             }, receiveValue: { model in
-                self.todoModel = model
+                switch index {
+                case .active:
+                    self.todoModel = model.filter {
+                        Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() && $0.completionFlag != CompletionFlag.completion.rawValue
+                    }
+                case .expired:
+                    self.todoModel = model.filter {
+                        $0.todoDate <= Format().stringFromDate(date: Date()) && $0.completionFlag != CompletionFlag.completion.rawValue
+                    }
+                case .complete:
+                    self.todoModel = model.filter {
+                        $0.completionFlag == CompletionFlag.completion.rawValue
+                    }
+                case .all:
+                    self.todoModel = model
+                }
             })
             .cancel()
     }
@@ -102,20 +118,8 @@ final class ToDoViewModel: ObservableObject {
         $segmentIndex
             .print()
             .sink(receiveValue: { value in
-            self.sinkAllTodoModel()
-            switch value {
-            case .active:
-                self.todoModel = self.todoModel.filter {
-                    Format().dateFromString(string: $0.todoDate)! > Format().dateFormat()
-                }
-            case .expired:
-                self.todoModel = self.todoModel.filter {
-                    $0.todoDate <= Format().stringFromDate(date: Date())
-                }
-            case .all:
-                break
-            }
-        })
+                self.sinkAllTodoModel(index: value)
+            })
         .store(in: &cancellable)
     }
 

@@ -33,7 +33,7 @@ struct ToDoListView: View {
                     ForEach(0..<self.toDoviewModel.todoModel.count, id: \.self) { row in
                         NavigationLink(destination:
                                         TodoDetailView(toDoModel: self.$toDoviewModel.todoModel[row])
-                                        .onDisappear { self.toDoviewModel.sinkAllTodoModel() }
+                                        .onDisappear { self.toDoviewModel.sinkAllTodoModel(index: $toDoviewModel.segmentIndex.wrappedValue) }
                         ) {
                             ToDoRow(todoModel: self.toDoviewModel.todoModel[row])
                                 .frame(height: 60)
@@ -69,7 +69,7 @@ extension ToDoListView {
         .sheet(isPresented: $isShowModle) {
             ToDoInputView(inputViewModel: InputViewModel(), isUpdate: false)
                 .onDisappear {
-                    toDoviewModel.sinkAllTodoModel()
+                    toDoviewModel.sinkAllTodoModel(index: $toDoviewModel.segmentIndex.wrappedValue)
                 }
         }
         .disabled(self.toDoviewModel.isAlertError)
@@ -102,9 +102,10 @@ extension ToDoListView {
             Picker(selection: $toDoviewModel.segmentIndex, label: Text("")) {
                 Text("全件").tag(SegmentIndex.all)
                 Text("アクティブ").tag(SegmentIndex.active)
+                Text(R.string.labels.complete()).tag(SegmentIndex.complete)
                 Text("期限切れ").tag(SegmentIndex.expired)
             }
-            .frame(height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            .frame(height: 30, alignment: .center)
             .pickerStyle(SegmentedPickerStyle())
             .padding(.all)
         }
