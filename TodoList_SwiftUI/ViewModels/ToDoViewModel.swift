@@ -34,7 +34,7 @@ final class ToDoViewModel: ObservableObject {
     
     func fetchAllTodoModel() -> Future<[ToDoModel], TodoModelError> {
         return Future<[ToDoModel], TodoModelError> { promise in
-            guard let model = ToDoModel.allFindRealm() else {
+            guard let model = ToDoModel.allFindTodo() else {
                 promise(.failure(.init(isError: true)))
                 return
             }
@@ -77,7 +77,7 @@ final class ToDoViewModel: ObservableObject {
     
     /// Todoを１件検索
     func findTodo(todoId: String, createTime: String) -> ToDoModel {
-        let model = ToDoModel.findRealm(todoId: todoId, createTime: createTime)
+        let model = ToDoModel.findTodo(todoId: todoId, createTime: createTime)
         let todo = ToDoModel()
         todo.id = model?.id ?? ""
         todo.toDoName = model?.toDoName ?? ""

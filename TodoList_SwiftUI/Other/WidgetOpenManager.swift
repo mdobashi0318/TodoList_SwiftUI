@@ -19,7 +19,7 @@ final class WidgetOpenManager: ObservableObject {
     /// 次に来るのTodoを検索する
     var findNextTodo: ToDoModel? {
         get {
-            guard let model = ToDoModel.allFindRealm(),
+            guard let model = ToDoModel.allFindTodo(),
                   let _nextTodo = model.filter({ Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() }).first,
                   !_nextTodo.id.isEmpty else {
                 return nil

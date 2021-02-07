@@ -30,7 +30,7 @@ class TodoList_SwiftUITests: XCTestCase {
         inputViewModel.addTodo().sink(receiveCompletion: { completion in
             switch completion {
             case .finished:
-                let todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
+                let todoModel = ToDoModel.findTodo(todoId: "1", createTime: nil)
                 XCTAssert(todoModel?.id == "1", "idが登録されていない")
                 XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
                 XCTAssert(todoModel?.todoDate == "2022/01/01 00:00", "Todoの期限が登録されていない")
@@ -53,7 +53,7 @@ class TodoList_SwiftUITests: XCTestCase {
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
-                    let todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
+                    let todoModel = ToDoModel.findTodo(todoId: "1", createTime: nil)
                     XCTAssert(todoModel?.id == "1", "idが登録されていない")
                     XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
                     XCTAssert(todoModel?.todoDate == "2022/01/01 00:00", "Todoの期限が登録されていない")
@@ -74,7 +74,7 @@ class TodoList_SwiftUITests: XCTestCase {
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
-                    let todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
+                    let todoModel = ToDoModel.findTodo(todoId: "1", createTime: nil)
                     XCTAssert(todoModel?.id == "1", "idが登録されていない")
                     XCTAssert(todoModel?.toDoName == "EditUnitTest", "Todoのタイトルが登録されていない")
                     XCTAssert(todoModel?.todoDate == "2022/01/01 10:00", "　Todoの期限が登録されていない")
@@ -97,7 +97,7 @@ class TodoList_SwiftUITests: XCTestCase {
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
-                    let todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
+                    let todoModel = ToDoModel.findTodo(todoId: "1", createTime: nil)
                     XCTAssert(todoModel?.id == "1", "idが登録されていない")
                     XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
                     XCTAssert(todoModel?.todoDate == "2022/01/01 00:00", "Todoの期限が登録されていない")
@@ -122,7 +122,7 @@ class TodoList_SwiftUITests: XCTestCase {
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
-                    let todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
+                    let todoModel = ToDoModel.findTodo(todoId: "1", createTime: nil)
                     XCTAssert(todoModel?.id == "1", "idが登録されていない")
                     XCTAssert(todoModel?.toDoName == "EditUnitTest", "Todoのタイトルが登録されていない")
                     XCTAssert(todoModel?.todoDate == "2022/01/01 10:00", "　Todoの期限が登録されていない")
@@ -153,7 +153,7 @@ class TodoList_SwiftUITests: XCTestCase {
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
-                    todoModel = ToDoModel.findRealm(todoId: "1", createTime: nil)
+                    todoModel = ToDoModel.findTodo(todoId: "1", createTime: nil)
                     XCTAssert(todoModel?.id == "1", "idが登録されていない")
                     XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
                     XCTAssert(todoModel?.todoDate == "2022/01/01 00:00", "Todoの期限が登録されていない")
@@ -171,7 +171,7 @@ class TodoList_SwiftUITests: XCTestCase {
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
-                    XCTAssertNil(ToDoModel.findRealm(todoId: "1", createTime: nil), "Todoの削除ができていない")
+                    XCTAssertNil(ToDoModel.findTodo(todoId: "1", createTime: nil), "Todoの削除ができていない")
                 case .failure(let error):
                     XCTAssertNil(error, "エラーが発生している\(error)")
                 }
