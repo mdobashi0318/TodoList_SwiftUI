@@ -73,21 +73,7 @@ final class ToDoViewModel: ObservableObject {
             .cancel()
     }
 
-    
-    
-    /// Todoを１件検索
-    func findTodo(todoId: String, createTime: String) -> ToDoModel {
-        let model = ToDoModel.findTodo(todoId: todoId, createTime: createTime)
-        let todo = ToDoModel()
-        todo.id = model?.id ?? ""
-        todo.toDoName = model?.toDoName ?? ""
-        todo.todoDate = model?.todoDate ?? ""
-        todo.toDo = model?.toDo ?? ""
-        
-        return todo
-    }
-    
-    
+
     /// Todoの削除
     func deleteTodo(delete: ToDoModel) -> Future<ToDoModel, DeleteError> {
         return Future<ToDoModel, DeleteError> { promiss in

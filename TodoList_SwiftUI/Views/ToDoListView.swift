@@ -32,7 +32,7 @@ struct ToDoListView: View {
                 } else {
                     ForEach(0..<self.toDoviewModel.todoModel.count, id: \.self) { row in
                         NavigationLink(destination:
-                                        TodoDetailView(toDoModel: self.$toDoviewModel.todoModel[row])
+                                        TodoDetailView(viewModel: TodoDetailViewModel(model: self.toDoviewModel.todoModel[row]))
                                         .onDisappear { self.toDoviewModel.sinkAllTodoModel(index: $toDoviewModel.segmentIndex.wrappedValue) }
                         ) {
                             ToDoRow(todoModel: self.toDoviewModel.todoModel[row])
@@ -115,7 +115,7 @@ extension ToDoListView {
     /// WidgetでタップしたTodoをモーダルで表示する
     private var openWidgetView: some View {
         return NavigationView {
-            TodoDetailView(toDoModel: .constant(openWidget.nextTodo))
+            TodoDetailView(viewModel: TodoDetailViewModel(model: openWidget.nextTodo))
                 .onDisappear { openWidget.isOpneTodo = false }
                 .navigationBarTitle(openWidget.nextTodo.toDoName)
                 .navigationBarItems(leading: Button(action: {

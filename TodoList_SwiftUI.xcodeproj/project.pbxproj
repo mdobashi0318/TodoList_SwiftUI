@@ -29,6 +29,7 @@
 		D02D0FD024701E4800FC1D4F /* ToDoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02D0FCF24701E4800FC1D4F /* ToDoRow.swift */; };
 		D02DDC252495BD5C00AE1F0B /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02DDC242495BD5C00AE1F0B /* NotificationManager.swift */; };
 		D02DDC272495D27500AE1F0B /* NotificationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02DDC262495D27500AE1F0B /* NotificationManagerTests.swift */; };
+		D04FBD89268855DB00BBBE4A /* TodoDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FBD88268855DB00BBBE4A /* TodoDetailViewModel.swift */; };
 		D04FF8D225C05F6D00391290 /* labels.strings in Resources */ = {isa = PBXBuildFile; fileRef = D04FF8D425C05F6D00391290 /* labels.strings */; };
 		D059FAAD2470C7FF00737532 /* ToDoInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059FAAC2470C7FF00737532 /* ToDoInputView.swift */; };
 		D066E6A024701B0B007FA3DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D066E69F24701B0B007FA3DB /* AppDelegate.swift */; };
@@ -115,6 +116,7 @@
 		D02D0FCF24701E4800FC1D4F /* ToDoRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoRow.swift; sourceTree = "<group>"; };
 		D02DDC242495BD5C00AE1F0B /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		D02DDC262495D27500AE1F0B /* NotificationManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerTests.swift; sourceTree = "<group>"; };
+		D04FBD88268855DB00BBBE4A /* TodoDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoDetailViewModel.swift; sourceTree = "<group>"; };
 		D04FF8D325C05F6D00391290 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/labels.strings; sourceTree = "<group>"; };
 		D059FAAC2470C7FF00737532 /* ToDoInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoInputView.swift; sourceTree = "<group>"; };
 		D066E69C24701B0B007FA3DB /* TodoList_SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoList_SwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -334,6 +336,7 @@
 			children = (
 				D0CB6D042518BFEC0049D10B /* ToDoViewModel.swift */,
 				D01178C425B433FF0071E101 /* InputViewModel.swift */,
+				D04FBD88268855DB00BBBE4A /* TodoDetailViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -712,6 +715,7 @@
 				D020DDE725BDC2DF002DAC37 /* CompletionFlag.swift in Sources */,
 				D01178C525B433FF0071E101 /* InputViewModel.swift in Sources */,
 				D066E6A224701B0B007FA3DB /* SceneDelegate.swift in Sources */,
+				D04FBD89268855DB00BBBE4A /* TodoDetailViewModel.swift in Sources */,
 				D0BD8D4725728415009BCA97 /* R.generated.swift in Sources */,
 				D011ACD6257681A00007C7D3 /* TodoWidget.intentdefinition in Sources */,
 				D0C2F4E3259A0482008C6FE3 /* WidgetOpenManager.swift in Sources */,
