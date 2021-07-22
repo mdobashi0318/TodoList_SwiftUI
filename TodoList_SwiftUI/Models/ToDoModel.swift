@@ -198,6 +198,34 @@ final class ToDoModel: Object {
     }
     
     
+    /// 完了フラグの更新
+    /// - Parameters:
+    ///   - updateTodo: 更新するTodo
+    ///   - flag: 変更する値
+    static func updateCompletionFlag(updateTodo: ToDoModel, flag: CompletionFlag) {
+        switch initRealm {
+        case .success(let realm):
+            guard let toDoModel: ToDoModel = ToDoModel.findTodo(todoId: updateTodo.id, createTime: updateTodo.createTime) else { return }
+                try? realm.write() {
+                    toDoModel.completionFlag = flag.rawValue
+                }
+            if updateTodo.completionFlag == CompletionFlag.completion.rawValue {
+                NotificationManager().removeNotification([toDoModel.createTime ?? ""])
+            } else {
+                NotificationManager().addNotification(toDoModel: toDoModel) { _ in
+                    /// 何もしない
+                }
+            }
+            
+            if #available(iOS 14.0, *) {
+                WidgetCenter.shared.reloadAllTimelines()
+            }
+            
+        case .failure(let error):
+            print("完了フラグ更新エラー: \(error)")
+        }
+    }
+    
     // MARK: Todo削除
     
     /// ToDoの削除
