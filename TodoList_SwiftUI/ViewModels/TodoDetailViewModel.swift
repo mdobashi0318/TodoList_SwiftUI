@@ -32,7 +32,7 @@ class TodoDetailViewModel: ObservableObject {
     
     /// Todoを１件検索
     func findTodo() {
-        let model = ToDoModel.findTodo(todoId: model?.id ?? "", createTime: model?.createTime ?? "")
+        let model = ToDoModel.findTodo(todoId: model?.id ?? "", createTime: model?.createTime)
         let todo = model
         self.completionFlag = self.model?.completionFlag == CompletionFlag.completion.rawValue ? true : false
         self.model = todo
