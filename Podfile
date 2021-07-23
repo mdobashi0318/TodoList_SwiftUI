@@ -9,13 +9,13 @@ target 'TodoList_SwiftUI' do
   pod 'RealmSwift', '10.8.1'
   pod 'R.swift','5.3.0'
 
-  target 'TodoList_SwiftUITests' do
+  target 'TodoList_Tests' do
     inherit! :search_paths
     # Pods for testing
     pod 'RealmSwift', '10.8.1'
   end
 
-  target 'TodoList_SwiftUIUITests' do
+  target 'TodoList_UITests' do
     # Pods for testing
     pod 'RealmSwift', '10.8.1'
   end
