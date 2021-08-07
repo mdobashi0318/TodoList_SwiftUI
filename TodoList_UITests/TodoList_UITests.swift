@@ -1,6 +1,6 @@
 //
-//  TodoList_SwiftUIUITests.swift
-//  TodoList_SwiftUIUITests
+//  TodoList_UITests.swift
+//  TodoList_UITests
 //
 //  Created by 土橋正晴 on 2020/05/16.
 //  Copyright © 2020 m.dobashi. All rights reserved.
@@ -9,7 +9,7 @@
 import XCTest
 
 @available(iOS 14.0, *)
-class TodoList_SwiftUIUITests: XCTestCase {
+class TodoList_IUITests: XCTestCase {
     
     
     

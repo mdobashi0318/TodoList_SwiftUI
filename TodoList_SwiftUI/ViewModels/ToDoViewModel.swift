@@ -34,7 +34,7 @@ final class ToDoViewModel: ObservableObject {
     
     func fetchAllTodoModel() -> Future<[ToDoModel], TodoModelError> {
         return Future<[ToDoModel], TodoModelError> { promise in
-            guard let model = ToDoModel.allFindRealm() else {
+            guard let model = ToDoModel.allFindTodo() else {
                 promise(.failure(.init(isError: true)))
                 return
             }
@@ -73,21 +73,7 @@ final class ToDoViewModel: ObservableObject {
             .cancel()
     }
 
-    
-    
-    /// Todoを１件検索
-    func findTodo(todoId: String, createTime: String) -> ToDoModel {
-        let model = ToDoModel.findRealm(todoId: todoId, createTime: createTime)
-        let todo = ToDoModel()
-        todo.id = model?.id ?? ""
-        todo.toDoName = model?.toDoName ?? ""
-        todo.todoDate = model?.todoDate ?? ""
-        todo.toDo = model?.toDo ?? ""
-        
-        return todo
-    }
-    
-    
+
     /// Todoの削除
     func deleteTodo(delete: ToDoModel) -> Future<ToDoModel, DeleteError> {
         return Future<ToDoModel, DeleteError> { promiss in

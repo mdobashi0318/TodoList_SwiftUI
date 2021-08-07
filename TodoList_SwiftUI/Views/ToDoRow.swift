@@ -23,7 +23,7 @@ struct ToDoRow: View {
                         .foregroundColor(.red)
                         .accessibility(identifier: "completeLabel")
                 } else {
-                    Text(Format().dateFromString(string: todoModel.todoDate)! > Format().dateFormat() ? "" : "期限切れ")
+                    Text(Format().dateFromString(string: todoModel.todoDate)! > Format().dateFormat() ? "" : R.string.labels.expired())
                         .font(.caption)
                         .foregroundColor(.red)
                         .accessibility(identifier: "dateLabel")

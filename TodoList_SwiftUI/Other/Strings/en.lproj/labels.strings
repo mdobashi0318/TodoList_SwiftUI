@@ -7,4 +7,7 @@
 */
 
 
+"All" = "全件";
+"Active" = "未完了";
+"Expired" = "期限切れ";
 "Complete" = "完了";

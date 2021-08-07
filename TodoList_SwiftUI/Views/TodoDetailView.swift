@@ -12,7 +12,7 @@ struct TodoDetailView: View {
     
     // MARK: Properties
     
-    @Binding var toDoModel: ToDoModel
+    @ObservedObject var viewModel: TodoDetailViewModel
     
     /// Todoの編集するためのモーダルを出すフラグ
     @State var isShowModle = false
@@ -28,25 +28,23 @@ struct TodoDetailView: View {
     
     @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
     
+    
 
-    
-    
-    // MARK : Body
     
     var body: some View {
         List {
             Section(header: Text("期限")
                         .font(.headline)) {
                 HStack {
-                    Text(toDoModel.todoDate)
+                    Text(viewModel.model?.todoDate ?? "")
                         .accessibility(identifier: "dateLabel")
-                    if toDoModel.completionFlag == CompletionFlag.completion.rawValue {
+                    if viewModel.model?.completionFlag == CompletionFlag.completion.rawValue {
                         Text(R.string.labels.complete())
                             .font(.subheadline)
                             .foregroundColor(.red)
                             .accessibility(identifier: "completeLabel")
-                    } else if toDoModel.todoDate != "" {
-                        Text(Format().dateFromString(string: toDoModel.todoDate)! > Format().dateFormat() ? "" : "期限切れ")
+                    } else if viewModel.model?.todoDate != "" {
+                        Text(Format().dateFromString(string: viewModel.model?.todoDate ?? "")! > Format().dateFormat() ? "" : R.string.labels.expired())
                             .font(.caption)
                             .foregroundColor(.red)
                     }
@@ -55,17 +53,23 @@ struct TodoDetailView: View {
             
             Section(header: Text("詳細")
                         .font(.headline)) {
-                Text(toDoModel.toDo)
+                Text(viewModel.model?.toDo ?? "")
                     .accessibility(identifier: "todoDetaillabel")
             }
+            
+            completeToggleSection
+        }
+        .onAppear {
+            viewModel.setFlag()
         }
         .alert(isPresented: $isShowErrorAlert) {
             Alert(title: Text("削除に失敗しました"))
         }
         .listStyle(GroupedListStyle())
-        .navigationBarTitle(toDoModel.toDoName)
+        .navigationBarTitle(viewModel.model?.toDoName ?? "")
         .navigationBarItems(trailing: addButton)
     }
+    
 }
 
 
@@ -87,11 +91,11 @@ extension TodoDetailView {
         }
         .sheet(isPresented: $isShowModle) {
             /// 編集を選択
-            ToDoInputView(inputViewModel: InputViewModel(model: toDoModel),
+            ToDoInputView(inputViewModel: InputViewModel(model: viewModel.model),
                           isUpdate: true
             )
             .onDisappear {
-                self.toDoModel = ToDoViewModel().findTodo(todoId: self.toDoModel.id, createTime: self.toDoModel.createTime ?? "")
+                viewModel.findTodo()
             }
         }
         .alert(isPresented: $isDeleteAction) {
@@ -120,7 +124,7 @@ extension TodoDetailView {
     var deleteAlert: Alert {
         Alert(title: Text("Todoを削除しますか?"),
               primaryButton: .destructive(Text("削除")) {
-                ToDoViewModel().deleteTodo(delete: toDoModel)
+                ToDoViewModel().deleteTodo(delete: viewModel.model!)
                     .sink(receiveCompletion: { completion in
                         switch completion {
                         case .finished:
@@ -130,11 +134,22 @@ extension TodoDetailView {
                             print(error)
                         }
                     }, receiveValue: { dummy in
-                        self.toDoModel = dummy
+                        viewModel.model = dummy
                     }).cancel()
               },
               secondaryButton: .cancel(Text("キャンセル"))
         )
+    }
+    
+    
+    
+    
+    /// Todoの未完・完了トグル
+    private var completeToggleSection: some View {
+        return Section {
+            Toggle(R.string.labels.complete(), isOn: $viewModel.completionFlag)
+                .accessibility(identifier: "completeSwitch")
+        }
     }
     
 }
@@ -145,7 +160,7 @@ extension TodoDetailView {
 struct TodoDetail_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            TodoDetailView(toDoModel: .constant(testModel[0]))
+            TodoDetailView(viewModel: TodoDetailViewModel(model: testModel[0]))
             //            .colorScheme(.dark)
             //            .background(Color(.systemBackground))
             //            .environment(\.colorScheme, .dark)
