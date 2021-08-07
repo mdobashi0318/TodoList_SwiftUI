@@ -44,7 +44,7 @@ struct TodoDetailView: View {
                             .foregroundColor(.red)
                             .accessibility(identifier: "completeLabel")
                     } else if viewModel.model?.todoDate != "" {
-                        Text(Format().dateFromString(string: viewModel.model?.todoDate ?? "")! > Format().dateFormat() ? "" : "期限切れ")
+                        Text(Format().dateFromString(string: viewModel.model?.todoDate ?? "")! > Format().dateFormat() ? "" : R.string.labels.expired())
                             .font(.caption)
                             .foregroundColor(.red)
                     }

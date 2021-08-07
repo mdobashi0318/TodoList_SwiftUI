@@ -100,10 +100,10 @@ extension ToDoListView {
     private var segmenteSection: some View {
         return Section() {
             Picker(selection: $toDoviewModel.segmentIndex, label: Text("")) {
-                Text("全件").tag(SegmentIndex.all)
-                Text("アクティブ").tag(SegmentIndex.active)
+                Text(R.string.labels.all()).tag(SegmentIndex.all)
+                Text(R.string.labels.active()).tag(SegmentIndex.active)
                 Text(R.string.labels.complete()).tag(SegmentIndex.complete)
-                Text("期限切れ").tag(SegmentIndex.expired)
+                Text(R.string.labels.expired()).tag(SegmentIndex.expired)
             }
             .frame(height: 30, alignment: .center)
             .pickerStyle(SegmentedPickerStyle())
