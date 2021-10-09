@@ -28,7 +28,7 @@ final class ToDoViewModel: ObservableObject {
     var isAlertError: Bool = false
     
     init() {
-        setSegmentPub()
+        selectedSegment()
     }
     
     
@@ -100,7 +100,7 @@ final class ToDoViewModel: ObservableObject {
     
    
 
-    private func setSegmentPub() {
+    private func selectedSegment() {
         $segmentIndex
             .print()
             .sink(receiveValue: { value in
