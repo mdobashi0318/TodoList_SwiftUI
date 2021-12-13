@@ -9,6 +9,11 @@
 import Foundation
 
 final class WidgetOpenManager: ObservableObject {
+    
+    enum OpenTodo {
+        case Widget
+        case NotificationBanner
+    }
         
     static let shared = WidgetOpenManager()
     
@@ -28,18 +33,34 @@ final class WidgetOpenManager: ObservableObject {
         }
     }
     
-    
+    /// WidgetからTodoを開く
     private let openedFromWidget = NotificationCenter.default.publisher(for: Notification.Name(rawValue: R.string.notifications.openedFromWidget()))
-        .sink(receiveValue: { notification in
-            shared.openTodoModal()
+        .sink(receiveValue: { _ in
+            shared.openTodoModal(.Widget, todo: nil)
         })
     
     
-    private func openTodoModal() {
-        guard let _nextTodo = findNextTodo else {
-            return
+    /// 通知からTodoを開く
+    private let openedFromNotificationBanner = NotificationCenter.default.publisher(for: Notification.Name(rawValue: R.string.notifications.tapNotificationBanner()))
+        .sink(receiveValue: { notification in
+            guard let _id = notification.object as? String else { return }
+            shared.openTodoModal(.NotificationBanner, todo: ToDoModel.findTodo(todoId: "", createTime: _id))
+        })
+    
+    
+    private func openTodoModal(_ open: OpenTodo, todo: ToDoModel?) {
+        switch open {
+        case .Widget:
+            guard let _nextTodo = findNextTodo else {
+                return
+            }
+            nextTodo = _nextTodo
+        case .NotificationBanner:
+            guard let _openTodo = todo else {
+                return
+            }
+            nextTodo = _openTodo
         }
-        nextTodo = _nextTodo
         isOpneTodo = true
     }
     
