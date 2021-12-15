@@ -8,21 +8,25 @@
 
 import Foundation
 
-final class WidgetOpenManager: ObservableObject {
+
+/// アプリ外でTodoを開いた時のTodoの設定をする
+final class OpenTodoManager: ObservableObject {
     
-    enum OpenTodo {
+    /// アプリ外でTodoを開いた際にどこから開いたかのenum
+    enum OpenMethod {
         case Widget
         case NotificationBanner
     }
         
-    static let shared = WidgetOpenManager()
+    static let shared = OpenTodoManager()
     
     @Published var isOpneTodo: Bool = false
     
-    private(set) var nextTodo: ToDoModel!
+    /// 詳細を開くTodo
+    private(set) var openTodo: ToDoModel!
     
     /// 次に来るのTodoを検索する
-    var findNextTodo: ToDoModel? {
+    private var findNextTodo: ToDoModel? {
         get {
             guard let model = ToDoModel.allFindTodo(),
                   let _nextTodo = model.filter({ Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() }).first,
@@ -48,18 +52,19 @@ final class WidgetOpenManager: ObservableObject {
         })
     
     
-    private func openTodoModal(_ open: OpenTodo, todo: ToDoModel?) {
+    /// 詳細を開くTodoを設定する
+    private func openTodoModal(_ open: OpenMethod, todo: ToDoModel?) {
         switch open {
         case .Widget:
             guard let _nextTodo = findNextTodo else {
                 return
             }
-            nextTodo = _nextTodo
+            openTodo = _nextTodo
         case .NotificationBanner:
             guard let _openTodo = todo else {
                 return
             }
-            nextTodo = _openTodo
+            openTodo = _openTodo
         }
         isOpneTodo = true
     }

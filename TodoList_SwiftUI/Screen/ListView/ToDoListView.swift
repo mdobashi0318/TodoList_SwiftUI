@@ -14,7 +14,7 @@ struct ToDoListView: View {
     
     @ObservedObject private var toDoviewModel = ToDoViewModel()
     
-    @ObservedObject private var openWidget = WidgetOpenManager.shared
+    @ObservedObject private var openWidget = OpenTodoManager.shared
     
     @State var isShowModle = false
     
@@ -115,9 +115,9 @@ extension ToDoListView {
     /// WidgetでタップしたTodoをモーダルで表示する
     private var openWidgetView: some View {
         return NavigationView {
-            TodoDetailView(viewModel: TodoDetailViewModel(model: openWidget.nextTodo))
+            TodoDetailView(viewModel: TodoDetailViewModel(model: openWidget.openTodo))
                 .onDisappear { openWidget.isOpneTodo = false }
-                .navigationBarTitle(openWidget.nextTodo.toDoName)
+                .navigationBarTitle(openWidget.openTodo.toDoName)
                 .navigationBarItems(leading: Button(action: {
                     openWidget.isOpneTodo = false
                 }, label: {

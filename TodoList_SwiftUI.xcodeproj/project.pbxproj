@@ -45,7 +45,7 @@
 		D0750DC924769BD500BAB0C9 /* ToDoDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0750DC824769BD500BAB0C9 /* ToDoDetailView.swift */; };
 		D0BD8D40257283BF009BCA97 /* AlertMessage.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0BD8D42257283BF009BCA97 /* AlertMessage.strings */; };
 		D0BD8D4725728415009BCA97 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BD8D4625728415009BCA97 /* R.generated.swift */; };
-		D0C2F4E3259A0482008C6FE3 /* WidgetOpenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C2F4E2259A0482008C6FE3 /* WidgetOpenManager.swift */; };
+		D0C2F4E3259A0482008C6FE3 /* OpenTodoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C2F4E2259A0482008C6FE3 /* OpenTodoManager.swift */; };
 		D0C2F4EE259A056F008C6FE3 /* Notifications.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0C2F4F0259A056F008C6FE3 /* Notifications.strings */; };
 		D0CB6D052518BFEC0049D10B /* ToDoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CB6D042518BFEC0049D10B /* ToDoViewModel.swift */; };
 		D0DBE0582576866A00CF9F01 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02DDC242495BD5C00AE1F0B /* NotificationManager.swift */; };
@@ -145,7 +145,7 @@
 		D0A3858B257BC3F8007332CD /* TodoList_SwiftUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TodoList_SwiftUI.entitlements; sourceTree = "<group>"; };
 		D0BD8D41257283BF009BCA97 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AlertMessage.strings; sourceTree = "<group>"; };
 		D0BD8D4625728415009BCA97 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
-		D0C2F4E2259A0482008C6FE3 /* WidgetOpenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetOpenManager.swift; sourceTree = "<group>"; };
+		D0C2F4E2259A0482008C6FE3 /* OpenTodoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenTodoManager.swift; sourceTree = "<group>"; };
 		D0C2F4EF259A056F008C6FE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Notifications.strings; sourceTree = "<group>"; };
 		D0CB6D042518BFEC0049D10B /* ToDoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoViewModel.swift; sourceTree = "<group>"; };
 		E73AE3B2CCEB9369A8B9EC83 /* Pods-TodoList_SwiftUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodoList_SwiftUITests.release.xcconfig"; path = "Target Support Files/Pods-TodoList_SwiftUITests/Pods-TodoList_SwiftUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -252,7 +252,7 @@
 				D00B1E002487AF790034FB25 /* Format.swift */,
 				D02DDC242495BD5C00AE1F0B /* NotificationManager.swift */,
 				D020DDE625BDC2DF002DAC37 /* CompletionFlag.swift */,
-				D0C2F4E2259A0482008C6FE3 /* WidgetOpenManager.swift */,
+				D0C2F4E2259A0482008C6FE3 /* OpenTodoManager.swift */,
 				D06C910E25B48F8E007D6D08 /* Errors.swift */,
 			);
 			path = Other;
@@ -753,7 +753,7 @@
 				D04FBD89268855DB00BBBE4A /* ToDoDetailViewModel.swift in Sources */,
 				D0BD8D4725728415009BCA97 /* R.generated.swift in Sources */,
 				D011ACD6257681A00007C7D3 /* TodoWidget.intentdefinition in Sources */,
-				D0C2F4E3259A0482008C6FE3 /* WidgetOpenManager.swift in Sources */,
+				D0C2F4E3259A0482008C6FE3 /* OpenTodoManager.swift in Sources */,
 				D066E6A424701B0B007FA3DB /* ToDoListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

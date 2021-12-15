@@ -8,6 +8,8 @@
 
 
 
+/// Widgetから開く
 "OpenedFromWidget" = "OpenedFromWidget";
 
+/// NotificationBannerから開く
 "TapNotificationBanner" = "TapNotificationBanner";
