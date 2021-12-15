@@ -70,5 +70,13 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         completionHandler([.alert, .sound])
     }
     
+    
+    /// 通知バナータップ
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: R.string.notifications.tapNotificationBanner()), object: response.notification.request.identifier)
+        }
+        completionHandler()
+    }
 }
 

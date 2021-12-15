@@ -26,7 +26,7 @@ class TodoDetailViewModel: ObservableObject {
     
     func setFlag(){
         self.completionFlag = model?.completionFlag == CompletionFlag.completion.rawValue ? true : false
-        setCompletionFlagPub()
+        swicthCompletionFlag()
     }
     
     
@@ -39,7 +39,7 @@ class TodoDetailViewModel: ObservableObject {
     }
     
     
-    private func setCompletionFlagPub() {
+    private func swicthCompletionFlag() {
         $completionFlag
             .print()
             .sink(receiveValue: { flag in
