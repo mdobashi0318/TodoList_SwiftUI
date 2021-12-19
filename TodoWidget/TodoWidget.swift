@@ -23,7 +23,7 @@ struct Provider: IntentTimelineProvider {
     func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         var entries: [SimpleEntry] = []
         var todo: ToDoModel? {
-            return ToDoModel.allFindTodo()?.first(where: {
+            return ToDoModel.allFindTodo().first(where: {
                 Format().dateFromString(string: $0.todoDate)! > Format().dateFormat()
             })
         }

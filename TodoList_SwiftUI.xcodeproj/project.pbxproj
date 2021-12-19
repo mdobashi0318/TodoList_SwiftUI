@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		1A414AC01A5F799ABB5DF20B /* Pods_TodoList_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E287EC0C56A849158E1C5B8 /* Pods_TodoList_SwiftUI.framework */; };
+		6D734CE6276ED9F0004A3EC2 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C910E25B48F8E007D6D08 /* Errors.swift */; };
+		6D734CEA276EE45D004A3EC2 /* Message.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D734CED276EE45D004A3EC2 /* Message.strings */; };
+		6D734CEB276EE45D004A3EC2 /* Message.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D734CED276EE45D004A3EC2 /* Message.strings */; };
 		6DFF5AEC276DF4BA00BA43B7 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 6DFF5AEB276DF4BA00BA43B7 /* Realm */; };
 		6DFF5AEE276DF4BA00BA43B7 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6DFF5AED276DF4BA00BA43B7 /* RealmSwift */; };
 		6DFF5AF0276DF4EE00BA43B7 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 6DFF5AEF276DF4EE00BA43B7 /* Realm */; };
@@ -96,6 +99,7 @@
 		20895C79C2BC0B9DF8FCD7CC /* Pods-TodoList_SwiftUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodoList_SwiftUITests.debug.xcconfig"; path = "Target Support Files/Pods-TodoList_SwiftUITests/Pods-TodoList_SwiftUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		550DD561A2DCF81CABA625AE /* Pods-TodoList_SwiftUI-TodoList_SwiftUIUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodoList_SwiftUI-TodoList_SwiftUIUITests.debug.xcconfig"; path = "Target Support Files/Pods-TodoList_SwiftUI-TodoList_SwiftUIUITests/Pods-TodoList_SwiftUI-TodoList_SwiftUIUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		5F9156AAA989BE2FEE3C6FA7 /* Pods-TodoList_SwiftUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodoList_SwiftUI.debug.xcconfig"; path = "Target Support Files/Pods-TodoList_SwiftUI/Pods-TodoList_SwiftUI.debug.xcconfig"; sourceTree = "<group>"; };
+		6D734CEC276EE45D004A3EC2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Message.strings; sourceTree = "<group>"; };
 		87FB4DB141C3654B8514F443 /* Pods-TodoList_SwiftUI-TodoList_SwiftUIUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodoList_SwiftUI-TodoList_SwiftUIUITests.release.xcconfig"; path = "Target Support Files/Pods-TodoList_SwiftUI-TodoList_SwiftUIUITests/Pods-TodoList_SwiftUI-TodoList_SwiftUIUITests.release.xcconfig"; sourceTree = "<group>"; };
 		917BC2DC939C700B13F1246F /* Pods-TodoList_SwiftUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodoList_SwiftUI.release.xcconfig"; path = "Target Support Files/Pods-TodoList_SwiftUI/Pods-TodoList_SwiftUI.release.xcconfig"; sourceTree = "<group>"; };
 		D00B1E002487AF790034FB25 /* Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Format.swift; sourceTree = "<group>"; };
@@ -357,6 +361,7 @@
 			isa = PBXGroup;
 			children = (
 				D0BD8D42257283BF009BCA97 /* AlertMessage.strings */,
+				6D734CED276EE45D004A3EC2 /* Message.strings */,
 				D04FF8D425C05F6D00391290 /* labels.strings */,
 				D0C2F4F0259A056F008C6FE3 /* Notifications.strings */,
 			);
@@ -514,6 +519,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D734CEB276EE45D004A3EC2 /* Message.strings in Resources */,
 				D011ACD3257681A00007C7D3 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -528,6 +534,7 @@
 				D066E6A924701B0F007FA3DB /* Preview Assets.xcassets in Resources */,
 				D066E6A624701B0F007FA3DB /* Assets.xcassets in Resources */,
 				D04FF8D225C05F6D00391290 /* labels.strings in Resources */,
+				6D734CEA276EE45D004A3EC2 /* Message.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -617,6 +624,7 @@
 				D020DDEC25BDC3E4002DAC37 /* CompletionFlag.swift in Sources */,
 				D011ACD02576819E0007C7D3 /* TodoWidget.swift in Sources */,
 				D01E4B48259C9F84006D58B5 /* UserDefaultsExtensions.swift in Sources */,
+				6D734CE6276ED9F0004A3EC2 /* Errors.swift in Sources */,
 				D0DBE0592576866A00CF9F01 /* Format.swift in Sources */,
 				D0DBE0582576866A00CF9F01 /* NotificationManager.swift in Sources */,
 				D011ACE22576830D0007C7D3 /* ToDoModel.swift in Sources */,
@@ -687,6 +695,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		6D734CED276EE45D004A3EC2 /* Message.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6D734CEC276EE45D004A3EC2 /* en */,
+			);
+			name = Message.strings;
+			sourceTree = "<group>";
+		};
 		D04FF8D425C05F6D00391290 /* labels.strings */ = {
 			isa = PBXVariantGroup;
 			children = (

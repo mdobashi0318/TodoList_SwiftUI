@@ -50,9 +50,7 @@ class TodoDetailViewModelTest: XCTestCase {
     
     
     func test_findTodo() {
-        let exp = expectation(description: "add")
-        ToDoModel.addRealm(addValue: ToDoModel(toDoName: "TEST", todoDate: "2022/01/01 00:00", toDo: "toDo", completionFlag: CompletionFlag.unfinished.rawValue, createTime: ""), result:{ _ in exp.fulfill() })
-        wait(for: [exp], timeout: 3.0)
+        try? ToDoModel.addRealm(addValue: ToDoModel(toDoName: "TEST", todoDate: "2022/01/01 00:00", toDo: "toDo", completionFlag: CompletionFlag.unfinished.rawValue, createTime: ""))
         let viewModel = TodoDetailViewModel(model: ToDoModel(id: "1", toDoName: "", todoDate: "", toDo: "", completionFlag: ""))
         viewModel.findTodo()
         

@@ -32,13 +32,9 @@ final class ToDoViewModel: ObservableObject {
     }
     
     
-    func fetchAllTodoModel() -> Future<[ToDoModel], TodoModelError> {
-        return Future<[ToDoModel], TodoModelError> { promise in
-            guard let model = ToDoModel.allFindTodo() else {
-                promise(.failure(.init(isError: true)))
-                return
-            }
-            promise(.success(model))
+    func fetchAllTodoModel() -> Future<[ToDoModel], Never> {
+        return Future<[ToDoModel], Never> { promise in
+            promise(.success(ToDoModel.allFindTodo()))
         }
     }
     
@@ -49,8 +45,8 @@ final class ToDoViewModel: ObservableObject {
                 switch completion {
                 case .finished:
                     self.objectWillChange.send()
-                case .failure(let error):
-                    self.isAlertError = error.isError
+                case .failure(_):
+                    break
                 }
             }, receiveValue: { model in
                 switch index {
@@ -75,18 +71,16 @@ final class ToDoViewModel: ObservableObject {
 
 
     /// Todoの削除
-    func deleteTodo(delete: ToDoModel) -> Future<ToDoModel, DeleteError> {
-        return Future<ToDoModel, DeleteError> { promiss in
-            ToDoModel.deleteRealm(deleteTodo: delete) { result in
-                switch result {
-                case .success(_):
-                    /// 呼び出し元のTodoがnilになるとクラッシュするのでToDoの削除後に空のTodoを入れて回避する
-                    return promiss(.success(ToDoModel()))
-                case .failure(let error):
-                    print(error)
-                    return promiss(.failure(.init(model: delete, message: "Todoの削除に失敗しました")))
-                }
+    func deleteTodo(delete: ToDoModel) throws -> ToDoModel {
+        do {
+            try ToDoModel.deleteRealm(deleteTodo: delete)
+            /// 呼び出し元のTodoがnilになるとクラッシュするのでToDoの削除後に空のTodoを入れて回避する
+            return ToDoModel()
+        } catch {
+            if let _error = error as? DeleteError {
+                throw _error
             }
+            throw error
         }
     }
     

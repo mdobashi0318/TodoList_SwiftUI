@@ -1,0 +1,13 @@
+/* 
+  Message.strings
+  TodoList_SwiftUI
+
+  Created by 土橋正晴 on 2021/12/19.
+  Copyright © 2021 m.dobashi. All rights reserved.
+*/
+
+
+/// Error
+"AddError" = "Todoの追加に失敗しました。";
+"UpdateError" = "Todoの更新に失敗しました。";
+"DeleteError" = "Todoの削除に失敗しました。";

@@ -28,8 +28,8 @@ final class OpenTodoManager: ObservableObject {
     /// 次に来るのTodoを検索する
     private var findNextTodo: ToDoModel? {
         get {
-            guard let model = ToDoModel.allFindTodo(),
-                  let _nextTodo = model.filter({ Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() }).first,
+            let model = ToDoModel.allFindTodo()
+            guard let _nextTodo = model.filter({ Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() }).first,
                   !_nextTodo.id.isEmpty else {
                 return nil
             }

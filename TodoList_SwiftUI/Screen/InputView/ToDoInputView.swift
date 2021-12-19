@@ -179,35 +179,31 @@ extension ToDoInputView {
     
     /// Todoの追加
     private func addTodo() {
-        inputViewModel.addTodo()
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .finished:
-                    self.presentationMode.wrappedValue.dismiss()
-                case .failure(let error):
-                    print(error)
-                    self.errorMessage = error.message
-                    self.isShowAlert = true
-                }
-            }, receiveValue: {
-            }).cancel()
+        
+        do {
+            try inputViewModel.addTodo()
+            self.presentationMode.wrappedValue.dismiss()
+        } catch {
+            if let _error = error as? TodoModelError {
+                self.errorMessage = _error.message
+            }
+            self.isShowAlert = true
+        }
     }
     
     
     /// Todoのアップデート
     private func updateTodo() {
-        inputViewModel.updateTodo()
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .finished:
-                    self.presentationMode.wrappedValue.dismiss()
-                case .failure(let error):
-                    print(error)
-                    self.errorMessage = error.message
-                    self.isShowAlert = true
-                }
-            }, receiveValue: {
-            }).cancel()
+        do {
+            try inputViewModel.updateTodo()
+            self.presentationMode.wrappedValue.dismiss()
+        } catch {
+            if let _error = error as? TodoModelError {
+                self.errorMessage = _error.message
+            }
+            self.isShowAlert = true
+        }
+        
     }
     
 }

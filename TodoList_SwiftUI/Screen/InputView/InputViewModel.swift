@@ -79,41 +79,35 @@ final class InputViewModel: ObservableObject {
     
     
     /// Todoの追加
-    func addTodo() -> Future<Void, TodoModelError> {
-        return Future<Void, TodoModelError> { promiss in
-            if let message = self.validateCheck() {
-                return promiss(.failure(.init(message: message)))
+    func addTodo() throws {
+        if let message = self.validateCheck() {
+            throw TodoModelError(message: message)
+        }
+        
+        do {
+            try ToDoModel.addRealm(addValue: ToDoModel(toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo))
+        } catch {
+            if let _error = error as? TodoModelError {
+                throw _error
             }
-            
-            ToDoModel.addRealm(addValue: ToDoModel(toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo)) { result in
-                switch result {
-                case .success(_):
-                    return promiss(.success(Void()))
-                case .failure(let error):
-                    print(error.localizedDescription)
-                    return promiss(.failure(.init(message: "Todoの追加に失敗しました")))
-                }
-            }
+            throw error
         }
     }
     
     
     
-    func updateTodo() -> Future<Void, TodoModelError> {
-        return Future<Void, TodoModelError> { promiss in
-            if let message = self.validateCheck() {
-                return promiss(.failure(.init(message: message)))
+    func updateTodo() throws {
+        if let message = self.validateCheck() {
+            throw TodoModelError(message: message)
+        }
+        
+        do {
+            try ToDoModel.updateRealm(updateTodo: ToDoModel(id: self.id,toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo, completionFlag: self.completionFlagStr.rawValue, createTime: self.createTime))
+        } catch {
+            if let _error = error as? TodoModelError {
+                throw _error
             }
-            
-            ToDoModel.updateRealm(updateTodo: ToDoModel(id: self.id,toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo, completionFlag: self.completionFlagStr.rawValue, createTime: self.createTime)) { result in
-                switch result {
-                case .success(_):
-                    return promiss(.success(Void()))
-                case .failure(let error):
-                    print(error.localizedDescription)
-                    return promiss(.failure(.init(message: "Todoの更新に失敗しました")))
-                }
-            }
+            throw error
         }
     }
     

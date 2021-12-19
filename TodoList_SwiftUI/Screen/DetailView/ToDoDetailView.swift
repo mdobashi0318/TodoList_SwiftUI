@@ -124,19 +124,13 @@ extension TodoDetailView {
     var deleteAlert: Alert {
         Alert(title: Text("Todoを削除しますか?"),
               primaryButton: .destructive(Text("削除")) {
-                ToDoViewModel().deleteTodo(delete: viewModel.model!)
-                    .sink(receiveCompletion: { completion in
-                        switch completion {
-                        case .finished:
-                            self.presentationMode.wrappedValue.dismiss()
-                        case .failure(let error):
-                            self.isShowErrorAlert = true
-                            print(error)
-                        }
-                    }, receiveValue: { dummy in
-                        viewModel.model = dummy
-                    }).cancel()
-              },
+            do {
+                viewModel.model = try ToDoViewModel().deleteTodo(delete: viewModel.model!)
+                self.presentationMode.wrappedValue.dismiss()
+            } catch {
+                self.isShowErrorAlert = true
+            }
+        },
               secondaryButton: .cancel(Text("キャンセル"))
         )
     }
