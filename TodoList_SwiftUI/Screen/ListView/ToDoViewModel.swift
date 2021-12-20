@@ -23,7 +23,7 @@ final class ToDoViewModel: ObservableObject {
     
     @Published var segmentIndex: SegmentIndex = .all
     
-    var cancellable: Set<AnyCancellable> = []
+    private var cancellable: Set<AnyCancellable> = []
         
     var isAlertError: Bool = false
     

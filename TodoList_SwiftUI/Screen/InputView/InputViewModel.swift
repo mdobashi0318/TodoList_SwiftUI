@@ -17,7 +17,7 @@ final class InputViewModel: ObservableObject {
     @Published var toDoName: String = ""
     
     /// Todoの期限
-    @Published var todoDateStr: String = ""
+    private var todoDateStr: String = ""
     
     /// Todoの期限
     @Published var toDoDate = Date()
@@ -27,11 +27,11 @@ final class InputViewModel: ObservableObject {
     
     @Published var completionFlag: Bool = false
     
-    @Published var completionFlagStr: CompletionFlag = .unfinished
+    private var completionFlagStr: CompletionFlag = .unfinished
     
-    var createTime: String?
+    private var createTime: String?
     
-    var cancellable: Set<AnyCancellable> = []
+    private var cancellable: Set<AnyCancellable> = []
     
  
 

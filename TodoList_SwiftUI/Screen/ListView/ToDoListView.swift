@@ -16,9 +16,9 @@ struct ToDoListView: View {
     
     @ObservedObject private var openWidget = OpenTodoManager.shared
     
-    @State var isShowModle = false
+    @State private var isShowModle = false
     
-    @State var isDeleteFlag = false
+    @State private var isDeleteFlag = false
     
     
     // MARK: Body

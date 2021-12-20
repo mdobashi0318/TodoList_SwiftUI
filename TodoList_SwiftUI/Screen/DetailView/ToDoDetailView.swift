@@ -15,18 +15,18 @@ struct TodoDetailView: View {
     @ObservedObject var viewModel: TodoDetailViewModel
     
     /// Todoの編集するためのモーダルを出すフラグ
-    @State var isShowModle = false
+    @State private var isShowModle = false
     
     /// アクションシートを出しフラグ
-    @State var isActionSheet = false
+    @State private var isActionSheet = false
     
     /// 削除確認アラートを出すフラグ
-    @State var isDeleteAction = false
+    @State private var isDeleteAction = false
     
-    @State var isShowErrorAlert = false
+    @State private var isShowErrorAlert = false
     
     
-    @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
+    @Environment(\.presentationMode) private var presentationMode:Binding<PresentationMode>
     
     
 

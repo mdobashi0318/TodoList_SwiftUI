@@ -16,16 +16,16 @@ struct ToDoInputView: View {
     @ObservedObject var inputViewModel: InputViewModel
     
     
-    @Environment(\.presentationMode) var presentationMode:Binding<PresentationMode>
+    @Environment(\.presentationMode) private var presentationMode:Binding<PresentationMode>
     
     /// Todoの更新か追加かを判断
     @State var isUpdate: Bool
     
     /// Alertの表示フラグ
-    @State var isShowAlert = false
+    @State private var isShowAlert = false
     
     /// エラーメッセージ
-    @State var errorMessage: String = ""
+    @State private var errorMessage: String = ""
     
     
     // MARK: Body
