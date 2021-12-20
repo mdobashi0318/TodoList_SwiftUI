@@ -107,7 +107,7 @@ final class ToDoModel: Object {
     /// - Parameters:
     ///   - addValue: 登録するTodoのTodo
     ///   - result: Todoの登録時の成功すればVoid、またはエラーを返す
-    static func addRealm(addValue:ToDoModel)  throws {
+    static func add(addValue:ToDoModel)  throws {
         
         guard let _realm = initRealm else {
             throw TodoModelError(message: "Todoの追加に失敗しました。")
@@ -147,7 +147,7 @@ final class ToDoModel: Object {
     ///   - updateTodo: 更新するTodo
     ///   - result: Todoの更新時のエラー
     ///   - result: Todoの登録時の成功すればVoid、またはエラーを返す
-    static func updateRealm(updateTodo: ToDoModel) throws {
+    static func update(updateTodo: ToDoModel) throws {
         guard let _realm = initRealm,
               let toDoModel: ToDoModel = ToDoModel.findTodo(todoId: updateTodo.id, createTime: updateTodo.createTime) else {
                 throw TodoModelError(message: "Todoの更新に失敗しました。")
@@ -212,7 +212,7 @@ final class ToDoModel: Object {
     /// - Parameters:
     ///   - deleteTodo: 削除するTodo
     ///   - result: Todoの登録時の成功すればVoid、またはエラーを返す
-    static func deleteRealm(deleteTodo: ToDoModel) throws {
+    static func delete(deleteTodo: ToDoModel) throws {
         guard let _realm = initRealm else {
             throw DeleteError(model: deleteTodo, message: "Todoの削除に失敗しました")
         }
@@ -256,7 +256,7 @@ final class ToDoModel: Object {
     
     
     /// FileManagerに移行前のRealm
-    private func oldRealm() -> Realm? {
+    private func oldVarTodo() -> Realm? {
         let oldRealm: Realm
         do {
             oldRealm = try Realm()
@@ -272,7 +272,7 @@ final class ToDoModel: Object {
     /// Realmの保存場所にFileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.TodoList-SwiftUI")を設定したので、設定前の値をFileManagerに移行してから以前の値を削除
     func change_TodoModel_Ver() {
         devPrint("v1.3.0以前に作成したTodoの移行と削除を開始")
-        let oldRealm = self.oldRealm()
+        let oldRealm = self.oldVarTodo()
         let oldTodoModel = oldRealm?.objects(ToDoModel.self)
         
         /// 前バージョンのローカル通知を削除
@@ -280,7 +280,7 @@ final class ToDoModel: Object {
         
         oldTodoModel?.forEach { todo in
             do {
-                try ToDoModel.addRealm(addValue: todo)
+                try ToDoModel.add(addValue: todo)
                 devPrint("追加に成功: \(todo)")
             } catch {
                 devPrint("追加に失敗しました。")

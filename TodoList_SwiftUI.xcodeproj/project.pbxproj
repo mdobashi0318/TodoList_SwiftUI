@@ -230,8 +230,8 @@
 		D0060DC026E13D90006A216D /* DetailView */ = {
 			isa = PBXGroup;
 			children = (
-				D04FBD88268855DB00BBBE4A /* ToDoDetailViewModel.swift */,
 				D0750DC824769BD500BAB0C9 /* ToDoDetailView.swift */,
+				D04FBD88268855DB00BBBE4A /* ToDoDetailViewModel.swift */,
 			);
 			path = DetailView;
 			sourceTree = "<group>";

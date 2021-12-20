@@ -73,7 +73,7 @@ final class ToDoViewModel: ObservableObject {
     /// Todoの削除
     func deleteTodo(delete: ToDoModel) throws -> ToDoModel {
         do {
-            try ToDoModel.deleteRealm(deleteTodo: delete)
+            try ToDoModel.delete(deleteTodo: delete)
             /// 呼び出し元のTodoがnilになるとクラッシュするのでToDoの削除後に空のTodoを入れて回避する
             return ToDoModel()
         } catch {

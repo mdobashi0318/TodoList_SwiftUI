@@ -85,7 +85,7 @@ final class InputViewModel: ObservableObject {
         }
         
         do {
-            try ToDoModel.addRealm(addValue: ToDoModel(toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo))
+            try ToDoModel.add(addValue: ToDoModel(toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo))
         } catch {
             if let _error = error as? TodoModelError {
                 throw _error
@@ -102,7 +102,7 @@ final class InputViewModel: ObservableObject {
         }
         
         do {
-            try ToDoModel.updateRealm(updateTodo: ToDoModel(id: self.id,toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo, completionFlag: self.completionFlagStr.rawValue, createTime: self.createTime))
+            try ToDoModel.update(updateTodo: ToDoModel(id: self.id,toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo, completionFlag: self.completionFlagStr.rawValue, createTime: self.createTime))
         } catch {
             if let _error = error as? TodoModelError {
                 throw _error
