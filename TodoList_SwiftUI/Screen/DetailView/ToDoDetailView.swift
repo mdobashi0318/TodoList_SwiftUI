@@ -113,9 +113,9 @@ extension TodoDetailView {
         ActionSheet(title: Text("Todoをどうしますか?"),
                     buttons: [ActionSheet.Button.default(Text("編集")) {
                         self.isShowModle.toggle()
-                        }, .destructive(Text("削除")) {
+                        }, .destructive(Text(R.string.labels.delete())) {
                             self.isDeleteAction.toggle()
-                        }, .cancel(Text("キャンセル"))
+                        }, .cancel(Text(R.string.labels.cancel()))
         ])
     }
     
@@ -123,7 +123,7 @@ extension TodoDetailView {
     /// 削除確認アラート
     var deleteAlert: Alert {
         Alert(title: Text("Todoを削除しますか?"),
-              primaryButton: .destructive(Text("削除")) {
+              primaryButton: .destructive(Text(R.string.labels.delete())) {
             do {
                 viewModel.model = try ToDoViewModel().deleteTodo(delete: viewModel.model!)
                 self.presentationMode.wrappedValue.dismiss()
@@ -131,7 +131,7 @@ extension TodoDetailView {
                 self.isShowErrorAlert = true
             }
         },
-              secondaryButton: .cancel(Text("キャンセル"))
+              secondaryButton: .cancel(Text(R.string.labels.cancel()))
         )
     }
     

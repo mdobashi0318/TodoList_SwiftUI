@@ -8,20 +8,19 @@
 
 
 
-
 /// Message
-"NoTodo" = "No To-Do's have been registered.";
-"AllDelete" = "Do you want to delete them all?";
+"NoTodo" = "ToDoが登録されていません";
+"AllDelete" = "全件削除しますか?";
 
 /// Error
 "AddError" = "Todoの追加に失敗しました。";
 "UpdateError" = "Todoの更新に失敗しました。";
 "DeleteError" = "Todoの削除に失敗しました。";
-"FindError" = "Failed to retrieve todo.";
-
+"FindError" = "Todoの取得に失敗しました";
 
 // MARK: - Validate Message
-
 "Validate" = "%@が入力されていません";
 "ValidateDate" = "入力されている期限が無効です";
+
+
 

@@ -165,7 +165,7 @@ extension ToDoInputView {
     
     /// バリデート時の表示するアラート
     private var showValidateAlert: Alert {
-        return Alert(title: Text(self.errorMessage), dismissButton: .default(Text(R.string.alertMessage.close())))
+        return Alert(title: Text(self.errorMessage), dismissButton: .default(Text(R.string.labels.close())))
     }
     
 }

@@ -28,7 +28,7 @@ struct ToDoListView: View {
             List {
                 segmenteSection
                 if self.toDoviewModel.todoModel.count == 0 {
-                    Text("ToDoが登録されていません")
+                    Text(R.string.message.noTodo())
                 } else {
                     ForEach(0..<self.toDoviewModel.todoModel.count, id: \.self) { row in
                         NavigationLink(destination:
@@ -46,7 +46,7 @@ struct ToDoListView: View {
             .navigationBarItems(leading: allDeleteButton ,trailing: addButton)
             .sheet(isPresented: $openWidget.isOpneTodo) { openWidgetView }
         }.alert(isPresented: $toDoviewModel.isAlertError) {
-            Alert(title: Text("Todoの取得に失敗しました"), dismissButton: .default(Text("閉じる")))
+            Alert(title: Text(R.string.message.findError()), dismissButton: .default(Text(R.string.labels.close())))
         }
         .accessibility(identifier: "ToDoList")
     }
@@ -74,6 +74,7 @@ extension ToDoListView {
         }
         .disabled(self.toDoviewModel.isAlertError)
         .accessibility(identifier: "addButton")
+        .accessibilityLabel(R.string.accessibilityText.todoAddButton())
     }
     
     
@@ -92,6 +93,7 @@ extension ToDoListView {
         }
         .disabled(self.toDoviewModel.isAlertError)
         .accessibility(identifier: "allDeleteButton")
+        .accessibilityLabel(R.string.accessibilityText.allDeleteButton())
     }
     
     
@@ -101,9 +103,13 @@ extension ToDoListView {
         return Section() {
             Picker(selection: $toDoviewModel.segmentIndex, label: Text("")) {
                 Text(R.string.labels.all()).tag(SegmentIndex.all)
+                    .accessibilityLabel(R.string.accessibilityText.all())
                 Text(R.string.labels.active()).tag(SegmentIndex.active)
+                    .accessibilityLabel(R.string.accessibilityText.active())
                 Text(R.string.labels.complete()).tag(SegmentIndex.complete)
+                    .accessibilityLabel(R.string.accessibilityText.complete())
                 Text(R.string.labels.expired()).tag(SegmentIndex.expired)
+                    .accessibilityLabel(R.string.accessibilityText.expired())
             }
             .frame(height: 30, alignment: .center)
             .pickerStyle(SegmentedPickerStyle())

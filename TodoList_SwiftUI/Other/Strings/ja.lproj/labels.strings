@@ -10,14 +10,15 @@
 
 
 // MARK: - Segmente
-"All" = "ALL";
-"Active" = "Active";
-"Expired" = "Expired";
-"Complete" = "Complete";
+"All" = "全件";
+"Active" = "未完了";
+"Expired" = "期限切れ";
+"Complete" = "完了";
 
 
 
 // MARK: - Button
-"Close" = "Close";
-"Cancel" = "Cancel";
-"Delete" = "Delete";
+"Close" = "閉じる";
+"Cancel" = "キャンセル";
+"Delete" = "削除";
+
