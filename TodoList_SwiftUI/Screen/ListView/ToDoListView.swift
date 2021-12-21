@@ -87,9 +87,9 @@ extension ToDoListView {
             Image(systemName: "trash")
         }
         .alert(isPresented: self.$isDeleteFlag) {
-            Alert(title: Text("全件削除しますか?"), primaryButton: .destructive(Text("削除")) {
+            Alert(title: Text(R.string.message.allDelete()), primaryButton: .destructive(Text(R.string.labels.delete())) {
                 toDoviewModel.allDeleteTodo()
-                }, secondaryButton: .cancel(Text("キャンセル")))
+                }, secondaryButton: .cancel(Text(R.string.labels.cancel())))
         }
         .disabled(self.toDoviewModel.isAlertError)
         .accessibility(identifier: "allDeleteButton")
