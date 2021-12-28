@@ -21,12 +21,14 @@
 "Close" = "Close";
 "Cancel" = "Cancel";
 "Delete" = "Delete";
+"Edit" = "Edit";
 
 
+
+// MARK: - Label
 "Title" = "Title";
 "Deadline" = "Deadline";
 "Details" = "Details";
-
 
 "AddToDo" = "Add Todo";
 "UpdateToDo" = "Update Todo";

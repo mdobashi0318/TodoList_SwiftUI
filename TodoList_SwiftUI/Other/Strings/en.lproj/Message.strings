@@ -12,10 +12,13 @@
 /// Message
 "NoTodo" = "No To-Do's have been registered.";
 "AllDelete" = "Do you want to delete them all?";
+"DeleteTodo" = "Do you want to delete a todo?";
 
 
 "inputTitle" = "Please enter a title";
 "inputDetails" = "Please enter your details";
+
+"DetailActionSheet" = "What do you want to do with your todo?";
 
 /// Error
 "AddError" = "Todoの追加に失敗しました。";
@@ -26,6 +29,6 @@
 
 // MARK: - Validate Message
 
-"Validate" = "%@が入力されていません";
-"ValidateDate" = "入力されている期限が無効です";
+"Validate" = "%@ is not entered.";
+"ValidateDate" = "The deadline you entered is invalid.";
 

@@ -11,9 +11,12 @@
 /// Message
 "NoTodo" = "ToDoが登録されていません";
 "AllDelete" = "全件削除しますか?";
+"DeleteTodo" = "Todoを削除しますか?";
 
 "inputTitle" = "タイトルを入力してください";
 "inputDetails" = "詳細を入力してください";
+
+"DetailActionSheet" = "Todoをどうしますか?";
 
 /// Error
 "AddError" = "Todoの追加に失敗しました。";
