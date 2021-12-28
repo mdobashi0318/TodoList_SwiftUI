@@ -39,7 +39,7 @@ struct ToDoInputView: View {
                 if isUpdate { completeToggleSection }
             }
             .listStyle(GroupedListStyle())
-            .navigationBarTitle(isUpdate ? "ToDo更新" : "ToDo追加")
+            .navigationBarTitle(isUpdate ? R.string.labels.updateToDo() : R.string.labels.addToDo())
             .navigationBarItems(leading: cancelButton ,trailing: addButton)
             .accessibility(identifier: "ToDoInputView")
         }
@@ -90,7 +90,7 @@ extension ToDoInputView {
     
     /// 「*必須」ラベル
     private var requiredLabel: some View {
-        return Text("*必須")
+        return Text(R.string.labels.required())
             .font(.caption)
             .foregroundColor(.red)
     }
@@ -126,8 +126,8 @@ extension ToDoInputView {
     
     /// タイトル入力テキストフィールド
     private var todoNameSection: some View {
-        return Section(header: headerLabel(text: "タイトル", identifier: "titlelabel", isRequiredLabel: true)) {
-            textField(placeholder: "タイトルを入力してください",
+        return Section(header: headerLabel(text: R.string.labels.title(), identifier: "titlelabel", isRequiredLabel: true)) {
+            textField(placeholder: R.string.message.inputTitle(),
                       text: $inputViewModel.toDoName,
                       identifier: "titleTextField"
             )
@@ -138,7 +138,7 @@ extension ToDoInputView {
     /// 期限入力DatePicker
     private var todoDatePicker: some View {
         return Section() {
-            DatePicker("期限", selection: $inputViewModel.toDoDate, in: Date()...)
+            DatePicker(R.string.labels.deadline(), selection: $inputViewModel.toDoDate, in: Date()...)
             .accessibility(identifier: "todoDatePicker")
         }
     }
@@ -146,8 +146,8 @@ extension ToDoInputView {
     
     /// 詳細入力テキストフィールド
     private var todoDetailSection: some View {
-        return Section(header: headerLabel(text: "詳細", identifier: "detailLabel", isRequiredLabel: true)) {
-            textField(placeholder: "詳細を入力してください",
+        return Section(header: headerLabel(text: R.string.labels.details(), identifier: "detailLabel", isRequiredLabel: true)) {
+            textField(placeholder: R.string.message.inputDetails(),
                       text: $inputViewModel.toDo,
                       identifier: "detailTextField"
             )

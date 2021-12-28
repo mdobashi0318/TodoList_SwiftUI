@@ -22,3 +22,11 @@
 "Cancel" = "キャンセル";
 "Delete" = "削除";
 
+"Title" = "タイトル";
+"Deadline" = "期限";
+"Details" = "詳細";
+
+
+"AddToDo" = "Todo 追加";
+"UpdateToDo" = "Todo 更新";
+"Required" = "*必須";

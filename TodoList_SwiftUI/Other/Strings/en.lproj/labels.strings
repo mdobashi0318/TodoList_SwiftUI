@@ -21,3 +21,13 @@
 "Close" = "Close";
 "Cancel" = "Cancel";
 "Delete" = "Delete";
+
+
+"Title" = "Title";
+"Deadline" = "Deadline";
+"Details" = "Details";
+
+
+"AddToDo" = "Add Todo";
+"UpdateToDo" = "Update Todo";
+"Required" = "*Required";

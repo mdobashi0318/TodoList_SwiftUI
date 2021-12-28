@@ -13,6 +13,10 @@
 "NoTodo" = "No To-Do's have been registered.";
 "AllDelete" = "Do you want to delete them all?";
 
+
+"inputTitle" = "Please enter a title";
+"inputDetails" = "Please enter your details";
+
 /// Error
 "AddError" = "Todoの追加に失敗しました。";
 "UpdateError" = "Todoの更新に失敗しました。";

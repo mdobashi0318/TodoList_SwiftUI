@@ -68,6 +68,7 @@ struct TodoDetailView: View {
         .listStyle(GroupedListStyle())
         .navigationBarTitle(viewModel.model?.toDoName ?? "")
         .navigationBarItems(trailing: addButton)
+        
     }
     
 }
