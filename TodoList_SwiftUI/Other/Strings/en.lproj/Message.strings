@@ -7,7 +7,28 @@
 */
 
 
+
+
+/// Message
+"NoTodo" = "No To-Do's have been registered.";
+"AllDelete" = "Do you want to delete them all?";
+"DeleteTodo" = "Do you want to delete a todo?";
+
+
+"inputTitle" = "Please enter a title";
+"inputDetails" = "Please enter your details";
+
+"DetailActionSheet" = "What do you want to do with your todo?";
+
 /// Error
 "AddError" = "Todoの追加に失敗しました。";
 "UpdateError" = "Todoの更新に失敗しました。";
 "DeleteError" = "Todoの削除に失敗しました。";
+"FindError" = "Failed to retrieve todo.";
+
+
+// MARK: - Validate Message
+
+"Validate" = "%@ is not entered.";
+"ValidateDate" = "The deadline you entered is invalid.";
+

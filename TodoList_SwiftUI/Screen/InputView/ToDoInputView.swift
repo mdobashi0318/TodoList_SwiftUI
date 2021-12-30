@@ -39,7 +39,7 @@ struct ToDoInputView: View {
                 if isUpdate { completeToggleSection }
             }
             .listStyle(GroupedListStyle())
-            .navigationBarTitle(isUpdate ? "ToDo更新" : "ToDo追加")
+            .navigationBarTitle(isUpdate ? R.string.labels.updateToDo() : R.string.labels.addToDo())
             .navigationBarItems(leading: cancelButton ,trailing: addButton)
             .accessibility(identifier: "ToDoInputView")
         }
@@ -62,6 +62,7 @@ extension ToDoInputView {
             self.presentationMode.wrappedValue.dismiss()
         }) {
             Image(systemName: "xmark")
+                .accessibilityLabel(R.string.labels.close())
         }
         .accessibility(identifier: "cancelButton")
     }
@@ -78,6 +79,7 @@ extension ToDoInputView {
         }) {
             Image(systemName: "plus")
                 .resizable()
+                .accessibilityLabel(R.string.labels.add())
         }
         .alert(isPresented: $isShowAlert) {
             return showValidateAlert
@@ -90,12 +92,12 @@ extension ToDoInputView {
     
     /// 「*必須」ラベル
     private var requiredLabel: some View {
-        return Text("*必須")
+        return Text(R.string.labels.required())
             .font(.caption)
             .foregroundColor(.red)
     }
     
-
+    
     
     /// ヘッダーラベル
     /// - Parameters:
@@ -111,7 +113,7 @@ extension ToDoInputView {
         }
     }
     
-
+    
     
     /// テキストフィールド
     /// - Parameters:
@@ -122,12 +124,12 @@ extension ToDoInputView {
         TextField(placeholder, text: text)
             .accessibility(identifier: identifier)
     }
-
+    
     
     /// タイトル入力テキストフィールド
     private var todoNameSection: some View {
-        return Section(header: headerLabel(text: "タイトル", identifier: "titlelabel", isRequiredLabel: true)) {
-            textField(placeholder: "タイトルを入力してください",
+        return Section(header: headerLabel(text: R.string.labels.title(), identifier: "titlelabel", isRequiredLabel: true)) {
+            textField(placeholder: R.string.message.inputTitle(),
                       text: $inputViewModel.toDoName,
                       identifier: "titleTextField"
             )
@@ -138,16 +140,16 @@ extension ToDoInputView {
     /// 期限入力DatePicker
     private var todoDatePicker: some View {
         return Section() {
-            DatePicker("期限", selection: $inputViewModel.toDoDate, in: Date()...)
-            .accessibility(identifier: "todoDatePicker")
+            DatePicker(R.string.labels.deadline(), selection: $inputViewModel.toDoDate, in: Date()...)
+                .accessibility(identifier: "todoDatePicker")
         }
     }
     
     
     /// 詳細入力テキストフィールド
     private var todoDetailSection: some View {
-        return Section(header: headerLabel(text: "詳細", identifier: "detailLabel", isRequiredLabel: true)) {
-            textField(placeholder: "詳細を入力してください",
+        return Section(header: headerLabel(text: R.string.labels.details(), identifier: "detailLabel", isRequiredLabel: true)) {
+            textField(placeholder: R.string.message.inputDetails(),
                       text: $inputViewModel.toDo,
                       identifier: "detailTextField"
             )
@@ -165,7 +167,7 @@ extension ToDoInputView {
     
     /// バリデート時の表示するアラート
     private var showValidateAlert: Alert {
-        return Alert(title: Text(self.errorMessage), dismissButton: .default(Text(R.string.alertMessage.close())))
+        return Alert(title: Text(self.errorMessage), dismissButton: .default(Text(R.string.labels.close())))
     }
     
 }

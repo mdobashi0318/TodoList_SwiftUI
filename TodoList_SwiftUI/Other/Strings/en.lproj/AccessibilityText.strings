@@ -1,0 +1,18 @@
+/* 
+  AccessibilityText.strings
+  TodoList_SwiftUI
+
+  Created by 土橋正晴 on 2021/12/21.
+  Copyright © 2021 m.dobashi. All rights reserved.
+*/
+
+
+// MARK: - AccessibilityLabel
+"TodoAddButton" = "Open the Todo registration screen";
+"AllDeleteButton" = "Confirm deletion of all todo.";
+
+// MARK: - Segmente
+"All" = "View all Todo";
+"Active" = "Show uncompleted todo";
+"Expired" = "Show todo that is overdue";
+"Complete" = "Show completed todo";

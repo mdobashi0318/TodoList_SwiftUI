@@ -7,7 +7,29 @@
 */
 
 
-"All" = "全件";
-"Active" = "未完了";
-"Expired" = "期限切れ";
-"Complete" = "完了";
+
+
+// MARK: - Segmente
+"All" = "ALL";
+"Active" = "Active";
+"Expired" = "Expired";
+"Complete" = "Complete";
+
+
+
+// MARK: - Button
+"Close" = "Close";
+"Cancel" = "Cancel";
+"Delete" = "Delete";
+"Edit" = "Edit";
+"Add" = "Add";
+
+
+// MARK: - Label
+"Title" = "Title";
+"Deadline" = "Deadline";
+"Details" = "Details";
+
+"AddToDo" = "Add Todo";
+"UpdateToDo" = "Update Todo";
+"Required" = "*Required";

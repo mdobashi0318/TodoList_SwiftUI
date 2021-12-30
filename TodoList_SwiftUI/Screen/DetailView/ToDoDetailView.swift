@@ -33,7 +33,7 @@ struct TodoDetailView: View {
     
     var body: some View {
         List {
-            Section(header: Text("期限")
+            Section(header: Text(R.string.labels.deadline())
                         .font(.headline)) {
                 HStack {
                     Text(viewModel.model?.todoDate ?? "")
@@ -51,7 +51,7 @@ struct TodoDetailView: View {
                 }
             }
             
-            Section(header: Text("詳細")
+            Section(header: Text(R.string.labels.details())
                         .font(.headline)) {
                 Text(viewModel.model?.toDo ?? "")
                     .accessibility(identifier: "todoDetaillabel")
@@ -63,11 +63,12 @@ struct TodoDetailView: View {
             viewModel.setFlag()
         }
         .alert(isPresented: $isShowErrorAlert) {
-            Alert(title: Text("削除に失敗しました"))
+            Alert(title: Text(R.string.message.deleteError()))
         }
         .listStyle(GroupedListStyle())
         .navigationBarTitle(viewModel.model?.toDoName ?? "")
         .navigationBarItems(trailing: addButton)
+        
     }
     
 }
@@ -110,20 +111,20 @@ extension TodoDetailView {
     
     /// Todoの編集、削除の選択をするアクションシートを出す
     var actionSheet: ActionSheet {
-        ActionSheet(title: Text("Todoをどうしますか?"),
-                    buttons: [ActionSheet.Button.default(Text("編集")) {
+        ActionSheet(title: Text(R.string.message.detailActionSheet()),
+                    buttons: [ActionSheet.Button.default(Text(R.string.labels.edit())) {
                         self.isShowModle.toggle()
-                        }, .destructive(Text("削除")) {
+                        }, .destructive(Text(R.string.labels.delete())) {
                             self.isDeleteAction.toggle()
-                        }, .cancel(Text("キャンセル"))
+                        }, .cancel(Text(R.string.labels.cancel()))
         ])
     }
     
     
     /// 削除確認アラート
     var deleteAlert: Alert {
-        Alert(title: Text("Todoを削除しますか?"),
-              primaryButton: .destructive(Text("削除")) {
+        Alert(title: Text(R.string.message.deleteTodo()),
+              primaryButton: .destructive(Text(R.string.labels.delete())) {
             do {
                 viewModel.model = try ToDoViewModel().deleteTodo(delete: viewModel.model!)
                 self.presentationMode.wrappedValue.dismiss()
@@ -131,7 +132,7 @@ extension TodoDetailView {
                 self.isShowErrorAlert = true
             }
         },
-              secondaryButton: .cancel(Text("キャンセル"))
+              secondaryButton: .cancel(Text(R.string.labels.cancel()))
         )
     }
     
