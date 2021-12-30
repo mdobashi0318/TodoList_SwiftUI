@@ -128,9 +128,8 @@ final class ToDoModel: Object {
             NotificationManager().addNotification(toDoModel: toDoModel) { _ in
                 /// 何もしない
             }
-            if #available(iOS 14.0, *) {
-                WidgetCenter.shared.reloadAllTimelines()
-            }
+            
+            WidgetCenter.shared.reloadAllTimelines()
             
         }
         catch {
@@ -150,7 +149,7 @@ final class ToDoModel: Object {
     static func update(updateTodo: ToDoModel) throws {
         guard let _realm = initRealm,
               let toDoModel: ToDoModel = ToDoModel.findTodo(todoId: updateTodo.id, createTime: updateTodo.createTime) else {
-                throw TodoModelError(message: NSLocalizedString("UpdateError", comment: ""))
+                  throw TodoModelError(message: NSLocalizedString("UpdateError", comment: ""))
               }
         
         do {
@@ -168,11 +167,8 @@ final class ToDoModel: Object {
                     /// 何もしない
                 }
             }
+            WidgetCenter.shared.reloadAllTimelines()
             
-            if #available(iOS 14.0, *) {
-                WidgetCenter.shared.reloadAllTimelines()
-            }
-
         }
         catch {
             throw TodoModelError(message: NSLocalizedString("UpdateError", comment: ""))
@@ -201,9 +197,8 @@ final class ToDoModel: Object {
             }
         }
         
-        if #available(iOS 14.0, *) {
-            WidgetCenter.shared.reloadAllTimelines()
-        }
+        WidgetCenter.shared.reloadAllTimelines()
+        
     }
     
     // MARK: Todo削除
@@ -225,11 +220,8 @@ final class ToDoModel: Object {
             try _realm.write() {
                 _realm.delete(deleteTodo)
             }
+            WidgetCenter.shared.reloadAllTimelines()
             
-            if #available(iOS 14.0, *) {
-                WidgetCenter.shared.reloadAllTimelines()
-            }
-
         }
         catch {
             throw DeleteError(model: deleteTodo, message: NSLocalizedString("DeleteError", comment: ""))
@@ -246,9 +238,9 @@ final class ToDoModel: Object {
             _realm.deleteAll()
         }
         
-        if #available(iOS 14.0, *) {
-            WidgetCenter.shared.reloadAllTimelines()
-        }
+        
+        WidgetCenter.shared.reloadAllTimelines()
+        
         
         NotificationManager().allRemoveNotification()
         
