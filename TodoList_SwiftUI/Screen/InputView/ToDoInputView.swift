@@ -62,6 +62,7 @@ extension ToDoInputView {
             self.presentationMode.wrappedValue.dismiss()
         }) {
             Image(systemName: "xmark")
+                .accessibilityLabel(R.string.labels.close())
         }
         .accessibility(identifier: "cancelButton")
     }
@@ -78,6 +79,7 @@ extension ToDoInputView {
         }) {
             Image(systemName: "plus")
                 .resizable()
+                .accessibilityLabel(R.string.labels.add())
         }
         .alert(isPresented: $isShowAlert) {
             return showValidateAlert
@@ -95,7 +97,7 @@ extension ToDoInputView {
             .foregroundColor(.red)
     }
     
-
+    
     
     /// ヘッダーラベル
     /// - Parameters:
@@ -111,7 +113,7 @@ extension ToDoInputView {
         }
     }
     
-
+    
     
     /// テキストフィールド
     /// - Parameters:
@@ -122,7 +124,7 @@ extension ToDoInputView {
         TextField(placeholder, text: text)
             .accessibility(identifier: identifier)
     }
-
+    
     
     /// タイトル入力テキストフィールド
     private var todoNameSection: some View {
@@ -139,7 +141,7 @@ extension ToDoInputView {
     private var todoDatePicker: some View {
         return Section() {
             DatePicker(R.string.labels.deadline(), selection: $inputViewModel.toDoDate, in: Date()...)
-            .accessibility(identifier: "todoDatePicker")
+                .accessibility(identifier: "todoDatePicker")
         }
     }
     
