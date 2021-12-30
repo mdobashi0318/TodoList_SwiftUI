@@ -1,0 +1,12 @@
+/* 
+  Label.strings
+  TodoList_SwiftUI
+
+  Created by 土橋正晴 on 2021/12/31.
+  Copyright © 2021 m.dobashi. All rights reserved.
+*/
+
+"NextTodo" = "次の予定";
+"NoTodo" = "予定はありません";
+"TodoTitle" = "次のTodoタイトル";
+"TodoDetail" = "Todoの詳細";

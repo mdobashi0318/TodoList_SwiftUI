@@ -11,6 +11,7 @@
 		6D734CE6276ED9F0004A3EC2 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C910E25B48F8E007D6D08 /* Errors.swift */; };
 		6D734CEA276EE45D004A3EC2 /* Message.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D734CED276EE45D004A3EC2 /* Message.strings */; };
 		6D734CEB276EE45D004A3EC2 /* Message.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D734CED276EE45D004A3EC2 /* Message.strings */; };
+		6D7FB8C6277E135900BE8EC4 /* Label.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D7FB8C8277E135900BE8EC4 /* Label.strings */; };
 		6DE5CDF5277214440031FB39 /* AccessibilityText.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DE5CDF8277214440031FB39 /* AccessibilityText.strings */; };
 		6DE5CDF6277214440031FB39 /* AccessibilityText.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DE5CDF8277214440031FB39 /* AccessibilityText.strings */; };
 		6DFF5AEC276DF4BA00BA43B7 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 6DFF5AEB276DF4BA00BA43B7 /* Realm */; };
@@ -101,6 +102,8 @@
 		550DD561A2DCF81CABA625AE /* Pods-TodoList_SwiftUI-TodoList_SwiftUIUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodoList_SwiftUI-TodoList_SwiftUIUITests.debug.xcconfig"; path = "Target Support Files/Pods-TodoList_SwiftUI-TodoList_SwiftUIUITests/Pods-TodoList_SwiftUI-TodoList_SwiftUIUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		5F9156AAA989BE2FEE3C6FA7 /* Pods-TodoList_SwiftUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodoList_SwiftUI.debug.xcconfig"; path = "Target Support Files/Pods-TodoList_SwiftUI/Pods-TodoList_SwiftUI.debug.xcconfig"; sourceTree = "<group>"; };
 		6D734CEC276EE45D004A3EC2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Message.strings; sourceTree = "<group>"; };
+		6D7FB8C7277E135900BE8EC4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Label.strings; sourceTree = "<group>"; };
+		6D7FB8C9277E135B00BE8EC4 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Label.strings; sourceTree = "<group>"; };
 		6DE5CDEC27720C090031FB39 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		6DE5CDEE27720C0A0031FB39 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Message.strings; sourceTree = "<group>"; };
 		6DE5CDEF27720C0A0031FB39 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/labels.strings; sourceTree = "<group>"; };
@@ -191,6 +194,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6D7FB8C3277E129400BE8EC4 /* Strings */ = {
+			isa = PBXGroup;
+			children = (
+				6D7FB8C8277E135900BE8EC4 /* Label.strings */,
+			);
+			path = Strings;
+			sourceTree = "<group>";
+		};
 		AFA42E8E5BAAB8BA9AA31E30 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -261,6 +272,7 @@
 				D011ACD12576819E0007C7D3 /* TodoWidget.intentdefinition */,
 				D011ACD2257681A00007C7D3 /* Assets.xcassets */,
 				D011ACD4257681A00007C7D3 /* Info.plist */,
+				6D7FB8C3277E129400BE8EC4 /* Strings */,
 			);
 			path = TodoWidget;
 			sourceTree = "<group>";
@@ -540,6 +552,7 @@
 				D0C2F4EE259A056F008C6FE3 /* Notifications.strings in Resources */,
 				D066E6A924701B0F007FA3DB /* Preview Assets.xcassets in Resources */,
 				D066E6A624701B0F007FA3DB /* Assets.xcassets in Resources */,
+				6D7FB8C6277E135900BE8EC4 /* Label.strings in Resources */,
 				D04FF8D225C05F6D00391290 /* labels.strings in Resources */,
 				6D734CEA276EE45D004A3EC2 /* Message.strings in Resources */,
 			);
@@ -709,6 +722,15 @@
 				6DE5CDEE27720C0A0031FB39 /* ja */,
 			);
 			name = Message.strings;
+			sourceTree = "<group>";
+		};
+		6D7FB8C8277E135900BE8EC4 /* Label.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6D7FB8C7277E135900BE8EC4 /* en */,
+				6D7FB8C9277E135B00BE8EC4 /* ja */,
+			);
+			name = Label.strings;
 			sourceTree = "<group>";
 		};
 		6DE5CDF8277214440031FB39 /* AccessibilityText.strings */ = {

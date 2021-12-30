@@ -16,7 +16,7 @@ struct Provider: IntentTimelineProvider {
     }
 
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), configuration: configuration, todomodel: ToDoModel(id: "", toDoName: "次のTodoタイトル", todoDate: "2021/01/01 00:00", toDo: "Todoの詳細", createTime: nil))
+        let entry = SimpleEntry(date: Date(), configuration: configuration, todomodel: ToDoModel(id: "", toDoName: NSLocalizedString("TodoTitle",comment: ""), todoDate: "2021/01/01 00:00", toDo: NSLocalizedString("TodoDetail", comment: ""), createTime: nil))
         completion(entry)
     }
 
@@ -55,9 +55,9 @@ struct TodoWidgetEntryView : View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("次の予定")
+            Text(NSLocalizedString("NextTodo", comment: ""))
                 .font(.caption)
-            Text(entry.todomodel?.toDoName ?? "予定はありません")
+            Text(entry.todomodel?.toDoName ?? NSLocalizedString("NoTodo", comment: ""))
             Text(entry.todomodel?.todoDate ?? "")
         }
         .widgetURL(Self.deeplinkURL)
