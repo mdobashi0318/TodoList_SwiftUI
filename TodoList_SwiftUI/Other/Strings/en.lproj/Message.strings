@@ -21,9 +21,9 @@
 "DetailActionSheet" = "What do you want to do with your todo?";
 
 /// Error
-"AddError" = "Todoの追加に失敗しました。";
-"UpdateError" = "Todoの更新に失敗しました。";
-"DeleteError" = "Todoの削除に失敗しました。";
+"AddError" = "Todo failed to be added";
+"UpdateError" = "Todo update failed.";
+"DeleteError" = "Failed to delete todo.";
 "FindError" = "Failed to retrieve todo.";
 
 

@@ -110,7 +110,7 @@ final class ToDoModel: Object {
     static func add(addValue:ToDoModel)  throws {
         
         guard let _realm = initRealm else {
-            throw TodoModelError(message: "Todoの追加に失敗しました。")
+            throw TodoModelError(message: NSLocalizedString("AddError", comment: ""))
         }
         
         let toDoModel: ToDoModel = ToDoModel()
@@ -134,7 +134,7 @@ final class ToDoModel: Object {
             
         }
         catch {
-            throw TodoModelError(message: "Todoの追加に失敗しました。")
+            throw TodoModelError(message: NSLocalizedString("AddError", comment: ""))
         }
         
     }
@@ -150,7 +150,7 @@ final class ToDoModel: Object {
     static func update(updateTodo: ToDoModel) throws {
         guard let _realm = initRealm,
               let toDoModel: ToDoModel = ToDoModel.findTodo(todoId: updateTodo.id, createTime: updateTodo.createTime) else {
-                throw TodoModelError(message: "Todoの更新に失敗しました。")
+                throw TodoModelError(message: NSLocalizedString("UpdateError", comment: ""))
               }
         
         do {
@@ -175,7 +175,7 @@ final class ToDoModel: Object {
 
         }
         catch {
-            throw TodoModelError(message: "Todoの更新に失敗しました。")
+            throw TodoModelError(message: NSLocalizedString("UpdateError", comment: ""))
         }
         
     }
@@ -214,7 +214,7 @@ final class ToDoModel: Object {
     ///   - result: Todoの登録時の成功すればVoid、またはエラーを返す
     static func delete(deleteTodo: ToDoModel) throws {
         guard let _realm = initRealm else {
-            throw DeleteError(model: deleteTodo, message: "Todoの削除に失敗しました")
+            throw DeleteError(model: deleteTodo, message: NSLocalizedString("DeleteError", comment: ""))
         }
         if let _createTime = deleteTodo.createTime {
             NotificationManager().removeNotification([_createTime])
@@ -232,7 +232,7 @@ final class ToDoModel: Object {
 
         }
         catch {
-            throw DeleteError(model: deleteTodo, message: "Todoの削除に失敗しました")
+            throw DeleteError(model: deleteTodo, message: NSLocalizedString("DeleteError", comment: ""))
         }
     }
     
