@@ -17,7 +17,7 @@ final class InputViewModel: ObservableObject {
     @Published var toDoName: String = ""
     
     /// Todoの期限
-    @Published var todoDateStr: String = ""
+    private var todoDateStr: String = ""
     
     /// Todoの期限
     @Published var toDoDate = Date()
@@ -27,11 +27,11 @@ final class InputViewModel: ObservableObject {
     
     @Published var completionFlag: Bool = false
     
-    @Published var completionFlagStr: CompletionFlag = .unfinished
+    private var completionFlagStr: CompletionFlag = .unfinished
     
-    var createTime: String?
+    private var createTime: String?
     
-    var cancellable: Set<AnyCancellable> = []
+    private var cancellable: Set<AnyCancellable> = []
     
  
 
@@ -79,41 +79,35 @@ final class InputViewModel: ObservableObject {
     
     
     /// Todoの追加
-    func addTodo() -> Future<Void, TodoModelError> {
-        return Future<Void, TodoModelError> { promiss in
-            if let message = self.validateCheck() {
-                return promiss(.failure(.init(message: message)))
+    func addTodo() throws {
+        if let message = self.validateCheck() {
+            throw TodoModelError(message: message)
+        }
+        
+        do {
+            try ToDoModel.add(addValue: ToDoModel(toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo))
+        } catch {
+            if let _error = error as? TodoModelError {
+                throw _error
             }
-            
-            ToDoModel.addRealm(addValue: ToDoModel(toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo)) { result in
-                switch result {
-                case .success(_):
-                    return promiss(.success(Void()))
-                case .failure(let error):
-                    print(error.localizedDescription)
-                    return promiss(.failure(.init(message: "Todoの追加に失敗しました")))
-                }
-            }
+            throw error
         }
     }
     
     
     
-    func updateTodo() -> Future<Void, TodoModelError> {
-        return Future<Void, TodoModelError> { promiss in
-            if let message = self.validateCheck() {
-                return promiss(.failure(.init(message: message)))
+    func updateTodo() throws {
+        if let message = self.validateCheck() {
+            throw TodoModelError(message: message)
+        }
+        
+        do {
+            try ToDoModel.update(updateTodo: ToDoModel(id: self.id,toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo, completionFlag: self.completionFlagStr.rawValue, createTime: self.createTime))
+        } catch {
+            if let _error = error as? TodoModelError {
+                throw _error
             }
-            
-            ToDoModel.updateRealm(updateTodo: ToDoModel(id: self.id,toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo, completionFlag: self.completionFlagStr.rawValue, createTime: self.createTime)) { result in
-                switch result {
-                case .success(_):
-                    return promiss(.success(Void()))
-                case .failure(let error):
-                    print(error.localizedDescription)
-                    return promiss(.failure(.init(message: "Todoの更新に失敗しました")))
-                }
-            }
+            throw error
         }
     }
     
@@ -122,12 +116,12 @@ final class InputViewModel: ObservableObject {
     /// - Returns: エラー文も返す
     func validateCheck() -> String? {
         if self.toDoName.isEmpty {
-            return  R.string.alertMessage.validate("タイトル")
+            return  R.string.message.validate(R.string.labels.title())
         } else if self.completionFlagStr == CompletionFlag.unfinished && self.todoDateStr <= Format().stringFromDate(date: Format().dateFormat()) {
             /// 完了フラグの未完であればあれば期限のバリデーションチェックを行う
-            return R.string.alertMessage.validateDate()
+            return R.string.message.validateDate()
         } else if self.toDo.isEmpty {
-            return R.string.alertMessage.validate("詳細")
+            return R.string.message.validate(R.string.labels.details())
         } else {
             return nil
         }

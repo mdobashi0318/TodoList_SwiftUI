@@ -1,0 +1,34 @@
+/* 
+  Message.strings
+  TodoList_SwiftUI
+
+  Created by 土橋正晴 on 2021/12/19.
+  Copyright © 2021 m.dobashi. All rights reserved.
+*/
+
+
+
+
+/// Message
+"NoTodo" = "No To-Do's have been registered.";
+"AllDelete" = "Do you want to delete them all?";
+"DeleteTodo" = "Do you want to delete a todo?";
+
+
+"inputTitle" = "Please enter a title";
+"inputDetails" = "Please enter your details";
+
+"DetailActionSheet" = "What do you want to do with your todo?";
+
+/// Error
+"AddError" = "Todo failed to be added";
+"UpdateError" = "Todo update failed.";
+"DeleteError" = "Failed to delete todo.";
+"FindError" = "Failed to retrieve todo.";
+
+
+// MARK: - Validate Message
+
+"Validate" = "%@ is not entered.";
+"ValidateDate" = "The deadline you entered is invalid.";
+

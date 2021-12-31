@@ -1,0 +1,34 @@
+/* 
+  labels.strings
+  TodoList_SwiftUI
+
+  Created by 土橋正晴 on 2021/01/26.
+  Copyright © 2021 m.dobashi. All rights reserved.
+*/
+
+
+
+
+// MARK: - Segmente
+"All" = "全件";
+"Active" = "未完了";
+"Expired" = "期限切れ";
+"Complete" = "完了";
+
+
+
+// MARK: - Button
+"Close" = "閉じる";
+"Cancel" = "キャンセル";
+"Delete" = "削除";
+"Edit" = "編集";
+"Add" = "追加";
+
+"Title" = "タイトル";
+"Deadline" = "期限";
+"Details" = "詳細";
+
+
+"AddToDo" = "Todo 追加";
+"UpdateToDo" = "Todo 更新";
+"Required" = "*必須";
