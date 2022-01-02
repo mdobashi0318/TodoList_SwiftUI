@@ -12,9 +12,9 @@ struct ToDoListView: View {
     
     // MARK: Properties
     
-    @ObservedObject private var toDoviewModel = ToDoViewModel()
+    @StateObject private var toDoviewModel = ToDoViewModel()
     
-    @ObservedObject private var openWidget = OpenTodoManager.shared
+    @StateObject private var openWidget = OpenTodoManager.shared
     
     @State private var isShowModle = false
     
