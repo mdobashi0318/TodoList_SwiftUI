@@ -12,11 +12,19 @@ import Combine
 
 class TodoDetailViewModel: ObservableObject {
     
-    var model: ToDoModel?
+    var model: ToDoModel
         
+    /// 完了フラグ
+    ///
+    /// 画面側でのトグルの選択された値
     @Published var completionFlag: Bool = false
     
+    /// Model側に格納する完了フラグの文字列
     @Published var completionFlagStr: CompletionFlag = .unfinished
+        
+    @Published var isError: Bool = false
+    
+    var errorMessage: String = ""
     
     private var cancellable: Set<AnyCancellable> = []
     
@@ -24,27 +32,33 @@ class TodoDetailViewModel: ObservableObject {
         self.model = model
     }
     
+    /// Modelから取得した完了フラグを画面側の完了フラグにセットする
     func setFlag(){
-        self.completionFlag = model?.completionFlag == CompletionFlag.completion.rawValue ? true : false
+        self.completionFlag = model.completionFlag == CompletionFlag.completion.rawValue ? true : false
         swicthCompletionFlag()
     }
     
     
     /// Todoを１件検索
     func findTodo() {
-        let model = ToDoModel.findTodo(todoId: model?.id ?? "", createTime: model?.createTime)
+        guard let model = ToDoModel.findTodo(todoId: model.id, createTime: model.createTime) else {
+            isError = true
+            errorMessage = R.string.message.findError()
+            return
+        }
+        
         let todo = model
-        self.completionFlag = self.model?.completionFlag == CompletionFlag.completion.rawValue ? true : false
+        self.completionFlag = self.model.completionFlag == CompletionFlag.completion.rawValue ? true : false
         self.model = todo
     }
     
-    
+    /// 画面側の完了フラグが変更されたらModelの完了フラグを更新する
     private func swicthCompletionFlag() {
         $completionFlag
             .print()
             .sink(receiveValue: { flag in
                 self.completionFlagStr = flag ? .completion : .unfinished
-                ToDoModel.updateCompletionFlag(updateTodo: self.model!, flag: self.completionFlagStr)
+                ToDoModel.updateCompletionFlag(updateTodo: self.model, flag: self.completionFlagStr)
             })
             .store(in: &cancellable)
     }

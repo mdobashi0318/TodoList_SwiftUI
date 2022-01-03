@@ -31,14 +31,14 @@ final class ToDoViewModel: ObservableObject {
         selectedSegment()
     }
     
-    
-    func fetchAllTodoModel() -> Future<[ToDoModel], Never> {
+    /// Todoを全件取得する
+    private func fetchAllTodoModel() -> Future<[ToDoModel], Never> {
         return Future<[ToDoModel], Never> { promise in
             promise(.success(ToDoModel.allFindTodo()))
         }
     }
     
-    
+    /// Todoを全件取得し、SegmentIndexの値によってフィルターをする
     func sinkAllTodoModel(index: SegmentIndex) {
         fetchAllTodoModel()
             .sink(receiveCompletion: { completion in
@@ -84,7 +84,7 @@ final class ToDoViewModel: ObservableObject {
         }
     }
     
-    
+    /// Todoを全件削除する
     func allDeleteTodo() {
         ToDoModel.allDelete()
         self.todoModel = []
@@ -93,7 +93,7 @@ final class ToDoViewModel: ObservableObject {
     
     
    
-
+    /// segmentIndexが選択されたらTodoの全件取得をする
     private func selectedSegment() {
         $segmentIndex
             .print()

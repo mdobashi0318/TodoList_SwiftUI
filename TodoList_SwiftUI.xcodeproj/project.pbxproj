@@ -3,15 +3,16 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		1A414AC01A5F799ABB5DF20B /* Pods_TodoList_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E287EC0C56A849158E1C5B8 /* Pods_TodoList_SwiftUI.framework */; };
+		6D6904E92782F77E008EA32D /* Label.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D7FB8C8277E135900BE8EC4 /* Label.strings */; };
 		6D734CE6276ED9F0004A3EC2 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C910E25B48F8E007D6D08 /* Errors.swift */; };
 		6D734CEA276EE45D004A3EC2 /* Message.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D734CED276EE45D004A3EC2 /* Message.strings */; };
 		6D734CEB276EE45D004A3EC2 /* Message.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D734CED276EE45D004A3EC2 /* Message.strings */; };
-		6D7FB8C6277E135900BE8EC4 /* Label.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D7FB8C8277E135900BE8EC4 /* Label.strings */; };
+		6D90BC172782BFC700620E4F /* CompletionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D90BC162782BFC700620E4F /* CompletionLabel.swift */; };
 		6DE5CDF5277214440031FB39 /* AccessibilityText.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DE5CDF8277214440031FB39 /* AccessibilityText.strings */; };
 		6DE5CDF6277214440031FB39 /* AccessibilityText.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DE5CDF8277214440031FB39 /* AccessibilityText.strings */; };
 		6DFF5AEC276DF4BA00BA43B7 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 6DFF5AEB276DF4BA00BA43B7 /* Realm */; };
@@ -104,6 +105,7 @@
 		6D734CEC276EE45D004A3EC2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Message.strings; sourceTree = "<group>"; };
 		6D7FB8C7277E135900BE8EC4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Label.strings; sourceTree = "<group>"; };
 		6D7FB8C9277E135B00BE8EC4 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Label.strings; sourceTree = "<group>"; };
+		6D90BC162782BFC700620E4F /* CompletionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionLabel.swift; sourceTree = "<group>"; };
 		6DE5CDEC27720C090031FB39 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		6DE5CDEE27720C0A0031FB39 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Message.strings; sourceTree = "<group>"; };
 		6DE5CDEF27720C0A0031FB39 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/labels.strings; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 			isa = PBXGroup;
 			children = (
 				D02D0FCF24701E4800FC1D4F /* ToDoRow.swift */,
+				6D90BC162782BFC700620E4F /* CompletionLabel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -538,6 +541,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DE5CDF6277214440031FB39 /* AccessibilityText.strings in Resources */,
+				6D6904E92782F77E008EA32D /* Label.strings in Resources */,
 				6D734CEB276EE45D004A3EC2 /* Message.strings in Resources */,
 				D011ACD3257681A00007C7D3 /* Assets.xcassets in Resources */,
 			);
@@ -552,7 +556,6 @@
 				D0C2F4EE259A056F008C6FE3 /* Notifications.strings in Resources */,
 				D066E6A924701B0F007FA3DB /* Preview Assets.xcassets in Resources */,
 				D066E6A624701B0F007FA3DB /* Assets.xcassets in Resources */,
-				6D7FB8C6277E135900BE8EC4 /* Label.strings in Resources */,
 				D04FF8D225C05F6D00391290 /* labels.strings in Resources */,
 				6D734CEA276EE45D004A3EC2 /* Message.strings in Resources */,
 			);
@@ -616,13 +619,14 @@
 		};
 		D0BD8D30257281B8009BCA97 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$TEMP_DIR/rswift-lastrun",
+				"",
 			);
 			outputFileListPaths = (
 			);
@@ -665,6 +669,7 @@
 				D059FAAD2470C7FF00737532 /* ToDoInputView.swift in Sources */,
 				D02D0FCD24701E0000FC1D4F /* ToDoModel.swift in Sources */,
 				D02D0FD024701E4800FC1D4F /* ToDoRow.swift in Sources */,
+				6D90BC172782BFC700620E4F /* CompletionLabel.swift in Sources */,
 				D020DDE725BDC2DF002DAC37 /* CompletionFlag.swift in Sources */,
 				D01178C525B433FF0071E101 /* InputViewModel.swift in Sources */,
 				D066E6A224701B0B007FA3DB /* SceneDelegate.swift in Sources */,
@@ -786,7 +791,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.5.2;
+				MARKETING_VERSION = 1.5.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "m.dobashi.TodoList-SwiftUI.TodoWidget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -810,7 +815,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.5.2;
+				MARKETING_VERSION = 1.5.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "m.dobashi.TodoList-SwiftUI.TodoWidget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -954,7 +959,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.2;
+				MARKETING_VERSION = 1.5.23;
 				PRODUCT_BUNDLE_IDENTIFIER = "m.dobashi.TodoList-SwiftUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -979,7 +984,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.2;
+				MARKETING_VERSION = 1.5.23;
 				PRODUCT_BUNDLE_IDENTIFIER = "m.dobashi.TodoList-SwiftUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

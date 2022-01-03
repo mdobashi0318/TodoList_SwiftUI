@@ -8,32 +8,25 @@
 
 import SwiftUI
 
+/// TodoListに表示するセル
 struct ToDoRow: View {
     
     let todoModel: ToDoModel
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text(todoModel.toDoName)
                 .accessibility(identifier: "titlelabel")
-            HStack {
-                Text(todoModel.todoDate)
-                if todoModel.completionFlag == CompletionFlag.completion.rawValue {
-                    Text(R.string.labels.complete())
-                        .font(.subheadline)
-                        .foregroundColor(.red)
-                        .accessibility(identifier: "completeLabel")
-                } else {
-                    Text(Format().dateFromString(string: todoModel.todoDate)! > Format().dateFormat() ? "" : R.string.labels.expired())
-                        .font(.caption)
-                        .foregroundColor(.red)
-                        .accessibility(identifier: "dateLabel")
-                }
-            }
+            CompletionLable(todoDate: todoModel.todoDate, completionFlag: .constant(todoModel.completionFlag))
         }
         .frame(alignment: .leading)
         .padding()
     }
 }
+
+
+
+// MARK: - Previews
 
 struct ToDoRow_Previews: PreviewProvider {
     static var previews: some View {

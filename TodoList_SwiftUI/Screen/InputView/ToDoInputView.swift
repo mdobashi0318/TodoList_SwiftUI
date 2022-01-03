@@ -13,7 +13,7 @@ struct ToDoInputView: View {
     
     // MARK: Properties
     
-    @ObservedObject var inputViewModel: InputViewModel
+    @ObservedObject var viewModel: InputViewModel
     
     
     @Environment(\.presentationMode) private var presentationMode:Binding<PresentationMode>
@@ -130,7 +130,7 @@ extension ToDoInputView {
     private var todoNameSection: some View {
         return Section(header: headerLabel(text: R.string.labels.title(), identifier: "titlelabel", isRequiredLabel: true)) {
             textField(placeholder: R.string.message.inputTitle(),
-                      text: $inputViewModel.toDoName,
+                      text: $viewModel.toDoName,
                       identifier: "titleTextField"
             )
         }
@@ -140,7 +140,7 @@ extension ToDoInputView {
     /// 期限入力DatePicker
     private var todoDatePicker: some View {
         return Section() {
-            DatePicker(R.string.labels.deadline(), selection: $inputViewModel.toDoDate, in: Date()...)
+            DatePicker(R.string.labels.deadline(), selection: $viewModel.toDoDate, in: Date()...)
                 .accessibility(identifier: "todoDatePicker")
         }
     }
@@ -150,7 +150,7 @@ extension ToDoInputView {
     private var todoDetailSection: some View {
         return Section(header: headerLabel(text: R.string.labels.details(), identifier: "detailLabel", isRequiredLabel: true)) {
             textField(placeholder: R.string.message.inputDetails(),
-                      text: $inputViewModel.toDo,
+                      text: $viewModel.toDo,
                       identifier: "detailTextField"
             )
         }
@@ -160,7 +160,7 @@ extension ToDoInputView {
     /// Todoの未完・完了トグル
     private var completeToggleSection: some View {
         return Section {
-            Toggle(R.string.labels.complete(), isOn: $inputViewModel.completionFlag)
+            Toggle(R.string.labels.complete(), isOn: $viewModel.completionFlag)
                 .accessibility(identifier: "completeSwitch")
         }
     }
@@ -183,7 +183,7 @@ extension ToDoInputView {
     private func addTodo() {
         
         do {
-            try inputViewModel.addTodo()
+            try viewModel.addTodo()
             self.presentationMode.wrappedValue.dismiss()
         } catch {
             if let _error = error as? TodoModelError {
@@ -197,7 +197,7 @@ extension ToDoInputView {
     /// Todoのアップデート
     private func updateTodo() {
         do {
-            try inputViewModel.updateTodo()
+            try viewModel.updateTodo()
             self.presentationMode.wrappedValue.dismiss()
         } catch {
             if let _error = error as? TodoModelError {
@@ -216,8 +216,8 @@ extension ToDoInputView {
 struct ToDoInputView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ToDoInputView(inputViewModel: InputViewModel(), isUpdate: false)
-            ToDoInputView(inputViewModel: InputViewModel(model: testModel[0]), isUpdate: true)
+            ToDoInputView(viewModel: InputViewModel(), isUpdate: false)
+            ToDoInputView(viewModel: InputViewModel(model: testModel[0]), isUpdate: true)
         }
     }
 }
