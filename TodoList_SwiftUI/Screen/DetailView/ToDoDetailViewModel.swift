@@ -12,7 +12,7 @@ import Combine
 
 class TodoDetailViewModel: ObservableObject {
     
-    var model: ToDoModel?
+    var model: ToDoModel
         
     @Published var completionFlag: Bool = false
     
@@ -25,16 +25,16 @@ class TodoDetailViewModel: ObservableObject {
     }
     
     func setFlag(){
-        self.completionFlag = model?.completionFlag == CompletionFlag.completion.rawValue ? true : false
+        self.completionFlag = model.completionFlag == CompletionFlag.completion.rawValue ? true : false
         swicthCompletionFlag()
     }
     
     
     /// Todoを１件検索
     func findTodo() {
-        let model = ToDoModel.findTodo(todoId: model?.id ?? "", createTime: model?.createTime)
+        let model = ToDoModel.findTodo(todoId: model.id, createTime: model.createTime)!
         let todo = model
-        self.completionFlag = self.model?.completionFlag == CompletionFlag.completion.rawValue ? true : false
+        self.completionFlag = self.model.completionFlag == CompletionFlag.completion.rawValue ? true : false
         self.model = todo
     }
     
@@ -44,7 +44,7 @@ class TodoDetailViewModel: ObservableObject {
             .print()
             .sink(receiveValue: { flag in
                 self.completionFlagStr = flag ? .completion : .unfinished
-                ToDoModel.updateCompletionFlag(updateTodo: self.model!, flag: self.completionFlagStr)
+                ToDoModel.updateCompletionFlag(updateTodo: self.model, flag: self.completionFlagStr)
             })
             .store(in: &cancellable)
     }

@@ -312,6 +312,8 @@ let testModel:[ToDoModel] = {
     todo1.todoDate = Format().stringFromDate(date: Date())
     todo1.toDo = "TODO詳細1"
     todo1.createTime = "2020/01/01 00:00:01"
+    todo1.completionFlag = CompletionFlag.unfinished.rawValue
+    
     
     let todo2 = ToDoModel()
     todo2.toDoName = "TODOName2"
@@ -322,7 +324,7 @@ let testModel:[ToDoModel] = {
     
     let todo3 = ToDoModel()
     todo3.toDoName = "TODOName3"
-    todo3.todoDate = Format().stringFromDate(date: Date())
+    todo3.todoDate = "2099/01/01 00:00"
     todo3.toDo = "TODO詳細3"
     todo3.createTime = "2020/01/01 00:00:03"
     
