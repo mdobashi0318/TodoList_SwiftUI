@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		1A414AC01A5F799ABB5DF20B /* Pods_TodoList_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E287EC0C56A849158E1C5B8 /* Pods_TodoList_SwiftUI.framework */; };
+		6D6904E92782F77E008EA32D /* Label.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D7FB8C8277E135900BE8EC4 /* Label.strings */; };
 		6D734CE6276ED9F0004A3EC2 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C910E25B48F8E007D6D08 /* Errors.swift */; };
 		6D734CEA276EE45D004A3EC2 /* Message.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D734CED276EE45D004A3EC2 /* Message.strings */; };
 		6D734CEB276EE45D004A3EC2 /* Message.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D734CED276EE45D004A3EC2 /* Message.strings */; };
-		6D7FB8C6277E135900BE8EC4 /* Label.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D7FB8C8277E135900BE8EC4 /* Label.strings */; };
 		6D90BC172782BFC700620E4F /* CompletionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D90BC162782BFC700620E4F /* CompletionLabel.swift */; };
 		6DE5CDF5277214440031FB39 /* AccessibilityText.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DE5CDF8277214440031FB39 /* AccessibilityText.strings */; };
 		6DE5CDF6277214440031FB39 /* AccessibilityText.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DE5CDF8277214440031FB39 /* AccessibilityText.strings */; };
@@ -541,6 +541,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DE5CDF6277214440031FB39 /* AccessibilityText.strings in Resources */,
+				6D6904E92782F77E008EA32D /* Label.strings in Resources */,
 				6D734CEB276EE45D004A3EC2 /* Message.strings in Resources */,
 				D011ACD3257681A00007C7D3 /* Assets.xcassets in Resources */,
 			);
@@ -555,7 +556,6 @@
 				D0C2F4EE259A056F008C6FE3 /* Notifications.strings in Resources */,
 				D066E6A924701B0F007FA3DB /* Preview Assets.xcassets in Resources */,
 				D066E6A624701B0F007FA3DB /* Assets.xcassets in Resources */,
-				6D7FB8C6277E135900BE8EC4 /* Label.strings in Resources */,
 				D04FF8D225C05F6D00391290 /* labels.strings in Resources */,
 				6D734CEA276EE45D004A3EC2 /* Message.strings in Resources */,
 			);

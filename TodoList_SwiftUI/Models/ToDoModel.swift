@@ -110,7 +110,7 @@ final class ToDoModel: Object {
     static func add(addValue:ToDoModel)  throws {
         
         guard let _realm = initRealm else {
-            throw TodoModelError(message: NSLocalizedString("AddError", comment: ""))
+            throw TodoModelError(message: NSLocalizedString("AddError", tableName: "Message", comment: ""))
         }
         
         let toDoModel: ToDoModel = ToDoModel()
@@ -133,7 +133,7 @@ final class ToDoModel: Object {
             
         }
         catch {
-            throw TodoModelError(message: NSLocalizedString("AddError", comment: ""))
+            throw TodoModelError(message: NSLocalizedString("AddError", tableName: "Message", comment: ""))
         }
         
     }
@@ -149,7 +149,7 @@ final class ToDoModel: Object {
     static func update(updateTodo: ToDoModel) throws {
         guard let _realm = initRealm,
               let toDoModel: ToDoModel = ToDoModel.findTodo(todoId: updateTodo.id, createTime: updateTodo.createTime) else {
-                  throw TodoModelError(message: NSLocalizedString("UpdateError", comment: ""))
+                  throw TodoModelError(message: NSLocalizedString("UpdateError", tableName: "Message", comment: ""))
               }
         
         do {
@@ -171,7 +171,7 @@ final class ToDoModel: Object {
             
         }
         catch {
-            throw TodoModelError(message: NSLocalizedString("UpdateError", comment: ""))
+            throw TodoModelError(message: NSLocalizedString("UpdateError", tableName: "Message", comment: ""))
         }
         
     }
@@ -209,7 +209,7 @@ final class ToDoModel: Object {
     ///   - result: Todoの登録時の成功すればVoid、またはエラーを返す
     static func delete(deleteTodo: ToDoModel) throws {
         guard let _realm = initRealm else {
-            throw DeleteError(model: deleteTodo, message: NSLocalizedString("DeleteError", comment: ""))
+            throw DeleteError(model: deleteTodo, message: NSLocalizedString("DeleteError", tableName: "Message", comment: ""))
         }
         if let _createTime = deleteTodo.createTime {
             NotificationManager().removeNotification([_createTime])
@@ -224,7 +224,7 @@ final class ToDoModel: Object {
             
         }
         catch {
-            throw DeleteError(model: deleteTodo, message: NSLocalizedString("DeleteError", comment: ""))
+            throw DeleteError(model: deleteTodo, message: NSLocalizedString("DeleteError", tableName: "Message", comment: ""))
         }
     }
     
