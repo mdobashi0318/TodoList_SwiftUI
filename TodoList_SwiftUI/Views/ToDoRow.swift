@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+/// TodoListに表示するセル
 struct ToDoRow: View {
     
     let todoModel: ToDoModel
@@ -22,6 +23,10 @@ struct ToDoRow: View {
         .padding()
     }
 }
+
+
+
+// MARK: - Previews
 
 struct ToDoRow_Previews: PreviewProvider {
     static var previews: some View {

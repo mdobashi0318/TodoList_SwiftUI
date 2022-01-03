@@ -74,7 +74,7 @@ extension TodoDetailView {
         }
         .sheet(isPresented: $isShowModle) {
             /// 編集を選択
-            ToDoInputView(inputViewModel: InputViewModel(model: viewModel.model),
+            ToDoInputView(viewModel: InputViewModel(model: viewModel.model),
                           isUpdate: true
             )
             .onDisappear {

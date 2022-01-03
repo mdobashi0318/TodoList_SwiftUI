@@ -67,7 +67,7 @@ extension ToDoListView {
             Image(systemName: "plus")
         }
         .sheet(isPresented: $isShowModle) {
-            ToDoInputView(inputViewModel: InputViewModel(), isUpdate: false)
+            ToDoInputView(viewModel: InputViewModel(), isUpdate: false)
                 .onDisappear {
                     toDoviewModel.sinkAllTodoModel(index: $toDoviewModel.segmentIndex.wrappedValue)
                 }

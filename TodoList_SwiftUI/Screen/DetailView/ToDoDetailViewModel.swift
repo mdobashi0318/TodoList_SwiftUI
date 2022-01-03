@@ -14,8 +14,12 @@ class TodoDetailViewModel: ObservableObject {
     
     var model: ToDoModel
         
+    /// 完了フラグ
+    ///
+    /// 画面側でのトグルの選択された値
     @Published var completionFlag: Bool = false
     
+    /// Model側に格納する完了フラグの文字列
     @Published var completionFlagStr: CompletionFlag = .unfinished
         
     @Published var isError: Bool = false
@@ -28,6 +32,7 @@ class TodoDetailViewModel: ObservableObject {
         self.model = model
     }
     
+    /// Modelから取得した完了フラグを画面側の完了フラグにセットする
     func setFlag(){
         self.completionFlag = model.completionFlag == CompletionFlag.completion.rawValue ? true : false
         swicthCompletionFlag()
@@ -47,7 +52,7 @@ class TodoDetailViewModel: ObservableObject {
         self.model = todo
     }
     
-    
+    /// 画面側の完了フラグが変更されたらModelの完了フラグを更新する
     private func swicthCompletionFlag() {
         $completionFlag
             .print()

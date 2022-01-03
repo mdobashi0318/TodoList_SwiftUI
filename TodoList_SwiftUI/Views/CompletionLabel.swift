@@ -11,8 +11,10 @@ import SwiftUI
 /// 設定された期限とステータスを表示するラベル
 struct CompletionLable: View {
     
+    /// 期限
     let todoDate: String
     
+    /// 完了フラグ
     @Binding var completionFlag: String
     
     var body: some View {

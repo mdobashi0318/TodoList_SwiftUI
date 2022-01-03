@@ -16,24 +16,26 @@ final class InputViewModel: ObservableObject {
     /// Todoのタイトル
     @Published var toDoName: String = ""
     
-    /// Todoの期限
+    /// Model側に格納する期限の文字列
     private var todoDateStr: String = ""
     
-    /// Todoの期限
+    ///  画面側のTodoの期限
     @Published var toDoDate = Date()
     
     /// Todoの詳細
     @Published var toDo: String = ""
     
+    /// 画面側の完了フラグ
     @Published var completionFlag: Bool = false
     
+    /// Model側に格納する完了フラグの文字列
     private var completionFlagStr: CompletionFlag = .unfinished
     
+    /// Modelのプライマリキー
     private var createTime: String?
     
     private var cancellable: Set<AnyCancellable> = []
     
- 
 
     init(model: ToDoModel? = nil) {
         setModelValue(model)
@@ -41,7 +43,7 @@ final class InputViewModel: ObservableObject {
         setCompletionFlagPub()
     }
     
-    
+    /// Modelから取得した値を書くプロパティにセットする
     private func setModelValue(_ model: ToDoModel?) {
         if let _model = model {
             id = _model.id
@@ -56,6 +58,7 @@ final class InputViewModel: ObservableObject {
         }
     }
     
+    /// 画面側の期限がセットされたら、文字列に変換しModel格納用の値に入れる
     private func setDatePub() {
         $toDoDate
             .map { date in
@@ -68,6 +71,8 @@ final class InputViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
+    
+    /// 画面側の完了フラグがセットされたら、文字列に変換しModel格納用の値に入れる
     private func setCompletionFlagPub() {
         $completionFlag
             .print()
@@ -95,7 +100,7 @@ final class InputViewModel: ObservableObject {
     }
     
     
-    
+    /// Todoの更新
     func updateTodo() throws {
         if let message = self.validateCheck() {
             throw TodoModelError(message: message)
