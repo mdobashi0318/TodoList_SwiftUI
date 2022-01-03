@@ -50,14 +50,14 @@ class TodoDetailViewModelTest: XCTestCase {
     
     
     func test_findTodo() {
-        try? ToDoModel.add(addValue: ToDoModel(toDoName: "TEST", todoDate: "2022/01/01 00:00", toDo: "toDo", completionFlag: CompletionFlag.unfinished.rawValue, createTime: ""))
+        try? ToDoModel.add(addValue: ToDoModel(toDoName: "TEST", todoDate: "2030/01/01 00:00", toDo: "toDo", completionFlag: CompletionFlag.unfinished.rawValue, createTime: ""))
         let viewModel = TodoDetailViewModel(model: ToDoModel(id: "1", toDoName: "", todoDate: "", toDo: "", completionFlag: ""))
         viewModel.findTodo()
         
-        XCTAssert(viewModel.model?.toDoName == "TEST", "値が異なっている")
-        XCTAssert(viewModel.model?.todoDate == "2022/01/01 00:00", "値が異なっている")
-        XCTAssert(viewModel.model?.toDo == "toDo", "値が異なっている")
-        XCTAssert(viewModel.model?.completionFlag == CompletionFlag.unfinished.rawValue, "値が異なっている")
+        XCTAssert(viewModel.model.toDoName == "TEST", "値が異なっている")
+        XCTAssert(viewModel.model.todoDate == "2030/01/01 00:00", "値が異なっている")
+        XCTAssert(viewModel.model.toDo == "toDo", "値が異なっている")
+        XCTAssert(viewModel.model.completionFlag == CompletionFlag.unfinished.rawValue, "値が異なっている")
         XCTAssertFalse(viewModel.completionFlag, "値が異なっている")
         
     }
