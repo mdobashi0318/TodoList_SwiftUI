@@ -67,7 +67,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 withCompletionHandler completionHandler: (UNNotificationPresentationOptions) -> Void) {
         
         
-        completionHandler([.list, .sound])
+        completionHandler([.list, .banner, .sound])
     }
     
     
