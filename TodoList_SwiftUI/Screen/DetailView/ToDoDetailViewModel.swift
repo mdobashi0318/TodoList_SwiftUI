@@ -17,6 +17,10 @@ class TodoDetailViewModel: ObservableObject {
     @Published var completionFlag: Bool = false
     
     @Published var completionFlagStr: CompletionFlag = .unfinished
+        
+    @Published var isError: Bool = false
+    
+    var errorMessage: String = ""
     
     private var cancellable: Set<AnyCancellable> = []
     
@@ -32,7 +36,12 @@ class TodoDetailViewModel: ObservableObject {
     
     /// Todoを１件検索
     func findTodo() {
-        let model = ToDoModel.findTodo(todoId: model.id, createTime: model.createTime)!
+        guard let model = ToDoModel.findTodo(todoId: model.id, createTime: model.createTime) else {
+            isError = true
+            errorMessage = R.string.message.findError()
+            return
+        }
+        
         let todo = model
         self.completionFlag = self.model.completionFlag == CompletionFlag.completion.rawValue ? true : false
         self.model = todo

@@ -23,13 +23,8 @@ struct TodoDetailView: View {
     /// 削除確認アラートを出すフラグ
     @State private var isDeleteAction = false
     
-    @State private var isShowErrorAlert = false
-    
-    
     @Environment(\.presentationMode) private var presentationMode:Binding<PresentationMode>
     
-    
-
     
     var body: some View {
         List {
@@ -49,8 +44,8 @@ struct TodoDetailView: View {
         .onAppear {
             viewModel.setFlag()
         }
-        .alert(isPresented: $isShowErrorAlert) {
-            Alert(title: Text(R.string.message.deleteError()))
+        .alert(isPresented: $viewModel.isError) {
+            Alert(title: Text(viewModel.errorMessage))
         }
         .listStyle(GroupedListStyle())
         .navigationBarTitle(viewModel.model.toDoName)
@@ -116,7 +111,8 @@ extension TodoDetailView {
                 viewModel.model = try ToDoViewModel().deleteTodo(delete: viewModel.model)
                 self.presentationMode.wrappedValue.dismiss()
             } catch {
-                self.isShowErrorAlert = true
+                viewModel.errorMessage = R.string.message.deleteError()
+                viewModel.isError = true
             }
         },
               secondaryButton: .cancel(Text(R.string.labels.cancel()))
