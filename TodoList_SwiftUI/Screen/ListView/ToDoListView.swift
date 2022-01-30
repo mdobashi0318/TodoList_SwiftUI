@@ -33,7 +33,11 @@ struct ToDoListView: View {
                     ForEach(0..<self.toDoviewModel.todoModel.count, id: \.self) { row in
                         NavigationLink(destination:
                                         TodoDetailView(viewModel: TodoDetailViewModel(model: self.toDoviewModel.todoModel[row]))
-                                        .onDisappear { self.toDoviewModel.sinkAllTodoModel(index: $toDoviewModel.segmentIndex.wrappedValue) }
+                                        .onDisappear {
+                            withAnimation {
+                                toDoviewModel.sinkAllTodoModel(index: $toDoviewModel.segmentIndex.wrappedValue)
+                            }
+                        }
                         ) {
                             ToDoRow(todoModel: self.toDoviewModel.todoModel[row])
                                 .frame(height: 60)
@@ -69,7 +73,9 @@ extension ToDoListView {
         .sheet(isPresented: $isShowModle) {
             ToDoInputView(viewModel: InputViewModel(), isUpdate: false)
                 .onDisappear {
-                    toDoviewModel.sinkAllTodoModel(index: $toDoviewModel.segmentIndex.wrappedValue)
+                    withAnimation() {
+                        toDoviewModel.sinkAllTodoModel(index: $toDoviewModel.segmentIndex.wrappedValue)
+                    }
                 }
         }
         .disabled(self.toDoviewModel.isAlertError)
@@ -88,8 +94,10 @@ extension ToDoListView {
         }
         .alert(isPresented: self.$isDeleteFlag) {
             Alert(title: Text(R.string.message.allDelete()), primaryButton: .destructive(Text(R.string.labels.delete())) {
-                toDoviewModel.allDeleteTodo()
-                }, secondaryButton: .cancel(Text(R.string.labels.cancel())))
+                withAnimation() {
+                    toDoviewModel.allDeleteTodo()
+                }
+            }, secondaryButton: .cancel(Text(R.string.labels.cancel())))
         }
         .disabled(self.toDoviewModel.isAlertError)
         .accessibility(identifier: "allDeleteButton")

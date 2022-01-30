@@ -28,7 +28,7 @@ struct CompletionLable: View {
                     .accessibility(identifier: "completeLabel")
             } else {
                 /// 期限切れ
-                Text(Format().dateFromString(string: todoDate)! > Format().dateFormat() ? "" : R.string.labels.expired())
+                Text(Format().dateFromString(string: todoDate) ?? Date() > Format().dateFormat() ? "" : R.string.labels.expired())
                     .font(.subheadline)
                     .foregroundColor(.red)
                     .accessibility(identifier: "dateLabel")

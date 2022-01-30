@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 enum SegmentIndex: Int, CaseIterable {
     case all = 0
@@ -19,7 +20,7 @@ enum SegmentIndex: Int, CaseIterable {
 
 final class ToDoViewModel: ObservableObject {
     
-    var todoModel: [ToDoModel] = []
+    @Published var todoModel: [ToDoModel] = []
     
     @Published var segmentIndex: SegmentIndex = .all
     
@@ -98,7 +99,9 @@ final class ToDoViewModel: ObservableObject {
         $segmentIndex
             .print()
             .sink(receiveValue: { value in
-                self.sinkAllTodoModel(index: value)
+                withAnimation {
+                    self.sinkAllTodoModel(index: value)
+                }
             })
         .store(in: &cancellable)
     }
