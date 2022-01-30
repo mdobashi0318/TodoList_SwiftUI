@@ -47,7 +47,15 @@ struct ToDoListView: View {
             }
             .listStyle(PlainListStyle())
             .navigationBarTitle("ToDoList")
-            .navigationBarItems(leading: allDeleteButton ,trailing: addButton)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    allDeleteButton
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    addButton
+                }
+            }
             .sheet(isPresented: $openWidget.isOpneTodo) { openWidgetView }
         }.alert(isPresented: $toDoviewModel.isAlertError) {
             Alert(title: Text(R.string.message.findError()), dismissButton: .default(Text(R.string.labels.close())))
@@ -129,14 +137,18 @@ extension ToDoListView {
     /// WidgetでタップしたTodoをモーダルで表示する
     private var openWidgetView: some View {
         return NavigationView {
-            TodoDetailView(viewModel: TodoDetailViewModel(model: openWidget.openTodo))
+            TodoDetailView(viewModel: TodoDetailViewModel(model: openWidget.openTodo), isDisplayEllipsisBtn: false)
                 .onDisappear { openWidget.isOpneTodo = false }
                 .navigationBarTitle(openWidget.openTodo.toDoName)
-                .navigationBarItems(leading: Button(action: {
-                    openWidget.isOpneTodo = false
-                }, label: {
-                    Image(systemName: "xmark")
-                }), trailing: Button(""){})
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            openWidget.isOpneTodo = false
+                        }) {
+                            Image(systemName: "xmark")
+                        }
+                    }
+                }
         }
     }
     

@@ -40,7 +40,15 @@ struct ToDoInputView: View {
             }
             .listStyle(GroupedListStyle())
             .navigationBarTitle(isUpdate ? R.string.labels.updateToDo() : R.string.labels.addToDo())
-            .navigationBarItems(leading: cancelButton ,trailing: addButton)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    cancelButton
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    addButton
+                }
+            }
             .accessibility(identifier: "ToDoInputView")
         }
         
