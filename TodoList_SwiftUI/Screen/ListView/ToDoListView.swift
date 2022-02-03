@@ -25,8 +25,50 @@ struct ToDoListView: View {
     
     var body: some View {
         NavigationView {
+            TabView(selection: $toDoviewModel.segmentIndex) {
+                todoList
+                    .tag(SegmentIndex.all)
+                
+                todoList
+                    .tag(SegmentIndex.active)
+                
+                todoList
+                    .tag(SegmentIndex.complete)
+                
+                todoList
+                    .tag(SegmentIndex.expired)
+            }
+            .tabViewStyle(PageTabViewStyle())
+            .navigationBarTitle("ToDoList")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    allDeleteButton
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    addButton
+                }
+            }
+        .sheet(isPresented: $openWidget.isOpneTodo) { openWidgetView }
+        }.alert(isPresented: $toDoviewModel.isAlertError) {
+            Alert(title: Text(R.string.message.findError()), dismissButton: .default(Text(R.string.labels.close())))
+        }
+        .accessibility(identifier: "ToDoList")
+    }
+}
+
+
+
+
+// MARK: - UI
+
+extension ToDoListView {
+    /// Todoのリストを表示する
+    private var todoList: some View {
+        VStack(alignment: .leading) {
+            headerText
+                .padding()
             List {
-                segmenteSection
                 if self.toDoviewModel.todoModel.count == 0 {
                     Text(R.string.message.noTodo())
                 } else {
@@ -46,31 +88,21 @@ struct ToDoListView: View {
                 }
             }
             .listStyle(PlainListStyle())
-            .navigationBarTitle("ToDoList")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    allDeleteButton
-                }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    addButton
-                }
-            }
-            .sheet(isPresented: $openWidget.isOpneTodo) { openWidgetView }
-        }.alert(isPresented: $toDoviewModel.isAlertError) {
-            Alert(title: Text(R.string.message.findError()), dismissButton: .default(Text(R.string.labels.close())))
         }
-        .accessibility(identifier: "ToDoList")
     }
-}
-
-
-
-
-// MARK: - UI
-
-extension ToDoListView {
     
+    var headerText: some View {
+        switch toDoviewModel.segmentIndex {
+        case .all:
+            return Text(R.string.labels.all())
+        case .active:
+            return Text(R.string.labels.active())
+        case .complete:
+            return Text(R.string.labels.complete())
+        case .expired:
+            return Text(R.string.labels.expired())
+        }
+    }
     /// ToDoの追加画面に遷移させるボタン
     var addButton: some View {
         Button(action: {
