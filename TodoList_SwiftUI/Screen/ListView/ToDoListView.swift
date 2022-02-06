@@ -63,12 +63,11 @@ struct ToDoListView: View {
 // MARK: - UI
 
 extension ToDoListView {
+    
     /// Todoのリストを表示する
     private var todoList: some View {
-        VStack(alignment: .leading) {
-            headerText
-                .padding()
-            List {
+        List {
+            Section(content: {
                 if self.toDoviewModel.todoModel.count == 0 {
                     Text(R.string.message.noTodo())
                 } else {
@@ -86,12 +85,18 @@ extension ToDoListView {
                         }
                     }
                 }
-            }
-            .listStyle(PlainListStyle())
+            }, header: {
+                headerText
+                    .font(.headline)
+                    .padding()
+            })
+            
         }
+        .listStyle(PlainListStyle())
     }
     
-    var headerText: some View {
+    /// どのカテゴリかを表示するテキスト
+    private var headerText: some View {
         switch toDoviewModel.segmentIndex {
         case .all:
             return Text(R.string.labels.all())
@@ -103,6 +108,7 @@ extension ToDoListView {
             return Text(R.string.labels.expired())
         }
     }
+    
     /// ToDoの追加画面に遷移させるボタン
     var addButton: some View {
         Button(action: {
