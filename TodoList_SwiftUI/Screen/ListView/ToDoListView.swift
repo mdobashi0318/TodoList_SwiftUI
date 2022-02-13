@@ -153,28 +153,6 @@ extension ToDoListView {
         .accessibilityLabel(R.string.accessibilityText.allDeleteButton())
     }
     
-    
-    
-    /// セグメントピッカーセクション
-    private var segmenteSection: some View {
-        return Section() {
-            Picker(selection: $viewModel.segmentIndex, label: Text("")) {
-                Text(R.string.labels.all()).tag(SegmentIndex.all)
-                    .accessibilityLabel(R.string.accessibilityText.all())
-                Text(R.string.labels.active()).tag(SegmentIndex.active)
-                    .accessibilityLabel(R.string.accessibilityText.active())
-                Text(R.string.labels.complete()).tag(SegmentIndex.complete)
-                    .accessibilityLabel(R.string.accessibilityText.complete())
-                Text(R.string.labels.expired()).tag(SegmentIndex.expired)
-                    .accessibilityLabel(R.string.accessibilityText.expired())
-            }
-            .frame(height: 30, alignment: .center)
-            .pickerStyle(SegmentedPickerStyle())
-            .padding(.all)
-        }
-    }
-    
-    
     /// WidgetでタップしたTodoをモーダルで表示する
     private var openWidgetView: some View {
         return NavigationView {
