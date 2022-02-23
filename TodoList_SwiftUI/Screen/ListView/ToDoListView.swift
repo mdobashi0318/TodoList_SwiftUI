@@ -52,8 +52,9 @@ struct ToDoListView: View {
                     addButton
                 }
             }
-        .sheet(isPresented: $openWidget.isOpneTodo) { openWidgetView }
-        }.alert(isPresented: $viewModel.isAlertError) {
+            .sheet(isPresented: $openWidget.isOpneTodo) { openWidgetView }
+        }
+        .alert(isPresented: $viewModel.isAlertError) {
             Alert(title: Text(R.string.message.findError()), dismissButton: .default(Text(R.string.labels.close())))
         }
         .accessibility(identifier: "ToDoList")
@@ -83,7 +84,7 @@ extension ToDoListView {
                             }
                         }
                         ) {
-                            ToDoRow(todoModel: self.viewModel.todoModel[row])
+                            ToDoRow(todoModel: self.$viewModel.todoModel[row])
                                 .frame(height: 60)
                         }
                     }
