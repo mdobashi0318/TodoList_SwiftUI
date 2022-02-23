@@ -42,14 +42,7 @@ final class ToDoViewModel: ObservableObject {
     /// Todoを全件取得し、SegmentIndexの値によってフィルターをする
     func sinkAllTodoModel(index: SegmentIndex) {
         fetchAllTodoModel()
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .finished:
-                    self.objectWillChange.send()
-                case .failure(_):
-                    break
-                }
-            }, receiveValue: { model in
+            .sink(receiveValue: { model in
                 switch index {
                 case .active:
                     self.todoModel = model.filter {
@@ -89,7 +82,6 @@ final class ToDoViewModel: ObservableObject {
     func allDeleteTodo() {
         ToDoModel.allDelete()
         self.todoModel = []
-        self.objectWillChange.send()
     }
     
     
