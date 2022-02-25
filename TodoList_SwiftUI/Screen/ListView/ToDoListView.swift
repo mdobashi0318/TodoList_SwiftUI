@@ -93,6 +93,7 @@ extension ToDoListView {
                 headerText
                     .font(.headline)
                     .padding()
+                    .animation(.none)
             })
             
         }
