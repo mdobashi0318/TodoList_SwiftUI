@@ -42,7 +42,7 @@ struct ToDoListView: View {
                     .tag(SegmentIndex.expired)
             }
             .tabViewStyle(PageTabViewStyle())
-            .navigationBarTitle("ToDoList")
+            .navigationTitle("ToDoList")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     allDeleteButton
@@ -159,7 +159,7 @@ extension ToDoListView {
         return NavigationView {
             TodoDetailView(viewModel: TodoDetailViewModel(model: openWidget.openTodo), isDisplayEllipsisBtn: false)
                 .onDisappear { openWidget.isOpneTodo = false }
-                .navigationBarTitle(openWidget.openTodo.toDoName)
+                .navigationTitle(openWidget.openTodo.toDoName)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: {

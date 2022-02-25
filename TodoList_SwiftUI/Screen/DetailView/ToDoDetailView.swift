@@ -53,7 +53,7 @@ struct TodoDetailView: View {
             Alert(title: Text(viewModel.errorMessage))
         }
         .listStyle(GroupedListStyle())
-        .navigationBarTitle(viewModel.model.toDoName)
+        .navigationTitle(viewModel.model.toDoName)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 if isDisplayEllipsisBtn {

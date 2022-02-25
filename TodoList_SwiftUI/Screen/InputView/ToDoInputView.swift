@@ -39,7 +39,7 @@ struct ToDoInputView: View {
                 if isUpdate { completeToggleSection }
             }
             .listStyle(GroupedListStyle())
-            .navigationBarTitle(isUpdate ? R.string.labels.updateToDo() : R.string.labels.addToDo())
+            .navigationTitle(isUpdate ? R.string.labels.updateToDo() : R.string.labels.addToDo())
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     cancelButton
