@@ -28,10 +28,6 @@ final class ToDoViewModel: ObservableObject {
         
     var isAlertError: Bool = false
     
-    init() {
-        selectedSegment()
-    }
-    
     /// Todoを全件取得する
     private func fetchAllTodoModel() -> Future<[ToDoModel], Never> {
         return Future<[ToDoModel], Never> { promise in
@@ -82,20 +78,6 @@ final class ToDoViewModel: ObservableObject {
     func allDeleteTodo() {
         ToDoModel.allDelete()
         self.todoModel = []
-    }
-    
-    
-   
-    /// segmentIndexが選択されたらTodoの全件取得をする
-    private func selectedSegment() {
-        $segmentIndex
-            .print()
-            .sink(receiveValue: { value in
-                withAnimation {
-                    self.sinkAllTodoModel(index: value)
-                }
-            })
-        .store(in: &cancellable)
     }
 
 }

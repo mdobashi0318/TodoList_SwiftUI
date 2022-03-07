@@ -42,6 +42,11 @@ struct ToDoListView: View {
                     .tag(SegmentIndex.expired)
             }
             .tabViewStyle(PageTabViewStyle())
+            .onReceive(viewModel.$segmentIndex) { index in
+                withAnimation {
+                    viewModel.sinkAllTodoModel(index: index)
+                }
+            }
             .navigationTitle("ToDoList")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -90,10 +95,13 @@ extension ToDoListView {
                     }
                 }
             }, header: {
-                headerText
-                    .font(.headline)
-                    .padding()
-                    .animation(.none)
+                VStack {
+                    headerText
+                        .font(.headline)
+                        .padding()
+                }
+                .frame(width: UIScreen.main.bounds.width, height: 50, alignment: .leading)
+                .background(Color.systemBackground)
             })
             
         }

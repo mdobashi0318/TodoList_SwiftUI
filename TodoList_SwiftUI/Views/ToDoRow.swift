@@ -16,6 +16,7 @@ struct ToDoRow: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(todoModel.toDoName)
+                .animation(.none)
                 .accessibility(identifier: "titlelabel")
             CompletionLable(todoDate: todoModel.todoDate, completionFlag: $todoModel.completionFlag)
         }

@@ -20,6 +20,7 @@ struct CompletionLable: View {
     var body: some View {
         HStack {
             Text(todoDate)
+                .animation(.none)
             if completionFlag == CompletionFlag.completion.rawValue {
                 /// 完了
                 Text(R.string.labels.complete())
