@@ -20,6 +20,7 @@ struct CompletionLable: View {
     var body: some View {
         HStack {
             Text(todoDate)
+                .animation(.none)
             if completionFlag == CompletionFlag.completion.rawValue {
                 /// 完了
                 Text(R.string.labels.complete())
@@ -28,7 +29,7 @@ struct CompletionLable: View {
                     .accessibility(identifier: "completeLabel")
             } else {
                 /// 期限切れ
-                Text(Format().dateFromString(string: todoDate)! > Format().dateFormat() ? "" : R.string.labels.expired())
+                Text(Format().dateFromString(string: todoDate) ?? Date() > Format().dateFormat() ? "" : R.string.labels.expired())
                     .font(.subheadline)
                     .foregroundColor(.red)
                     .accessibility(identifier: "dateLabel")

@@ -12,12 +12,15 @@ struct ToDoListView: View {
     
     // MARK: Properties
     
-    @StateObject private var toDoviewModel = ToDoViewModel()
+    @StateObject private var viewModel = ToDoViewModel()
     
+    /// Widget、通知をタップして開いた時のTodoを設定する
     @StateObject private var openWidget = OpenTodoManager.shared
     
+    /// Todo追加画面のモーダル表示フラグ
     @State private var isShowModle = false
     
+    /// 全件削除の確認アラートの表示フラグ
     @State private var isDeleteFlag = false
     
     
@@ -25,27 +28,38 @@ struct ToDoListView: View {
     
     var body: some View {
         NavigationView {
-            List {
-                segmenteSection
-                if self.toDoviewModel.todoModel.count == 0 {
-                    Text(R.string.message.noTodo())
-                } else {
-                    ForEach(0..<self.toDoviewModel.todoModel.count, id: \.self) { row in
-                        NavigationLink(destination:
-                                        TodoDetailView(viewModel: TodoDetailViewModel(model: self.toDoviewModel.todoModel[row]))
-                                        .onDisappear { self.toDoviewModel.sinkAllTodoModel(index: $toDoviewModel.segmentIndex.wrappedValue) }
-                        ) {
-                            ToDoRow(todoModel: self.toDoviewModel.todoModel[row])
-                                .frame(height: 60)
-                        }
-                    }
+            TabView(selection: $viewModel.segmentIndex) {
+                todoList
+                    .tag(SegmentIndex.all)
+                
+                todoList
+                    .tag(SegmentIndex.active)
+                
+                todoList
+                    .tag(SegmentIndex.complete)
+                
+                todoList
+                    .tag(SegmentIndex.expired)
+            }
+            .tabViewStyle(PageTabViewStyle())
+            .onReceive(viewModel.$segmentIndex) { index in
+                withAnimation {
+                    viewModel.sinkAllTodoModel(index: index)
                 }
             }
-            .listStyle(PlainListStyle())
-            .navigationBarTitle("ToDoList")
-            .navigationBarItems(leading: allDeleteButton ,trailing: addButton)
+            .navigationTitle("ToDoList")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    allDeleteButton
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    addButton
+                }
+            }
             .sheet(isPresented: $openWidget.isOpneTodo) { openWidgetView }
-        }.alert(isPresented: $toDoviewModel.isAlertError) {
+        }
+        .alert(isPresented: $viewModel.isAlertError) {
             Alert(title: Text(R.string.message.findError()), dismissButton: .default(Text(R.string.labels.close())))
         }
         .accessibility(identifier: "ToDoList")
@@ -59,8 +73,57 @@ struct ToDoListView: View {
 
 extension ToDoListView {
     
+    /// Todoのリストを表示する
+    private var todoList: some View {
+        List {
+            Section(content: {
+                if self.viewModel.todoModel.count == 0 {
+                    Text(R.string.message.noTodo())
+                } else {
+                    ForEach(0..<self.viewModel.todoModel.count, id: \.self) { row in
+                        NavigationLink(destination:
+                                        TodoDetailView(viewModel: TodoDetailViewModel(model: self.viewModel.todoModel[row]))
+                                        .onDisappear {
+                            withAnimation {
+                                viewModel.sinkAllTodoModel(index: $viewModel.segmentIndex.wrappedValue)
+                            }
+                        }
+                        ) {
+                            ToDoRow(todoModel: self.$viewModel.todoModel[row])
+                                .frame(height: 60)
+                        }
+                    }
+                }
+            }, header: {
+                VStack {
+                    headerText
+                        .font(.headline)
+                        .padding()
+                }
+                .frame(width: UIScreen.main.bounds.width, height: 50, alignment: .leading)
+                .background(Color.systemBackground)
+            })
+            
+        }
+        .listStyle(PlainListStyle())
+    }
+    
+    /// どのカテゴリかを表示するテキスト
+    private var headerText: some View {
+        switch viewModel.segmentIndex {
+        case .all:
+            return Text(R.string.labels.all())
+        case .active:
+            return Text(R.string.labels.active())
+        case .complete:
+            return Text(R.string.labels.complete())
+        case .expired:
+            return Text(R.string.labels.expired())
+        }
+    }
+    
     /// ToDoの追加画面に遷移させるボタン
-    var addButton: some View {
+    private var addButton: some View {
         Button(action: {
             self.isShowModle.toggle()
         }) {
@@ -69,10 +132,12 @@ extension ToDoListView {
         .sheet(isPresented: $isShowModle) {
             ToDoInputView(viewModel: InputViewModel(), isUpdate: false)
                 .onDisappear {
-                    toDoviewModel.sinkAllTodoModel(index: $toDoviewModel.segmentIndex.wrappedValue)
+                    withAnimation() {
+                        viewModel.sinkAllTodoModel(index: $viewModel.segmentIndex.wrappedValue)
+                    }
                 }
         }
-        .disabled(self.toDoviewModel.isAlertError)
+        .disabled(self.viewModel.isAlertError)
         .accessibility(identifier: "addButton")
         .accessibilityLabel(R.string.accessibilityText.todoAddButton())
     }
@@ -80,7 +145,7 @@ extension ToDoListView {
     
     
     /// 全件削除ボタン
-    var allDeleteButton : some View {
+    private var allDeleteButton : some View {
         Button(action: {
             self.isDeleteFlag.toggle()
         }) {
@@ -88,47 +153,31 @@ extension ToDoListView {
         }
         .alert(isPresented: self.$isDeleteFlag) {
             Alert(title: Text(R.string.message.allDelete()), primaryButton: .destructive(Text(R.string.labels.delete())) {
-                toDoviewModel.allDeleteTodo()
-                }, secondaryButton: .cancel(Text(R.string.labels.cancel())))
+                withAnimation() {
+                    viewModel.allDeleteTodo()
+                }
+            }, secondaryButton: .cancel(Text(R.string.labels.cancel())))
         }
-        .disabled(self.toDoviewModel.isAlertError)
+        .disabled(self.viewModel.isAlertError)
         .accessibility(identifier: "allDeleteButton")
         .accessibilityLabel(R.string.accessibilityText.allDeleteButton())
     }
     
-    
-    
-    /// セグメントピッカーセクション
-    private var segmenteSection: some View {
-        return Section() {
-            Picker(selection: $toDoviewModel.segmentIndex, label: Text("")) {
-                Text(R.string.labels.all()).tag(SegmentIndex.all)
-                    .accessibilityLabel(R.string.accessibilityText.all())
-                Text(R.string.labels.active()).tag(SegmentIndex.active)
-                    .accessibilityLabel(R.string.accessibilityText.active())
-                Text(R.string.labels.complete()).tag(SegmentIndex.complete)
-                    .accessibilityLabel(R.string.accessibilityText.complete())
-                Text(R.string.labels.expired()).tag(SegmentIndex.expired)
-                    .accessibilityLabel(R.string.accessibilityText.expired())
-            }
-            .frame(height: 30, alignment: .center)
-            .pickerStyle(SegmentedPickerStyle())
-            .padding(.all)
-        }
-    }
-    
-    
     /// WidgetでタップしたTodoをモーダルで表示する
     private var openWidgetView: some View {
         return NavigationView {
-            TodoDetailView(viewModel: TodoDetailViewModel(model: openWidget.openTodo))
+            TodoDetailView(viewModel: TodoDetailViewModel(model: openWidget.openTodo), isDisplayEllipsisBtn: false)
                 .onDisappear { openWidget.isOpneTodo = false }
-                .navigationBarTitle(openWidget.openTodo.toDoName)
-                .navigationBarItems(leading: Button(action: {
-                    openWidget.isOpneTodo = false
-                }, label: {
-                    Image(systemName: "xmark")
-                }), trailing: Button(""){})
+                .navigationTitle(openWidget.openTodo.toDoName)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            openWidget.isOpneTodo = false
+                        }) {
+                            Image(systemName: "xmark")
+                        }
+                    }
+                }
         }
     }
     

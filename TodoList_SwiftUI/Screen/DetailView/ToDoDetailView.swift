@@ -22,6 +22,11 @@ struct TodoDetailView: View {
     
     /// 削除確認アラートを出すフラグ
     @State private var isDeleteAction = false
+     
+    /// ellipsisButtonの表示非表示を設定
+    ///
+    /// - default: true
+    var isDisplayEllipsisBtn = true
     
     @Environment(\.presentationMode) private var presentationMode:Binding<PresentationMode>
     
@@ -48,8 +53,14 @@ struct TodoDetailView: View {
             Alert(title: Text(viewModel.errorMessage))
         }
         .listStyle(GroupedListStyle())
-        .navigationBarTitle(viewModel.model.toDoName)
-        .navigationBarItems(trailing: addButton)
+        .navigationTitle(viewModel.model.toDoName)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if isDisplayEllipsisBtn {
+                    ellipsisButton
+                }
+            }
+        }
         
     }
     
@@ -62,8 +73,8 @@ struct TodoDetailView: View {
 
 extension TodoDetailView {
     
-    /// ToDo追加ボタン
-    var addButton: some View {
+    /// 編集/削除のアクションシート表示ボタン
+    var ellipsisButton: some View {
         Button(action: {
             self.isActionSheet.toggle()
         }) {

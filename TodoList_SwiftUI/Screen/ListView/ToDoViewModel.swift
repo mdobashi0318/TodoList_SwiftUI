@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 enum SegmentIndex: Int, CaseIterable {
     case all = 0
@@ -19,17 +20,13 @@ enum SegmentIndex: Int, CaseIterable {
 
 final class ToDoViewModel: ObservableObject {
     
-    var todoModel: [ToDoModel] = []
+    @Published var todoModel: [ToDoModel] = []
     
     @Published var segmentIndex: SegmentIndex = .all
     
     private var cancellable: Set<AnyCancellable> = []
         
     var isAlertError: Bool = false
-    
-    init() {
-        selectedSegment()
-    }
     
     /// Todoを全件取得する
     private func fetchAllTodoModel() -> Future<[ToDoModel], Never> {
@@ -41,14 +38,7 @@ final class ToDoViewModel: ObservableObject {
     /// Todoを全件取得し、SegmentIndexの値によってフィルターをする
     func sinkAllTodoModel(index: SegmentIndex) {
         fetchAllTodoModel()
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .finished:
-                    self.objectWillChange.send()
-                case .failure(_):
-                    break
-                }
-            }, receiveValue: { model in
+            .sink(receiveValue: { model in
                 switch index {
                 case .active:
                     self.todoModel = model.filter {
@@ -88,19 +78,6 @@ final class ToDoViewModel: ObservableObject {
     func allDeleteTodo() {
         ToDoModel.allDelete()
         self.todoModel = []
-        self.objectWillChange.send()
-    }
-    
-    
-   
-    /// segmentIndexが選択されたらTodoの全件取得をする
-    private func selectedSegment() {
-        $segmentIndex
-            .print()
-            .sink(receiveValue: { value in
-                self.sinkAllTodoModel(index: value)
-            })
-        .store(in: &cancellable)
     }
 
 }
