@@ -27,7 +27,6 @@ class TodoDetailViewModelTest: XCTestCase {
         /// completionFlagをfalseからtrueへ変更する
         var model: ToDoModel = ToDoModel(id: "0", toDoName: "TEST", todoDate: "Date", toDo: "toDo", completionFlag: CompletionFlag.unfinished.rawValue)
         var viewModel = TodoDetailViewModel(model: model)
-        viewModel.setFlag()
         XCTAssertFalse(viewModel.completionFlag, "falseが設定されていない")
         XCTAssert(viewModel.completionFlagStr == CompletionFlag.unfinished, "unfinishedの値が設定されていない")
         
@@ -39,7 +38,6 @@ class TodoDetailViewModelTest: XCTestCase {
         /// completionFlagをtrueからfalseへ変更する
         model = ToDoModel(id: "0", toDoName: "TEST", todoDate: "Date", toDo: "toDo", completionFlag: CompletionFlag.completion.rawValue)
         viewModel = TodoDetailViewModel(model: model)
-        viewModel.setFlag()
         XCTAssertTrue(viewModel.completionFlag, "trueが設定されていない")
         XCTAssert(viewModel.completionFlagStr == CompletionFlag.completion, "completionの値が設定されていない")
         

@@ -46,9 +46,6 @@ struct TodoDetailView: View {
             
             completeToggleSection
         }
-        .onAppear {
-            viewModel.setFlag()
-        }
         .alert(isPresented: $viewModel.isError) {
             Alert(title: Text(viewModel.errorMessage))
         }
