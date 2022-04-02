@@ -43,9 +43,7 @@ struct ToDoListView: View {
             }
             .tabViewStyle(PageTabViewStyle())
             .onReceive(viewModel.$segmentIndex) { index in
-                withAnimation {
-                    viewModel.sinkAllTodoModel(index: index)
-                }
+                viewModel.sinkAllTodoModel(index: index)
             }
             .navigationTitle("ToDoList")
             .toolbar {
@@ -83,11 +81,9 @@ extension ToDoListView {
                     ForEach(0..<self.viewModel.todoModel.count, id: \.self) { row in
                         NavigationLink(destination:
                                         TodoDetailView(viewModel: TodoDetailViewModel(model: self.viewModel.todoModel[row]))
-                                        .onDisappear {
-                            withAnimation {
+                            .onDisappear {
                                 viewModel.sinkAllTodoModel(index: $viewModel.segmentIndex.wrappedValue)
                             }
-                        }
                         ) {
                             ToDoRow(todoModel: self.$viewModel.todoModel[row])
                                 .frame(height: 60)
@@ -95,17 +91,14 @@ extension ToDoListView {
                     }
                 }
             }, header: {
-                VStack {
-                    headerText
-                        .font(.headline)
-                        .padding()
-                }
-                .frame(width: UIScreen.main.bounds.width, height: 50, alignment: .leading)
-                .background(Color.systemBackground)
+                headerText
+                    .font(.headline)
+                    .padding()
+                    .animation(.none)
             })
-            
         }
-        .listStyle(PlainListStyle())
+        .listStyle(InsetListStyle())
+        .animation(.easeIn)
     }
     
     /// どのカテゴリかを表示するテキスト
@@ -132,9 +125,7 @@ extension ToDoListView {
         .sheet(isPresented: $isShowModle) {
             ToDoInputView(viewModel: InputViewModel(), isUpdate: false)
                 .onDisappear {
-                    withAnimation() {
-                        viewModel.sinkAllTodoModel(index: $viewModel.segmentIndex.wrappedValue)
-                    }
+                    viewModel.sinkAllTodoModel(index: $viewModel.segmentIndex.wrappedValue)
                 }
         }
         .disabled(self.viewModel.isAlertError)
@@ -153,9 +144,7 @@ extension ToDoListView {
         }
         .alert(isPresented: self.$isDeleteFlag) {
             Alert(title: Text(R.string.message.allDelete()), primaryButton: .destructive(Text(R.string.labels.delete())) {
-                withAnimation() {
-                    viewModel.allDeleteTodo()
-                }
+                viewModel.allDeleteTodo()
             }, secondaryButton: .cancel(Text(R.string.labels.cancel())))
         }
         .disabled(self.viewModel.isAlertError)

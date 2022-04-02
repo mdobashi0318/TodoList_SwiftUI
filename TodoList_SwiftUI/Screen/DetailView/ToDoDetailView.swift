@@ -36,6 +36,7 @@ struct TodoDetailView: View {
             Section(header: Text(R.string.labels.deadline())
                         .font(.headline)) {
                 CompletionLable(todoDate: viewModel.model.todoDate, completionFlag: $viewModel.model.completionFlag)
+                                .animation(.default)
             }
             
             Section(header: Text(R.string.labels.details())
