@@ -11,7 +11,7 @@
 or 
 ```
    download zip
-   cd TodoList_SwiftUI-master
+   cd TodoList_SwiftUI-1.7.0
    xcodegen generate
 ```
 2. Opne TodoList_SwiftUI.xcworkspace
