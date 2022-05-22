@@ -24,3 +24,7 @@ Pods/*
 !.gitkeep
 .DS_Store
 *.generated.swift
+
+
+*.xcodeproj
+*.xcworkspace

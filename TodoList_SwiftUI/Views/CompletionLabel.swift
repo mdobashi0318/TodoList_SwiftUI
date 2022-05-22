@@ -28,10 +28,11 @@ struct CompletionLable: View {
                     .foregroundColor(.green)
                     .accessibility(identifier: "completeLabel")
             } else {
-                /// 期限切れ
-                Text(Format().dateFromString(string: todoDate) ?? Date() > Format().dateFormat() ? "" : R.string.labels.expired())
+                let text = Format().dateFromString(string: todoDate) ?? Date() > Format().dateFormat() ? R.string.labels.active() : R.string.labels.expired()
+                /// 未完了or期限切れ
+                Text(text)
                     .font(.subheadline)
-                    .foregroundColor(.red)
+                    .foregroundColor(text == R.string.labels.active() ? .yellow : .red)
                     .accessibility(identifier: "dateLabel")
             }
         }

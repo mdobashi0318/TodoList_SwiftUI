@@ -36,6 +36,7 @@ struct TodoDetailView: View {
             Section(header: Text(R.string.labels.deadline())
                         .font(.headline)) {
                 CompletionLable(todoDate: viewModel.model.todoDate, completionFlag: $viewModel.model.completionFlag)
+                                .animation(.default)
             }
             
             Section(header: Text(R.string.labels.details())
@@ -45,9 +46,6 @@ struct TodoDetailView: View {
             }
             
             completeToggleSection
-        }
-        .onAppear {
-            viewModel.setFlag()
         }
         .alert(isPresented: $viewModel.isError) {
             Alert(title: Text(viewModel.errorMessage))
