@@ -8,4 +8,13 @@
    cd TodoList_SwiftUI
    xcodegen generate
 ```
+or 
+```
+   download zip
+   cd TodoList_SwiftUI-master
+   xcodegen generate
+```
 2. Opne TodoList_SwiftUI.xcworkspace
+
+
+   
