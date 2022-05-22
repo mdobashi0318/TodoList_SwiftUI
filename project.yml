@@ -1,0 +1,183 @@
+name: TodoList_SwiftUI
+targets:
+  TodoList_SwiftUI:
+    type: application
+    platform: iOS
+    deploymentTarget: "14.0"
+    entitlements:
+      path: TodoList_SwiftUI/TodoList_SwiftUI.entitlements
+      properties:
+        com.apple.security.application-groups:
+        - group.TodoList-SwiftUI
+    prebuildScripts:
+      - name: Run R.swift
+        script: |
+           "$PODS_ROOT/R.swift/rswift" generate "$SRCROOT/$TARGET_NAME/Generated/R.generated.swift"
+        outputFiles:
+          - $SRCROOT/$TARGET_NAME/Generated/R.generated.swift
+    sources:
+         - TodoList_SwiftUI
+         - path: "TodoList_SwiftUI/Generated/R.generated.swift"
+           optional: true
+           type: file
+         - path: TodoWidget/TodoWidget.intentdefinition
+    dependencies:
+      - target: TodoWidgetExtension
+      - package: Realm
+        product: RealmSwift
+    settings:
+        base: 
+         ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
+         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+         CODE_SIGN_ENTITLEMENTS: TodoList_SwiftUI/TodoList_SwiftUI.entitlements
+         CODE_SIGN_STYLE: Automatic
+         DEVELOPMENT_ASSET_PATHS: "\"TodoList_SwiftUI/Preview Content\""
+         DEVELOPMENT_TEAM: 7RPFL7EXKD
+         ENABLE_PREVIEWS: YES
+         INFOPLIST_FILE: TodoList_SwiftUI/Info.plist
+         MARKETING_VERSION: &marketing_version 1.6.0
+         CURRENT_PROJECT_VERSIO: 1
+         PRODUCT_BUNDLE_IDENTIFIER: "m.dobashi.TodoList-SwiftUI"
+         PRODUCT_NAME: "$(TARGET_NAME)"
+        
+        
+  TodoList_Tests:
+      type: bundle.unit-test
+      platform: iOS
+      sources:
+       - TodoList_Tests
+      settings:
+        base:
+         ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
+         BUNDLE_LOADER: "$(TEST_HOST)"
+         CODE_SIGN_STYLE: Automatic
+         DEVELOPMENT_TEAM: 7RPFL7EXKD
+         INFOPLIST_FILE: TodoList_Tests/Info.plist
+         IPHONEOS_DEPLOYMENT_TARGET: 14.0
+         PRODUCT_BUNDLE_IDENTIFIER: "m.dobashi.TodoList-Tests"
+         PRODUCT_NAME: "$(TARGET_NAME)"
+         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/TodoList_SwiftUI.app/TodoList_SwiftUI"
+      dependencies:
+      - target: TodoList_SwiftUI
+        
+        
+  TodoList_UITests:
+      type: bundle.ui-testing
+      platform: iOS
+      sources:
+        - TodoList_UITests
+      settings:
+        base:
+             ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
+             CODE_SIGN_STYLE: Automatic
+             DEVELOPMENT_TEAM: 7RPFL7EXKD
+             INFOPLIST_FILE: TodoList_UITests/Info.plist
+             PRODUCT_BUNDLE_IDENTIFIER: "m.dobashi.TodoList-UITests"
+             PRODUCT_NAME: "$(TARGET_NAME)"
+             TEST_TARGET_NAME: TodoList_SwiftUI
+      dependencies:
+       - target: TodoList_SwiftUI
+    
+
+  TodoWidgetExtension:
+      type: app-extension
+      platform: iOS
+      entitlements:
+       path: TodoList_SwiftUI/TodoList_SwiftUI.entitlements
+       properties:
+         com.apple.security.application-groups:
+          - group.TodoList-SwiftUI
+      sources:
+       - TodoWidget
+       - TodoList_SwiftUI/Models
+       - TodoList_SwiftUI/Other/CompletionFlag.swift
+       - TodoList_SwiftUI/Other/Format.swift
+       - TodoList_SwiftUI/Other/Errors.swift
+       - TodoList_SwiftUI/Other/NotificationManager.swift
+       - TodoList_SwiftUI/Extensions/UserDefaultsExtensions.swift
+      settings:
+        base:
+             ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+             ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME: WidgetBackground
+             CODE_SIGN_STYLE: Automatic
+             DEVELOPMENT_TEAM: 7RPFL7EXKD
+             INFOPLIST_FILE: TodoWidget/Info.plist
+             MARKETING_VERSION: *marketing_version
+             CURRENT_PROJECT_VERSIO: 1
+             PRODUCT_BUNDLE_IDENTIFIER: "m.dobashi.TodoList-SwiftUI.TodoWidget"
+             PRODUCT_NAME: "$(TARGET_NAME)"
+             SKIP_INSTALL: true
+      dependencies:
+       - sdk: SwiftUI.framework
+       - sdk: WidgetKit.framework
+       - package: Realm
+         product: RealmSwift
+         
+options:
+  bundleIdPrefix: m.dobashi
+  postGenCommand: pod install
+packages:
+ XcodeGen:
+    url: https://github.com/yonaskolb/XcodeGen
+    version: 2.29.0
+ Realm:
+    url: https://github.com/realm/realm-swift
+    version: 10.20.1
+
+
+schemes:
+  TodoList_SwiftUI:
+    build:
+      targets:
+        TodoList_SwiftUI: all
+        TodoList_Tests: [test]
+        TodoList_UITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: true
+      coverageTargets:
+        - TodoList_SwiftUI
+      targets:
+        - name: TodoList_Tests
+          parallelizable: true
+          randomExecutionOrder: true 
+        - name: TodoList_UITests
+          parallelizable: true
+          randomExecutionOrder: true
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+      
+  TodoWidgetExtension:
+    build:
+      targets:
+        TodoWidgetExtension: all
+        TodoList_SwiftUI: all
+    run:
+      config: Debug
+      askForAppToLaunch: true
+      debugEnabled: false
+      environmentVariables:
+        - variable: _XCWidgetKind
+          value:
+          isEnabled: false
+        - variable: _XCWidgetDefaultView
+          value: timeline
+          isEnabled: false
+        - variable: _XCWidgetFamily
+          value: medium
+          isEnabled: false
+    test:
+      config: Debug
+    profile:
+      config: Release
+      askForAppToLaunch: true
+    analyze:
+      config: Debug
+    archive:
+      config: Release
