@@ -3,7 +3,7 @@ targets:
   TodoList_SwiftUI:
     type: application
     platform: iOS
-    deploymentTarget: "14.0"
+    deploymentTarget: &deployment_target "14.0"
     entitlements:
       path: TodoList_SwiftUI/TodoList_SwiftUI.entitlements
       properties:
@@ -35,7 +35,7 @@ targets:
          DEVELOPMENT_TEAM: 7RPFL7EXKD
          ENABLE_PREVIEWS: YES
          INFOPLIST_FILE: TodoList_SwiftUI/Info.plist
-         MARKETING_VERSION: &marketing_version 1.6.0
+         MARKETING_VERSION: &marketing_version 1.7.0
          CURRENT_PROJECT_VERSIO: 1
          PRODUCT_BUNDLE_IDENTIFIER: "m.dobashi.TodoList-SwiftUI"
          PRODUCT_NAME: "$(TARGET_NAME)"
@@ -82,6 +82,7 @@ targets:
   TodoWidgetExtension:
       type: app-extension
       platform: iOS
+      deploymentTarget: *deployment_target
       entitlements:
        path: TodoList_SwiftUI/TodoList_SwiftUI.entitlements
        properties:
