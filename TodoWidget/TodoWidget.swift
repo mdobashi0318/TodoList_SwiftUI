@@ -60,6 +60,8 @@ struct TodoWidgetEntryView : View {
     
     private static let deeplinkURL: URL = URL(string: "widget-deeplink-todolist://")!
     
+    
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text(NSLocalizedString("NextTodo", tableName: "Label", comment: ""))
@@ -75,13 +77,21 @@ struct TodoWidgetEntryView : View {
 struct TodoWidget: Widget {
     let kind: String = "TodoWidget"
     
+    let widgetFamilys: [WidgetFamily] = {
+        if #available(iOS 16.0, *) {
+            return [.systemSmall, .accessoryRectangular]
+        } else {
+            return [.systemSmall]
+        }
+    }()
+    
     var body: some WidgetConfiguration {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
             TodoWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("My Widget")
         .description("This is an example widget.")
-        .supportedFamilies([.systemSmall])
+        .supportedFamilies(widgetFamilys)
     }
 }
 
