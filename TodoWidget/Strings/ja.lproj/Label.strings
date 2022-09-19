@@ -6,7 +6,7 @@
   Copyright © 2021 m.dobashi. All rights reserved.
 */
 
-"NextTodo" = "次の予定";
+"NextTodo" = "期限が近いTodo";
 "NoTodo" = "予定はありません";
-"TodoTitle" = "次のTodoタイトル";
+"TodoTitle" = "Todoのタイトル";
 "TodoDetail" = "Todoの詳細";
