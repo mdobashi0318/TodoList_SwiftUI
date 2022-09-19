@@ -31,7 +31,8 @@ struct Provider: TimelineProvider {
         var entries: [SimpleEntry] = []
         var todo: ToDoModel? {
             return ToDoModel.allFindTodo().first(where: {
-                Format().dateFromString(string: $0.todoDate)! > Format().dateFormat()
+                Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() &&
+                $0.completionFlag != CompletionFlag.completion.rawValue
             })
         }
         
@@ -63,18 +64,38 @@ struct SimpleEntry: TimelineEntry {
 struct TodoWidgetEntryView : View {
     var entry: Provider.Entry
     
+    @Environment(\.widgetFamily) private var family: WidgetFamily
+    
     private static let deeplinkURL: URL = URL(string: "widget-deeplink-todolist://")!
     
-    
-    
+    @ViewBuilder
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(NSLocalizedString("NextTodo", tableName: "Label", comment: ""))
-                .font(.caption)
-            Text(entry.todomodel?.toDoName ?? NSLocalizedString("NoTodo", tableName: "Label", comment: ""))
-            Text(entry.todomodel?.todoDate ?? "")
+        switch family {
+        case .systemSmall, .accessoryRectangular:
+            VStack(alignment: .leading) {
+                Text(NSLocalizedString("NextTodo", tableName: "Label", comment: ""))
+                    .font(.caption)
+                Text(entry.todomodel?.toDoName ?? NSLocalizedString("NoTodo", tableName: "Label", comment: ""))
+                Text(entry.todomodel?.todoDate ?? "")
+            }
+            .widgetURL(Self.deeplinkURL)
+        case .systemMedium:
+            VStack(alignment: .leading) {
+                Text(NSLocalizedString("NextTodo", tableName: "Label", comment: ""))
+                    .font(.caption)
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(entry.todomodel?.toDoName ?? NSLocalizedString("NoTodo", tableName: "Label", comment: ""))
+                        Text(entry.todomodel?.todoDate ?? "")
+                    }
+                    Text(entry.todomodel?.toDo ?? "")
+                }
+            }
+            .padding()
+            .widgetURL(Self.deeplinkURL)
+        default:
+            Text("")
         }
-        .widgetURL(Self.deeplinkURL)
     }
 }
 
@@ -87,9 +108,9 @@ struct TodoWidget: Widget {
     
     let widgetFamilys: [WidgetFamily] = {
         if #available(iOS 16.0, *) {
-            return [.systemSmall, .accessoryRectangular]
+            return [.systemSmall, .systemMedium, .accessoryRectangular]
         } else {
-            return [.systemSmall]
+            return [.systemSmall, .systemMedium]
         }
     }()
     
@@ -106,6 +127,7 @@ struct TodoWidget: Widget {
 
 // MARK: - Previews
 
+@available(iOSApplicationExtension 16.0, *)
 struct TodoWidget_Previews: PreviewProvider {
     static var previews: some View {
         Group {
@@ -114,6 +136,20 @@ struct TodoWidget_Previews: PreviewProvider {
             
             TodoWidgetEntryView(entry: SimpleEntry(date: Date(), todomodel: nil))
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
+            
+            
+            TodoWidgetEntryView(entry: SimpleEntry(date: Date(), todomodel: testModel[0]))
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+            
+            TodoWidgetEntryView(entry: SimpleEntry(date: Date(), todomodel: nil))
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+            
+            
+            TodoWidgetEntryView(entry: SimpleEntry(date: Date(), todomodel: testModel[0]))
+                .previewContext(WidgetPreviewContext(family: .accessoryRectangular))
+            
+            TodoWidgetEntryView(entry: SimpleEntry(date: Date(), todomodel: nil))
+                .previewContext(WidgetPreviewContext(family: .accessoryRectangular))
         }
     }
 }
