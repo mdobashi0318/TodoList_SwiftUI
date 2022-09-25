@@ -127,7 +127,6 @@ struct TodoWidget: Widget {
 
 // MARK: - Previews
 
-@available(iOSApplicationExtension 16.0, *)
 struct TodoWidget_Previews: PreviewProvider {
     static var previews: some View {
         Group {
@@ -136,20 +135,6 @@ struct TodoWidget_Previews: PreviewProvider {
             
             TodoWidgetEntryView(entry: SimpleEntry(date: Date(), todomodel: nil))
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
-            
-            
-            TodoWidgetEntryView(entry: SimpleEntry(date: Date(), todomodel: testModel[0]))
-                .previewContext(WidgetPreviewContext(family: .systemMedium))
-            
-            TodoWidgetEntryView(entry: SimpleEntry(date: Date(), todomodel: nil))
-                .previewContext(WidgetPreviewContext(family: .systemMedium))
-            
-            
-            TodoWidgetEntryView(entry: SimpleEntry(date: Date(), todomodel: testModel[0]))
-                .previewContext(WidgetPreviewContext(family: .accessoryRectangular))
-            
-            TodoWidgetEntryView(entry: SimpleEntry(date: Date(), todomodel: nil))
-                .previewContext(WidgetPreviewContext(family: .accessoryRectangular))
         }
     }
 }
