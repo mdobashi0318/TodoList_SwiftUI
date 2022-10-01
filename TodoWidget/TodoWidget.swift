@@ -37,10 +37,9 @@ struct Provider: TimelineProvider {
         }
         
         
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .minute, value: hourOffset, to: currentDate)!
+        let entryDate = Calendar.current.date(byAdding: .minute, value: 15, to: currentDate)!
+        for _ in 0 ..< 96 {
             let entry = SimpleEntry(date: entryDate, todomodel: todo)
             entries.append(entry)
         }
