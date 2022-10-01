@@ -6,7 +6,7 @@
   Copyright © 2021 m.dobashi. All rights reserved.
 */
 
-"NextTodo" = "What's next";
+"NextTodo" = "Todo near due date";
 "NoTodo" = "I have no plans.";
 "TodoTitle" = "Next Todo Title";
 "TodoDetail" = "Todo Details";

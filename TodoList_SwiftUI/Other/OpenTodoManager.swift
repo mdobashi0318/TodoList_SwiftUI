@@ -25,11 +25,11 @@ final class OpenTodoManager: ObservableObject {
     /// 詳細を開くTodo
     private(set) var openTodo: ToDoModel!
     
-    /// 次に来るのTodoを検索する
+    /// WidgetからTodoを開く
     private var findNextTodo: ToDoModel? {
         get {
             let model = ToDoModel.allFindTodo()
-            guard let _nextTodo = model.filter({ Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() }).first,
+            guard let _nextTodo = model.filter({ Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() && $0.completionFlag != CompletionFlag.completion.rawValue }).first,
                   !_nextTodo.id.isEmpty else {
                 return nil
             }
@@ -45,7 +45,7 @@ final class OpenTodoManager: ObservableObject {
     
     
     /// 通知からTodoを開く
-    private let openedFromNotificationBanner = NotificationCenter.default.publisher(for: Notification.Name(rawValue: R.string.notifications.tapNotificationBanner()))
+    private let openedFromNotsificationBanner = NotificationCenter.default.publisher(for: Notification.Name(rawValue: R.string.notifications.tapNotificationBanner()))
         .sink(receiveValue: { notification in
             guard let _id = notification.object as? String else { return }
             shared.openTodoModal(.NotificationBanner, todo: ToDoModel.findTodo(todoId: "", createTime: _id))

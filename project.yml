@@ -20,7 +20,6 @@ targets:
          - path: "TodoList_SwiftUI/Generated/R.generated.swift"
            optional: true
            type: file
-         - path: TodoWidget/TodoWidget.intentdefinition
     dependencies:
       - target: TodoWidgetExtension
       - package: Realm
