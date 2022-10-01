@@ -117,7 +117,7 @@ struct TodoWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             TodoWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
+        .configurationDisplayName("Todo Widget")
         .description("This is an example widget.")
         .supportedFamilies(widgetFamilys)
     }
