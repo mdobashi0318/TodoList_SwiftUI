@@ -122,7 +122,7 @@ packages:
     version: 2.29.0
  Realm:
     url: https://github.com/realm/realm-swift
-    version: 10.20.1
+    version: 10.30.0
 
 
 schemes:
