@@ -1,6 +1,6 @@
 //
-//  TodoList_SwiftUITests.swift
-//  TodoList_SwiftUITests
+//  InputViewModelTests.swift
+//  InputViewModelTests
 //
 //  Created by 土橋正晴 on 2020/05/16.
 //  Copyright © 2020 m.dobashi. All rights reserved.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import TodoList_SwiftUI
 
-class TodoList_SwiftUITests: XCTestCase {
+class InputViewModelTests: XCTestCase {
     
     
     override func setUp() {
@@ -25,29 +25,28 @@ class TodoList_SwiftUITests: XCTestCase {
     
     
     
-    func test_AddViewModel() {
-        
+    func test_addTodo() {
         let inputViewModel = InputViewModel(model: ToDoModel(toDoName: "UnitTest", todoDate: "2030/01/01 00:00", toDo: "詳細"))
         
-        Task {
-            do {
-                try inputViewModel.addTodo()
-                let todoModel = ToDoModel.findTodo(todoId: "1", createTime: nil)
-                XCTAssert(todoModel?.id == "1", "idが登録されていない")
-                XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
-                XCTAssert(todoModel?.todoDate == "2030/01/01 00:00", "Todoの期限が登録されていない")
-                XCTAssert(todoModel?.toDo == "詳細", "　Todoの詳細が登録されていない")
-                XCTAssert(todoModel?.completionFlag == CompletionFlag.unfinished.rawValue, "完了フラグが未完が登録されていない")
-                let createTime = todoModel?.createTime ?? ""
-                XCTAssert(!createTime.isEmpty, "Todo作成時間が登録されていない")
-            } catch {
-                XCTAssertNil(error, "エラーが発生している\(error)")
-            }
+        
+        do {
+            try inputViewModel.addTodo()
+            let todoModel = ToDoModel.findTodo(todoId: "1", createTime: nil)
+            XCTAssert(todoModel?.id == "1", "idが登録されていない")
+            XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
+            XCTAssert(todoModel?.todoDate == "2030/01/01 00:00", "Todoの期限が登録されていない")
+            XCTAssert(todoModel?.toDo == "詳細", "　Todoの詳細が登録されていない")
+            XCTAssert(todoModel?.completionFlag == CompletionFlag.unfinished.rawValue, "完了フラグが未完が登録されていない")
+            let createTime = todoModel?.createTime ?? ""
+            XCTAssert(!createTime.isEmpty, "Todo作成時間が登録されていない")
+        } catch {
+            XCTAssertNil(error, "エラーが発生している\(error)")
         }
+        
     }
     
     
-    func test_EditViewModel() {
+    func test_updateTodo() {
         var inputViewModel = InputViewModel(model: ToDoModel(toDoName: "UnitTest", todoDate: "2030/01/01 00:00", toDo: "詳細"))
         
         do {
@@ -87,7 +86,6 @@ class TodoList_SwiftUITests: XCTestCase {
     func test_EditCompletionFlag() {
         var inputViewModel = InputViewModel(model: ToDoModel(toDoName: "UnitTest", todoDate: "2030/01/01 00:00", toDo: "詳細"))
         
-        
         do {
             try inputViewModel.addTodo()
             let todoModel = ToDoModel.findTodo(todoId: "1", createTime: nil)
@@ -105,7 +103,13 @@ class TodoList_SwiftUITests: XCTestCase {
         } catch {
             XCTAssertNil(error, "エラーが発生している\(error)")
         }
-        inputViewModel = InputViewModel(model: ToDoModel(id: "1", toDoName: "EditUnitTest", todoDate: "2030/01/01 10:00", toDo: "詳細編集",completionFlag: CompletionFlag.completion.rawValue, createTime: nil))
+        inputViewModel = InputViewModel(model: ToDoModel(id: "1",
+                                                         toDoName: "EditUnitTest",
+                                                         todoDate: "2030/01/01 10:00",
+                                                         toDo: "詳細編集",
+                                                         completionFlag: CompletionFlag.completion.rawValue,
+                                                         createTime: nil)
+        )
         
         
         do {
@@ -129,36 +133,39 @@ class TodoList_SwiftUITests: XCTestCase {
     }
     
     
-    
-    
-    func test_DeleteViewModel() {
+    func test_validateCheck() {
+        let inputViewModel = InputViewModel()
         
-        var todoModel: ToDoModel?
-        
-        let inputViewModel = InputViewModel(model: ToDoModel(toDoName: "UnitTest", todoDate: "2030/01/01 00:00", toDo: "詳細"))
-        
-        
-        do {
-            try inputViewModel.addTodo()
-        } catch {
-            XCTAssertNil(error, "エラーが発生している\(error)")
-        }
-        
-        todoModel = ToDoModel.findTodo(todoId: "1", createTime: nil)
-        XCTAssert(todoModel?.id == "1", "idが登録されていない")
-        XCTAssert(todoModel?.toDoName == "UnitTest", "Todoのタイトルが登録されていない")
-        XCTAssert(todoModel?.todoDate == "2030/01/01 00:00", "Todoの期限が登録されていない")
-        XCTAssert(todoModel?.toDo == "詳細", "　Todoの詳細が登録されていない")
-        let createTime = todoModel?.createTime ?? ""
-        XCTAssert(!createTime.isEmpty, "Todo作成時間が登録されていない")
+        /// タイトル
+        XCTAssert(inputViewModel.validateCheck() == R.string.message.validate(R.string.labels.title()), "バリデーションに引っかかっていない")
+        inputViewModel.toDoName = "タイトル"
+        XCTAssert(inputViewModel.validateCheck() != R.string.message.validate(R.string.labels.title()), "バリデーションに引っかかっている")
         
         
-        do {
-            let dummy = try ToDoViewModel().deleteTodo(delete: todoModel!)
-            XCTAssertNotNil(dummy, "ダミー用のモデルが入っていない")
-        } catch {
-            
-        }
+        /// 期限
+        XCTAssert(inputViewModel.validateCheck() == R.string.message.validateDate(), "バリデーションに引っかかっていない")
+        inputViewModel.completionFlag = true
+        XCTAssert(inputViewModel.validateCheck() != R.string.message.validateDate(), "バリデーションに引っかかっている")
+        
+        inputViewModel.completionFlag = false
+        inputViewModel.toDoDate = Date()
+        XCTAssert(inputViewModel.validateCheck() == R.string.message.validateDate(), "バリデーションに引っかかっていない")
+        
+        inputViewModel.toDoDate = Format().dateFromString(string: "2030/01/01 00:00")!
+        XCTAssert(inputViewModel.validateCheck() != R.string.message.validateDate(), "バリデーションに引っかかっている")
+        
+        inputViewModel.completionFlag = true
+        XCTAssert(inputViewModel.validateCheck() != R.string.message.validateDate(), "バリデーションに引っかかっている")
+        
+        
+        /// 詳細
+        XCTAssert(inputViewModel.validateCheck() == R.string.message.validate(R.string.labels.details()), "バリデーションに引っかかっていない")
+        
+        inputViewModel.toDo = "詳細"
+        XCTAssert(inputViewModel.validateCheck() != R.string.message.validate(R.string.labels.details()), "バリデーションに引っかかっている")
+        
+        /// バリデーション突破
+        XCTAssertNil(inputViewModel.validateCheck(), "バリデーションに引っかかっている")
     }
     
 }

@@ -8,16 +8,16 @@
 
 import WidgetKit
 import SwiftUI
-import Intents
 
-struct Provider: IntentTimelineProvider {
+// MARK: - Provider
+
+struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: ConfigurationIntent())
+        SimpleEntry(date: Date())
     }
-
-    func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
+    
+    func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> Void) {
         let entry = SimpleEntry(date: Date(),
-                                configuration: configuration,
                                 todomodel: ToDoModel(id: "",
                                                      toDoName: NSLocalizedString("TodoTitle", tableName: "Label", comment: ""),
                                                      todoDate: "2021/01/01 00:00",
@@ -26,72 +26,113 @@ struct Provider: IntentTimelineProvider {
         )
         completion(entry)
     }
-
-    func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+    
+    func getTimeline(in context: Context, completion: @escaping (Timeline<SimpleEntry>) -> Void) {
         var entries: [SimpleEntry] = []
         var todo: ToDoModel? {
             return ToDoModel.allFindTodo().first(where: {
-                Format().dateFromString(string: $0.todoDate)! > Format().dateFormat()
+                Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() &&
+                $0.completionFlag != CompletionFlag.completion.rawValue
             })
         }
-
-
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
+        
+        
         let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .minute, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, configuration: configuration, todomodel: todo)
+        let entryDate = Calendar.current.date(byAdding: .minute, value: 15, to: currentDate)!
+        for _ in 0 ..< 96 {
+            let entry = SimpleEntry(date: entryDate, todomodel: todo)
             entries.append(entry)
         }
-
+        
         let timeline = Timeline(entries: entries, policy: .atEnd)
         completion(timeline)
     }
 }
 
+
+// MARK: - SimpleEntry
+
 struct SimpleEntry: TimelineEntry {
     let date: Date
-    let configuration: ConfigurationIntent
     var todomodel: ToDoModel?
 }
+
+
+// MARK: - TodoWidgetEntryView
 
 struct TodoWidgetEntryView : View {
     var entry: Provider.Entry
     
+    @Environment(\.widgetFamily) private var family: WidgetFamily
+    
     private static let deeplinkURL: URL = URL(string: "widget-deeplink-todolist://")!
     
+    @ViewBuilder
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(NSLocalizedString("NextTodo", tableName: "Label", comment: ""))
-                .font(.caption)
-            Text(entry.todomodel?.toDoName ?? NSLocalizedString("NoTodo", tableName: "Label", comment: ""))
-            Text(entry.todomodel?.todoDate ?? "")
+        switch family {
+        case .systemSmall, .accessoryRectangular:
+            VStack(alignment: .leading) {
+                Text(NSLocalizedString("NextTodo", tableName: "Label", comment: ""))
+                    .font(.caption)
+                Text(entry.todomodel?.toDoName ?? NSLocalizedString("NoTodo", tableName: "Label", comment: ""))
+                Text(entry.todomodel?.todoDate ?? "")
+            }
+            .widgetURL(Self.deeplinkURL)
+        case .systemMedium:
+            VStack(alignment: .leading) {
+                Text(NSLocalizedString("NextTodo", tableName: "Label", comment: ""))
+                    .font(.caption)
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(entry.todomodel?.toDoName ?? NSLocalizedString("NoTodo", tableName: "Label", comment: ""))
+                        Text(entry.todomodel?.todoDate ?? "")
+                    }
+                    Text(entry.todomodel?.toDo ?? "")
+                }
+            }
+            .padding()
+            .widgetURL(Self.deeplinkURL)
+        default:
+            Text("")
         }
-        .widgetURL(Self.deeplinkURL)
     }
 }
+
+
+// MARK: - TodoWidget
 
 @main
 struct TodoWidget: Widget {
     let kind: String = "TodoWidget"
     
+    let widgetFamilys: [WidgetFamily] = {
+        if #available(iOS 16.0, *) {
+            return [.systemSmall, .systemMedium, .accessoryRectangular]
+        } else {
+            return [.systemSmall, .systemMedium]
+        }
+    }()
+    
     var body: some WidgetConfiguration {
-        IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
+        StaticConfiguration(kind: kind, provider: Provider()) { entry in
             TodoWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
+        .configurationDisplayName("Todo Widget")
         .description("This is an example widget.")
-        .supportedFamilies([.systemSmall])
+        .supportedFamilies(widgetFamilys)
     }
 }
+
+
+// MARK: - Previews
 
 struct TodoWidget_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            TodoWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent(), todomodel: testModel[0]))
+            TodoWidgetEntryView(entry: SimpleEntry(date: Date(), todomodel: testModel[0]))
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
             
-            TodoWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent(), todomodel: nil))
+            TodoWidgetEntryView(entry: SimpleEntry(date: Date(), todomodel: nil))
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
         }
     }

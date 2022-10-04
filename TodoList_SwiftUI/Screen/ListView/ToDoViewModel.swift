@@ -23,41 +23,31 @@ final class ToDoViewModel: ObservableObject {
     @Published var todoModel: [ToDoModel] = []
     
     @Published var segmentIndex: SegmentIndex = .all
-    
-    private var cancellable: Set<AnyCancellable> = []
         
     var isAlertError: Bool = false
     
     /// Todoを全件取得する
-    private func fetchAllTodoModel() -> Future<[ToDoModel], Never> {
-        return Future<[ToDoModel], Never> { promise in
-            promise(.success(ToDoModel.allFindTodo()))
+    @MainActor
+    func fetchAllTodoModel() async {
+        let model = ToDoModel.allFindTodo()
+        switch segmentIndex {
+        case .active:
+            self.todoModel = model.filter {
+                Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() && $0.completionFlag != CompletionFlag.completion.rawValue
+            }
+        case .expired:
+            self.todoModel = model.filter {
+                $0.todoDate <= Format().stringFromDate(date: Date()) && $0.completionFlag != CompletionFlag.completion.rawValue
+            }
+        case .complete:
+            self.todoModel = model.filter {
+                $0.completionFlag == CompletionFlag.completion.rawValue
+            }
+        case .all:
+            self.todoModel = model
         }
     }
     
-    /// Todoを全件取得し、SegmentIndexの値によってフィルターをする
-    func sinkAllTodoModel(index: SegmentIndex) {
-        fetchAllTodoModel()
-            .sink(receiveValue: { model in
-                switch index {
-                case .active:
-                    self.todoModel = model.filter {
-                        Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() && $0.completionFlag != CompletionFlag.completion.rawValue
-                    }
-                case .expired:
-                    self.todoModel = model.filter {
-                        $0.todoDate <= Format().stringFromDate(date: Date()) && $0.completionFlag != CompletionFlag.completion.rawValue
-                    }
-                case .complete:
-                    self.todoModel = model.filter {
-                        $0.completionFlag == CompletionFlag.completion.rawValue
-                    }
-                case .all:
-                    self.todoModel = model
-                }
-            })
-            .cancel()
-    }
 
 
     /// Todoの削除

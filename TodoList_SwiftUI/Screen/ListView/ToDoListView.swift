@@ -42,8 +42,10 @@ struct ToDoListView: View {
                     .tag(SegmentIndex.expired)
             }
             .tabViewStyle(PageTabViewStyle())
-            .onReceive(viewModel.$segmentIndex) { index in
-                viewModel.sinkAllTodoModel(index: index)
+            .onReceive(viewModel.$segmentIndex) { _ in
+                Task {
+                    await viewModel.fetchAllTodoModel()
+                }
             }
             .navigationTitle("ToDoList")
             .toolbar {
@@ -82,7 +84,9 @@ extension ToDoListView {
                         NavigationLink(destination:
                                         TodoDetailView(viewModel: TodoDetailViewModel(model: self.viewModel.todoModel[row]))
                             .onDisappear {
-                                viewModel.sinkAllTodoModel(index: $viewModel.segmentIndex.wrappedValue)
+                                Task {
+                                    await viewModel.fetchAllTodoModel()
+                                }
                             }
                         ) {
                             ToDoRow(todoModel: self.$viewModel.todoModel[row])
@@ -125,7 +129,9 @@ extension ToDoListView {
         .sheet(isPresented: $isShowModle) {
             ToDoInputView(viewModel: InputViewModel(), isUpdate: false)
                 .onDisappear {
-                    viewModel.sinkAllTodoModel(index: $viewModel.segmentIndex.wrappedValue)
+                    Task {
+                        await viewModel.fetchAllTodoModel()
+                    }
                 }
         }
         .disabled(self.viewModel.isAlertError)

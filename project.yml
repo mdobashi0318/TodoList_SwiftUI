@@ -20,7 +20,6 @@ targets:
          - path: "TodoList_SwiftUI/Generated/R.generated.swift"
            optional: true
            type: file
-         - path: TodoWidget/TodoWidget.intentdefinition
     dependencies:
       - target: TodoWidgetExtension
       - package: Realm
@@ -35,7 +34,7 @@ targets:
          DEVELOPMENT_TEAM: 7RPFL7EXKD
          ENABLE_PREVIEWS: YES
          INFOPLIST_FILE: TodoList_SwiftUI/Info.plist
-         MARKETING_VERSION: &marketing_version 1.7.0
+         MARKETING_VERSION: &marketing_version 1.7.1
          CURRENT_PROJECT_VERSIO: 1
          PRODUCT_BUNDLE_IDENTIFIER: "m.dobashi.TodoList-SwiftUI"
          PRODUCT_NAME: "$(TARGET_NAME)"
@@ -123,7 +122,7 @@ packages:
     version: 2.29.0
  Realm:
     url: https://github.com/realm/realm-swift
-    version: 10.20.1
+    version: 10.30.0
 
 
 schemes:
