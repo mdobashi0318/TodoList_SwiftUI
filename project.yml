@@ -34,7 +34,7 @@ targets:
          DEVELOPMENT_TEAM: 7RPFL7EXKD
          ENABLE_PREVIEWS: YES
          INFOPLIST_FILE: TodoList_SwiftUI/Info.plist
-         MARKETING_VERSION: &marketing_version 1.7.0
+         MARKETING_VERSION: &marketing_version 1.7.1
          CURRENT_PROJECT_VERSIO: 1
          PRODUCT_BUNDLE_IDENTIFIER: "m.dobashi.TodoList-SwiftUI"
          PRODUCT_NAME: "$(TARGET_NAME)"
