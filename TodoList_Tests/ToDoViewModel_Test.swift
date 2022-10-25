@@ -61,15 +61,6 @@ final class ToDoViewModel_Test: XCTestCase {
     }
     
     
-    @MainActor
-    func test_deleteTodo() async {
-        await viewModel.fetchAllTodoModel()
-        let dummy = try? viewModel.deleteTodo(delete: viewModel.todoModel[0])
-        XCTAssertNotNil(dummy, "ダミー用のモデルが入っていない")
-        await viewModel.fetchAllTodoModel()
-        XCTAssert(viewModel.todoModel.count == 2, "Todoが削除できていない")
-    }
-    
     
     @MainActor
     func test_allDeleteTodo() async {
