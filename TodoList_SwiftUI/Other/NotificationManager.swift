@@ -21,8 +21,8 @@ struct NotificationManager {
     /// 指定した通知を削除する
     let removeNotification = { (identifiers: [String]) -> Void in
         UNUserNotificationCenter
-        .current()
-        .removePendingNotificationRequests(withIdentifiers: identifiers)
+            .current()
+            .removePendingNotificationRequests(withIdentifiers: identifiers)
         print("ToDoの通知を\(identifiers.count)件削除しました")
     }
     
@@ -68,5 +68,25 @@ struct NotificationManager {
         }
     }
     
+    
+    
+    /// 通知の設定が許可されているかを取得する
+    func getNotificationStatus() async -> Bool {
+        return await getNotificationSettings()
+    }
+    
+    
+    private func getNotificationSettings() async -> Bool {
+        return await withCheckedContinuation { continuation in
+            UNUserNotificationCenter.current().getNotificationSettings{ (settings) in
+                switch settings.authorizationStatus {
+                case .authorized:
+                    continuation.resume(returning: true)
+                default:
+                    continuation.resume(returning: false)
+                }
+            }
+        }
+    }
 }
 
