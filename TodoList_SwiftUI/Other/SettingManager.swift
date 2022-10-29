@@ -24,7 +24,11 @@ class SettingManager: ObservableObject {
     
     
     func openSettingsURL() {
-        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+        if #available(iOS 16.0, *) {
+            UIApplication.shared.open(URL(string: UIApplication.openNotificationSettingsURLString)!)
+        } else {
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+        }
     }
     
     
