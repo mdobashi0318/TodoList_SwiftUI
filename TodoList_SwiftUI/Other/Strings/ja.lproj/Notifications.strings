@@ -13,3 +13,6 @@
 
 /// NotificationBannerから開く
 "TapNotificationBanner" = "TapNotificationBanner";
+
+/// 通知許可状態取得
+"GetNotificationStatus" = "GetNotificationStatus";

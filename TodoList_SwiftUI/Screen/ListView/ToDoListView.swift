@@ -17,6 +17,8 @@ struct ToDoListView: View {
     /// Widget、通知をタップして開いた時のTodoを設定する
     @StateObject private var openWidget = OpenTodoManager.shared
     
+    @StateObject private var setting = SettingManager.shared
+    
     /// Todo追加画面のモーダル表示フラグ
     @State private var isShowModle = false
     
@@ -53,7 +55,8 @@ struct ToDoListView: View {
                     allDeleteButton
                 }
                 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    notificationButton
                     addButton
                 }
             }
@@ -156,6 +159,16 @@ extension ToDoListView {
         .disabled(self.viewModel.isAlertError)
         .accessibility(identifier: "allDeleteButton")
         .accessibilityLabel(R.string.accessibilityText.allDeleteButton())
+    }
+    
+    
+    /// 通知設定ボタン
+    private var notificationButton: some View {
+        Button(action: {
+            setting.openSettingsURL()
+        }) {
+            Image(systemName: setting.isNotification ? "bell" : "bell.slash")
+        }
     }
     
     /// WidgetでタップしたTodoをモーダルで表示する

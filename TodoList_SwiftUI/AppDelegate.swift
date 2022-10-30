@@ -56,6 +56,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
             center.delegate = self
+            if granted {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: R.string.notifications.getNotificationStatus()), object: nil)
+            }
         }
     }
     
