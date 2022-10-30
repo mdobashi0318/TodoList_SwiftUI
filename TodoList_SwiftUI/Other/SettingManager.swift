@@ -39,7 +39,7 @@ class SettingManager: ObservableObject {
     
     
     @MainActor
-    func getNotificationStatus() async {
+    private func getNotificationStatus() async {
         isNotification = await NotificationManager().getNotificationStatus()
     }
     
