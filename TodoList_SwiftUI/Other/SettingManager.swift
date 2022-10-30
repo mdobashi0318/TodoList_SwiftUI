@@ -28,6 +28,7 @@ class SettingManager: ObservableObject {
         if #available(iOS 16.0, *) {
             Task {
                 if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
+                    /// シミュレータには「設定」>「通知」>「アプリ」の動線がないので実機でしか通知設定に遷移しない。
                     let _ = await UIApplication.shared.open(url)
                 }
             }
