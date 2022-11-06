@@ -45,16 +45,16 @@ final class InputViewModel: ObservableObject {
     
     /// Modelから取得した値を書くプロパティにセットする
     private func setModelValue(_ model: ToDoModel?) {
-        if let _model = model {
-            id = _model.id
-            toDoName = _model.toDoName
-            todoDateStr = _model.todoDate
-            if let date = Format().dateFromString(string: _model.todoDate) {
+        if let model {
+            id = model.id
+            toDoName = model.toDoName
+            todoDateStr = model.todoDate
+            if let date = Format().dateFromString(string: model.todoDate) {
                 toDoDate = date
             }
-            toDo = _model.toDo
-            completionFlag = _model.completionFlag == CompletionFlag.completion.rawValue ? true : false
-            createTime = _model.createTime
+            toDo = model.toDo
+            completionFlag = model.completionFlag == CompletionFlag.completion.rawValue ? true : false
+            createTime = model.createTime
         }
     }
     
