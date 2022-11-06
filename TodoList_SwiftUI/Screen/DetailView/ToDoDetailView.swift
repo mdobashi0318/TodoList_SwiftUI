@@ -117,7 +117,7 @@ extension TodoDetailView {
         Alert(title: Text(R.string.message.deleteTodo()),
               primaryButton: .destructive(Text(R.string.labels.delete())) {
             do {
-                viewModel.model = try ToDoViewModel().deleteTodo(delete: viewModel.model)
+                viewModel.model = try viewModel.deleteTodo(delete: viewModel.model)
                 self.presentationMode.wrappedValue.dismiss()
             } catch {
                 viewModel.errorMessage = R.string.message.deleteError()

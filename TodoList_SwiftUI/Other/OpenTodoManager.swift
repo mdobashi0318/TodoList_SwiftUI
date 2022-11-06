@@ -61,10 +61,10 @@ final class OpenTodoManager: ObservableObject {
             }
             openTodo = _nextTodo
         case .NotificationBanner:
-            guard let _openTodo = todo else {
+            guard let todo else {
                 return
             }
-            openTodo = _openTodo
+            openTodo = todo
         }
         isOpneTodo = true
     }

@@ -55,4 +55,20 @@ class TodoDetailViewModel: ObservableObject {
         self.model = todo
     }
     
+    
+    /// Todoの削除
+    func deleteTodo(delete: ToDoModel) throws -> ToDoModel {
+        do {
+            try ToDoModel.delete(deleteTodo: delete)
+            /// 呼び出し元のTodoがnilになるとクラッシュするのでToDoの削除後に空のTodoを入れて回避する
+            return ToDoModel()
+        } catch {
+            if let _error = error as? DeleteError {
+                throw _error
+            }
+            throw error
+        }
+    }
+    
+    
 }

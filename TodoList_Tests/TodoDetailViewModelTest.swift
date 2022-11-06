@@ -59,4 +59,22 @@ class TodoDetailViewModelTest: XCTestCase {
         XCTAssertFalse(viewModel.completionFlag, "値が異なっている")
         
     }
+    
+    @MainActor
+    func test_deleteTodo() async {
+        try? ToDoModel.add(addValue: ToDoModel(toDoName: "TEST", todoDate: "2030/01/01 00:00", toDo: "toDo", completionFlag: CompletionFlag.unfinished.rawValue, createTime: ""))
+        let viewModel = TodoDetailViewModel(model: ToDoModel(id: "1", toDoName: "", todoDate: "", toDo: "", completionFlag: ""))
+        viewModel.findTodo()
+        
+        let todoViewModel = ToDoViewModel()
+        await todoViewModel.fetchAllTodoModel()
+        XCTAssert(todoViewModel.todoModel.count == 1)
+        
+        let dummy = try? viewModel.deleteTodo(delete: viewModel.model)
+        XCTAssertNotNil(dummy, "ダミー用のモデルが入っていない")
+        
+        
+        await todoViewModel.fetchAllTodoModel()
+        XCTAssert(todoViewModel.todoModel.count == 0, "Todoが削除できていない")
+    }
 }
