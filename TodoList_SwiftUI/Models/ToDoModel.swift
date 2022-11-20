@@ -24,30 +24,24 @@ final class ToDoModel: Object {
     }
     
     
-    @objc dynamic var id: String = ""
+    @Persisted var id: String = ""
     
     /// Todoの期限
-    @objc dynamic var todoDate: String = ""
+    @Persisted var todoDate: String = ""
     
     /// Todoのタイトル
-    @objc dynamic var toDoName: String = ""
+    @Persisted var toDoName: String = ""
     
     /// Todoの詳細
-    @objc dynamic var toDo: String = ""
+    @Persisted var toDo: String = ""
     
     /// Todoの完了フラグ
     /// - 0: 未完
     /// - 1: 完了
-    @objc dynamic var completionFlag: String = ""
+    @Persisted var completionFlag: String = ""
     
     /// Todoの作成日時
-    @objc dynamic var createTime: String?
-    
-    
-    // idをプライマリキーに設定
-    override static func primaryKey() -> String? {
-        return "createTime"
-    }
+    @Persisted(primaryKey: true) var createTime: String?
     
     
     
