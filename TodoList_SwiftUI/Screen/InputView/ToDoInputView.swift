@@ -13,7 +13,7 @@ struct ToDoInputView: View {
     
     // MARK: Properties
     
-    @ObservedObject var viewModel: InputViewModel
+    @StateObject var viewModel: InputViewModel
     
     
     @Environment(\.presentationMode) private var presentationMode:Binding<PresentationMode>
@@ -32,7 +32,7 @@ struct ToDoInputView: View {
     
     var body: some View {
         NavigationView {
-            List {
+            Form {
                 todoNameSection
                 todoDatePicker
                 todoDetailSection

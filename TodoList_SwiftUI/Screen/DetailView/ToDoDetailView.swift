@@ -12,7 +12,7 @@ struct TodoDetailView: View {
     
     // MARK: Properties
     
-    @ObservedObject var viewModel: TodoDetailViewModel
+    @StateObject var viewModel: TodoDetailViewModel
     
     /// Todoの編集するためのモーダルを出すフラグ
     @State private var isShowModle = false
@@ -36,7 +36,6 @@ struct TodoDetailView: View {
             Section(header: Text(R.string.labels.deadline())
                         .font(.headline)) {
                 CompletionLable(todoDate: viewModel.model.todoDate, completionFlag: $viewModel.model.completionFlag)
-                                .animation(.default)
             }
             
             Section(header: Text(R.string.labels.details())
@@ -134,7 +133,7 @@ extension TodoDetailView {
     /// Todoの未完・完了トグル
     private var completeToggleSection: some View {
         return Section {
-            Toggle(R.string.labels.complete(), isOn: $viewModel.completionFlag)
+            Toggle(R.string.labels.complete(), isOn: $viewModel.completionFlag.animation())
                 .accessibility(identifier: "completeSwitch")
         }
     }
