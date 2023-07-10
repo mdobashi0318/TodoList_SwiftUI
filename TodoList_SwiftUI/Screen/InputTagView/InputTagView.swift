@@ -15,19 +15,29 @@ struct InputTagView: View {
     
     @Environment(\.presentationMode) private var presentationMode:Binding<PresentationMode>
     
+    /// Alertの表示フラグ
+    @State private var isShowAlert = false
+    
+    
+    @State private var errorMessage = ""
+    
     var body: some View {
         NavigationView {
-            VStack {
-                Section("タグカラー") {
+            Form {
+                Section("タグ") {
                     TextField("タグ名", text: $name)
                     ColorPicker("タグカラー", selection: $color)
                 }
            
             }
+            .navigationTitle("タグ作成")
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     addButton
                 }
+            }
+            .alert(isPresented: $isShowAlert) {
+                return Alert(title: Text(errorMessage), dismissButton: .default(Text(R.string.labels.close())))
             }
         }
     
@@ -36,8 +46,22 @@ struct InputTagView: View {
     
     private var addButton: some View {
         Button(action: {
-            Tag.add(name: name,color: color)
-            self.presentationMode.wrappedValue.dismiss()
+            do {
+                if name.isEmpty {
+                    self.errorMessage = "タグ名を入力してください"
+                    isShowAlert = true
+                    return
+                }
+                
+                try Tag.add(name: name,color: color)
+                self.presentationMode.wrappedValue.dismiss()
+            } catch {
+                self.errorMessage = "タグの追加に失敗しました"
+                isShowAlert = true
+            }
+            
+            
+            
         }) {
             Image(systemName: "plus")
         }

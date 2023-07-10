@@ -35,7 +35,7 @@ final class Tag: Object {
     @Persisted var alpha: String
     
     
-    static func add(name: String, color: CGColor) {
+    static func add(name: String, color: CGColor) throws {
         let tag = Tag()
         
         guard let realm,
@@ -56,7 +56,8 @@ final class Tag: Object {
                 realm.add(tag)
             }
         } catch {
-            print("追加失敗")
+            print("error: \(error)")
+            throw error
         }
         
 
