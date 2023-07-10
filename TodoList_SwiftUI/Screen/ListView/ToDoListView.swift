@@ -25,6 +25,8 @@ struct ToDoListView: View {
     /// 全件削除の確認アラートの表示フラグ
     @State private var isDeleteFlag = false
     
+    /// Tagリスト画面のモーダル表示フラグ
+    @State private var isShowTagModle = false
     
     // MARK: Body
     
@@ -56,6 +58,7 @@ struct ToDoListView: View {
                 }
                 
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    tagButton
                     notificationButton
                     addButton
                 }
@@ -169,6 +172,24 @@ extension ToDoListView {
         }) {
             Image(systemName: setting.isNotification ? "bell" : "bell.slash")
         }
+    }
+    
+    /// タグリスト画面に遷移させるボタン
+    private var tagButton: some View {
+        Button(action: {
+            self.isShowTagModle.toggle()
+        }) {
+            Image(systemName: "tag")
+        }
+        .sheet(isPresented: $isShowTagModle) {
+            TagListView()
+                .onDisappear {
+                    Task {
+                        await viewModel.fetchAllTodoModel()
+                    }
+                }
+        }
+        .accessibility(identifier: "tagButton")
     }
     
     /// WidgetでタップしたTodoをモーダルで表示する
