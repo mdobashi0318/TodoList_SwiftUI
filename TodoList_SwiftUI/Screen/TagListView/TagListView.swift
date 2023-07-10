@@ -17,14 +17,10 @@ struct TagListView: View {
         NavigationView {
             List {
                 ForEach(viewModel.model, id: \.id) { tag in
-                    Text(tag.name)
-                        .background(Color(cgColor: CGColor.init(red: changeCGFloat(tag.red),
-                                                                green: changeCGFloat(tag.green),
-                                                                blue: changeCGFloat(tag.blue),
-                                                                alpha: changeCGFloat(tag.alpha)
-                                                               )))
+                    TagRow(tag: tag)
                 }
             }
+            .navigationTitle("タグリスト")
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     addButton
@@ -54,9 +50,6 @@ struct TagListView: View {
         }
     }
     
-    func changeCGFloat(_ color: String) -> CGFloat  {
-        return CGFloat(truncating:NumberFormatter().number(from: color) ?? 0.0)
-    }
 }
 
 struct TagListView_Previews: PreviewProvider {
