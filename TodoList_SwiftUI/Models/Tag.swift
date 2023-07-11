@@ -59,11 +59,29 @@ final class Tag: Object {
             print("error: \(error)")
             throw error
         }
-        
-
-        
     }
     
+    
+    static func update(id: String, name: String, color: CGColor) throws {
+        guard let realm,
+              let tag = find(id: id),
+              let components = color.components else {
+            return
+        }
+     
+        do {
+            try realm.write {
+                tag.name = name
+                tag.red = components[0].description
+                tag.green = components[1].description
+                tag.blue = components[2].description
+                tag.alpha = components[3].description
+            }
+        } catch {
+            print("error: \(error)")
+            throw error
+        }
+    }
     
     static func findAll() -> [Tag] {
         guard let realm else {

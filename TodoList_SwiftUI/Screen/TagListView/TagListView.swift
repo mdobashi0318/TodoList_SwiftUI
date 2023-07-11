@@ -17,7 +17,18 @@ struct TagListView: View {
         NavigationView {
             List {
                 ForEach(viewModel.model, id: \.id) { tag in
-                    TagRow(tag: tag)
+                    NavigationLink(destination: {
+                        EditTagView(id: tag.id, color: tag.color(), name: tag.name)
+                            .onDisappear {
+                                Task {
+                                    await self.viewModel.fetchAllTag()
+                                }
+                                
+                            }
+                    }, label: {
+                        TagRow(tag: tag)
+                    })
+                    
                 }
             }
             .navigationTitle("タグリスト")

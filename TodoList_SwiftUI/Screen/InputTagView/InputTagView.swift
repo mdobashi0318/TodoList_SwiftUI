@@ -23,24 +23,18 @@ struct InputTagView: View {
     
     var body: some View {
         NavigationView {
-            Form {
-                Section("タグ") {
-                    TextField("タグ名", text: $name)
-                    ColorPicker("タグカラー", selection: $color)
+            TagView(name: $name, color: $color)
+                .navigationTitle("タグ作成")
+                .toolbar {
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        addButton
+                    }
                 }
-           
-            }
-            .navigationTitle("タグ作成")
-            .toolbar {
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    addButton
+                .alert(isPresented: $isShowAlert) {
+                    return Alert(title: Text(errorMessage), dismissButton: .default(Text(R.string.labels.close())))
                 }
-            }
-            .alert(isPresented: $isShowAlert) {
-                return Alert(title: Text(errorMessage), dismissButton: .default(Text(R.string.labels.close())))
-            }
         }
-    
+        
     }
     
     
