@@ -90,5 +90,11 @@ final class Tag: Object {
     }
     
     
-    
+    func color() -> CGColor  {
+        return CGColor(red: CGFloat(truncating:NumberFormatter().number(from: red) ?? 0.0),
+                       green: CGFloat(truncating:NumberFormatter().number(from: green) ?? 0.0),
+                       blue: CGFloat(truncating:NumberFormatter().number(from: blue) ?? 0.0),
+                       alpha: CGFloat(truncating:NumberFormatter().number(from: alpha) ?? 0.0)
+        )
+    }
 }
