@@ -18,7 +18,7 @@ struct TagListView: View {
             List {
                 ForEach(viewModel.model, id: \.id) { tag in
                     NavigationLink(destination: {
-                        EditTagView(id: tag.id, color: tag.color(), name: tag.name)
+                        EditTagView(viewModel: EditTagViewModel(tag))
                             .onDisappear {
                                 Task {
                                     await self.viewModel.fetchAllTag()

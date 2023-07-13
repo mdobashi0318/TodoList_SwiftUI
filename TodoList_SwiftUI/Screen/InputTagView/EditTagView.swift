@@ -9,25 +9,23 @@ import SwiftUI
 
 struct EditTagView: View {
     
-    let id: String
-    
-    @State var color: CGColor = CGColor(red: 0, green: 0, blue: 0, alpha: 1)
-    
-    @State var name: String = ""
+    @StateObject var viewModel: EditTagViewModel
     
     @Environment(\.presentationMode) private var presentationMode:Binding<PresentationMode>
     
     /// Alertの表示フラグ
     @State private var isShowAlert = false
     
-    
     @State private var errorMessage = ""
     
+    @State private var deleteConfilmFlag = false
+
     var body: some View {
-        TagView(name: $name, color: $color)
+        TagView(name: $viewModel.tag.name, color: $viewModel.color)
             .navigationTitle("タグ編集")
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    deleteButton
                     editButton
                 }
             }
@@ -40,20 +38,41 @@ struct EditTagView: View {
     private var editButton: some View {
         Button(action: {
             do {
-                if name.isEmpty {
-                    self.errorMessage = "タグ名を入力してください"
-                    isShowAlert = true
-                    return
-                }
-                
-                try Tag.update(id: id, name: name,color: color)
+                try viewModel.update()
                 self.presentationMode.wrappedValue.dismiss()
+            } catch(let error as TagModelError) {
+                self.errorMessage = error.message
+                isShowAlert = true
             } catch {
-                self.errorMessage = "タグの更新に失敗しました"
+                self.errorMessage = "エラーが発生しました"
                 isShowAlert = true
             }
         }) {
             Text("Done")
+        }
+    }
+    
+    
+    private var deleteButton: some View {
+        Button(action: {
+            deleteConfilmFlag.toggle()
+        }) {
+            Image(systemName: "trash")
+        }
+        .alert(isPresented: $deleteConfilmFlag) {
+            return Alert(title: Text("このラベルを削除しますか?"),
+                         primaryButton: .destructive(Text("削除"), action: {
+                do {
+                    try viewModel.delete()
+                    self.presentationMode.wrappedValue.dismiss()
+                } catch(let error as TagModelError) {
+                    self.errorMessage = error.message
+                    isShowAlert = true
+                } catch {
+                    self.errorMessage = "エラーが発生しました"
+                    isShowAlert = true
+                }
+            }), secondaryButton: .cancel(Text(R.string.labels.cancel())))
         }
     }
     

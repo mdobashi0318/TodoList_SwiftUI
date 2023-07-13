@@ -68,7 +68,7 @@ final class Tag: Object {
               let components = color.components else {
             return
         }
-     
+        
         do {
             try realm.write {
                 tag.name = name
@@ -83,6 +83,25 @@ final class Tag: Object {
         }
     }
     
+    
+    
+    static func delete(id: String) throws {
+        guard let realm,
+        let tag = find(id: id) else {
+            throw TagModelError(message: "Tagの削除に失敗しました")
+        }
+        
+        
+        do {
+            try realm.write {
+                realm.delete(tag)
+            }
+        } catch {
+            throw TagModelError(message: "Tagの削除に失敗しました")
+        }
+        
+    }
+    
     static func findAll() -> [Tag] {
         guard let realm else {
             return []
@@ -90,7 +109,7 @@ final class Tag: Object {
         
         var model = [Tag]()
         
-        realm.objects(Tag.self).forEach {
+        realm.objects(Tag.self).freeze().forEach {
             model.append($0)
         }
         
@@ -116,3 +135,14 @@ final class Tag: Object {
         )
     }
 }
+
+
+
+
+struct TagModelError: Error {
+    var message: String
+}
+
+
+
+
