@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct InputTagView: View {
+struct TagRegistrationView: View {
     
     @State var color: CGColor = CGColor(red: 0, green: 0, blue: 0, alpha: 1)
     
@@ -65,6 +65,6 @@ struct InputTagView: View {
 
 struct InputTagView_Previews: PreviewProvider {
     static var previews: some View {
-        InputTagView()
+        TagRegistrationView()
     }
 }
