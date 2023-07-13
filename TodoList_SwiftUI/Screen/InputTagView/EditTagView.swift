@@ -21,7 +21,7 @@ struct EditTagView: View {
     @State private var deleteConfilmFlag = false
 
     var body: some View {
-        TagView(name: $viewModel.tag.name, color: $viewModel.color)
+        TagView(name: $viewModel.name, color: $viewModel.color)
             .navigationTitle("タグ編集")
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
