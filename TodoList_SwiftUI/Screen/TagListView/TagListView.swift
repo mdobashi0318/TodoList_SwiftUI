@@ -13,6 +13,8 @@ struct TagListView: View {
     
     @State private var isShowModle = false
     
+    @Environment(\.presentationMode) private var presentationMode:Binding<PresentationMode>
+    
     var body: some View {
         NavigationView {
             List {
@@ -36,6 +38,11 @@ struct TagListView: View {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     addButton
                 }
+                
+                ToolbarItemGroup(placement: .navigationBarLeading) {
+                    closeButton
+                }
+                
             }
             .task() {
                 await self.viewModel.fetchAllTag()
@@ -60,6 +67,19 @@ struct TagListView: View {
                 }
         }
     }
+    
+    
+    /// 閉じるボタン
+    private var closeButton: some View {
+        Button(action: {
+            self.presentationMode.wrappedValue.dismiss()
+        }) {
+            Image(systemName: "xmark")
+                .accessibilityLabel(R.string.labels.close())
+        }
+        .accessibility(identifier: "closeButton")
+    }
+    
     
 }
 

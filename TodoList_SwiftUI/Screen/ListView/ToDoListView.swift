@@ -181,7 +181,7 @@ extension ToDoListView {
         }) {
             Image(systemName: "tag")
         }
-        .sheet(isPresented: $isShowTagModle) {
+        .fullScreenCover(isPresented: $isShowTagModle) {
             TagListView()
                 .onDisappear {
                     Task {
