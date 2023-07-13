@@ -123,7 +123,7 @@ final class Tag: Object {
             return nil
         }
         
-        return (realm.objects(Tag.self).filter("id == '\(id)'").first)
+        return (realm.object(ofType: Tag.self, forPrimaryKey: id))
     }
     
     
