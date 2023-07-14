@@ -14,8 +14,7 @@ import CoreGraphics
 final class Tag: Object {
     
     private static var realm: Realm? {
-        var configuration: Realm.Configuration
-        configuration = Realm.Configuration()
+        var configuration = Realm.Configuration()
         configuration.schemaVersion = UInt64(1)
         let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.TodoList-SwiftUI")
         configuration.fileURL = url!.appendingPathComponent("tag.realm")
@@ -34,9 +33,13 @@ final class Tag: Object {
     
     @Persisted var alpha: String
     
+    @Persisted var created_at: String
+    
+    @Persisted var updated_at: String
     
     static func add(name: String, color: CGColor) throws {
         let tag = Tag()
+        let _created_at = Format().stringFromDate(date: Date(), addSec: true)
         
         guard let realm,
               let components = color.components else {
@@ -49,6 +52,8 @@ final class Tag: Object {
         tag.green = components[1].description
         tag.blue = components[2].description
         tag.alpha = components[3].description
+        tag.created_at = _created_at
+        tag.updated_at = _created_at
         
         
         do {
@@ -76,6 +81,7 @@ final class Tag: Object {
                 tag.green = components[1].description
                 tag.blue = components[2].description
                 tag.alpha = components[3].description
+                tag.updated_at = Format().stringFromDate(date: Date(), addSec: true)
             }
         } catch {
             print("error: \(error)")
@@ -87,7 +93,7 @@ final class Tag: Object {
     
     static func delete(id: String) throws {
         guard let realm,
-        let tag = find(id: id) else {
+              let tag = find(id: id) else {
             throw TagModelError(message: "Tagの削除に失敗しました")
         }
         
@@ -111,6 +117,11 @@ final class Tag: Object {
         
         realm.objects(Tag.self).freeze().forEach {
             model.append($0)
+        }
+        
+        
+        model.sort {
+            Format().dateFromString(string: $0.updated_at, addSec: true)?.compare(Format().dateFromString(string: $1.updated_at, addSec: true) ?? Date()) == .orderedDescending
         }
         
         return model

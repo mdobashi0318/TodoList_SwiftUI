@@ -41,7 +41,6 @@ class EditTagViewModel: ObservableObject {
     func delete() throws {
         do {
             try Tag.delete(id: tag.id)
-            self.tag = Tag()
         } catch {
             throw TagModelError(message: "タグの削除に失敗しました")
         }
