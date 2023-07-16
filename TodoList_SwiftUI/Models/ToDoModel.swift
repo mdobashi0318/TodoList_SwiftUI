@@ -43,11 +43,13 @@ final class ToDoModel: Object {
     /// Todoの作成日時
     @Persisted(primaryKey: true) var createTime: String?
     
+    /// Tagのプライマリキー
+    @Persisted var tag_id: String?
     
     
     // MARK: init
     
-    convenience init(id: String = "", toDoName: String, todoDate: String, toDo: String, completionFlag: String = CompletionFlag.unfinished.rawValue, createTime: String? = nil) {
+    convenience init(id: String = "", toDoName: String, todoDate: String, toDo: String, completionFlag: String = CompletionFlag.unfinished.rawValue, createTime: String? = nil, tag_id: String?) {
         self.init()
         
         self.id = id
@@ -56,6 +58,7 @@ final class ToDoModel: Object {
         self.toDo = toDo
         self.completionFlag = completionFlag
         self.createTime = createTime
+        self.tag_id = tag_id
     }
     
     // MARK: Todo取得
@@ -114,6 +117,7 @@ final class ToDoModel: Object {
         toDoModel.toDo = addValue.toDo
         toDoModel.completionFlag = CompletionFlag.unfinished.rawValue
         toDoModel.createTime = Format().stringFromDate(date: Date(), addSec: true)
+        toDoModel.tag_id = addValue.tag_id
         
         do {
             try realm.write() {
@@ -152,6 +156,7 @@ final class ToDoModel: Object {
                 toDoModel.todoDate = updateTodo.todoDate
                 toDoModel.toDo = updateTodo.toDo
                 toDoModel.completionFlag = updateTodo.completionFlag
+                toDoModel.tag_id = updateTodo.tag_id
             }
             
             if updateTodo.completionFlag == CompletionFlag.completion.rawValue {
