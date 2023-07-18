@@ -18,19 +18,23 @@ struct TagListView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(viewModel.model, id: \.id) { tag in
-                    NavigationLink(destination: {
-                        EditTagView(viewModel: EditTagViewModel(tag))
-                            .onDisappear {
-                                Task {
-                                    await self.viewModel.fetchAllTag()
+                if viewModel.model.isEmpty {
+                    Text("タグが登録されていません")
+                } else {
+                    ForEach(viewModel.model, id: \.id) { tag in
+                        NavigationLink(destination: {
+                            EditTagView(viewModel: EditTagViewModel(tag))
+                                .onDisappear {
+                                    Task {
+                                        await self.viewModel.fetchAllTag()
+                                    }
+                                    
                                 }
-                                
-                            }
-                    }, label: {
-                        TagRow(tag: tag)
-                    })
-                    
+                        }, label: {
+                            TagRow(tag: tag)
+                        })
+                        
+                    }
                 }
             }
             .navigationTitle("タグリスト")
