@@ -41,7 +41,7 @@ struct TagRegistrationView: View {
     private var addButton: some View {
         Button(action: {
             do {
-                if name.isEmpty {
+                if name.isEmpty || name.isSpace() {
                     self.errorMessage = "タグ名を入力してください"
                     isShowAlert = true
                     return

@@ -28,7 +28,7 @@ class EditTagViewModel: ObservableObject {
     
     func update() throws {
         do {
-            if name.isEmpty {
+            if name.isEmpty || name.isSpace() {
                 throw TagModelError(message: "タグ名を入力してください")
             }
             try Tag.update(id: tag.id, name: name, color: color)
