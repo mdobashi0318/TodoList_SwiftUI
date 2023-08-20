@@ -60,7 +60,7 @@ struct EditTagView: View {
             Image(systemName: "trash")
         }
         .alert(isPresented: $deleteConfilmFlag) {
-            return Alert(title: Text("このラベルを削除しますか?"),
+            return Alert(title: Text("このタグを削除しますか?"),
                          primaryButton: .destructive(Text("削除"), action: {
                 do {
                     try viewModel.delete()
