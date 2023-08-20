@@ -22,7 +22,7 @@ struct EditTagView: View {
 
     var body: some View {
         TagView(name: $viewModel.name, color: $viewModel.color)
-            .navigationTitle("タグ編集")
+            .navigationTitle(R.string.labels.editTag())
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     deleteButton
@@ -44,7 +44,7 @@ struct EditTagView: View {
                 self.errorMessage = error.message
                 isShowAlert = true
             } catch {
-                self.errorMessage = "エラーが発生しました"
+                self.errorMessage = R.string.message.tagEditError()
                 isShowAlert = true
             }
         }) {
@@ -60,8 +60,8 @@ struct EditTagView: View {
             Image(systemName: "trash")
         }
         .alert(isPresented: $deleteConfilmFlag) {
-            return Alert(title: Text("このタグを削除しますか?"),
-                         primaryButton: .destructive(Text("削除"), action: {
+            return Alert(title: Text(R.string.message.deleteTag()),
+                         primaryButton: .destructive(Text(R.string.labels.delete()), action: {
                 do {
                     try viewModel.delete()
                     self.presentationMode.wrappedValue.dismiss()
@@ -69,7 +69,7 @@ struct EditTagView: View {
                     self.errorMessage = error.message
                     isShowAlert = true
                 } catch {
-                    self.errorMessage = "エラーが発生しました"
+                    self.errorMessage = R.string.message.tagDeleteError()
                     isShowAlert = true
                 }
             }), secondaryButton: .cancel(Text(R.string.labels.cancel())))

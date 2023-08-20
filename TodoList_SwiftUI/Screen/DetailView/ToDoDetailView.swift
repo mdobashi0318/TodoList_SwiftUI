@@ -47,7 +47,7 @@ struct TodoDetailView: View {
             
             if let tag_id = viewModel.model.tag_id,
                let tag = Tag.find(id: tag_id) {
-                Section(header: Text("タグ")
+                Section(header: Text(R.string.labels.tag())
                     .font(.headline)) {
                         TagRow(tag: tag)
                     }

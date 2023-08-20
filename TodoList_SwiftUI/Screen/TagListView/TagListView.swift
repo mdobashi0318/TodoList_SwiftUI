@@ -19,7 +19,7 @@ struct TagListView: View {
         NavigationView {
             List {
                 if viewModel.model.isEmpty {
-                    Text("タグが登録されていません")
+                    Text(R.string.message.noTag())
                 } else {
                     ForEach(viewModel.model, id: \.id) { tag in
                         NavigationLink(destination: {
@@ -37,7 +37,7 @@ struct TagListView: View {
                     }
                 }
             }
-            .navigationTitle("タグリスト")
+            .navigationTitle(R.string.labels.tagList())
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     addButton

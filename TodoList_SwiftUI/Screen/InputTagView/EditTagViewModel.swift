@@ -29,11 +29,11 @@ class EditTagViewModel: ObservableObject {
     func update() throws {
         do {
             if name.isEmpty || name.isSpace() {
-                throw TagModelError(message: "タグ名を入力してください")
+                throw TagModelError(message: R.string.message.inputTag())
             }
             try Tag.update(id: tag.id, name: name, color: color)
         } catch {
-            throw TagModelError(message: "タグの更新に失敗しました")
+            throw TagModelError(message: R.string.message.tagEditError())
         }
     }
     
@@ -42,7 +42,7 @@ class EditTagViewModel: ObservableObject {
         do {
             try Tag.delete(id: tag.id)
         } catch {
-            throw TagModelError(message: "タグの削除に失敗しました")
+            throw TagModelError(message: R.string.message.tagDeleteError())
         }
     }
     

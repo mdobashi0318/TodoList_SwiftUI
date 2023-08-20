@@ -24,7 +24,7 @@ struct TagRegistrationView: View {
     var body: some View {
         NavigationView {
             TagView(name: $name, color: $color)
-                .navigationTitle("タグ作成")
+                .navigationTitle(R.string.labels.addTag())
                 .toolbar {
                     ToolbarItemGroup(placement: .navigationBarTrailing) {
                         addButton
@@ -42,7 +42,7 @@ struct TagRegistrationView: View {
         Button(action: {
             do {
                 if name.isEmpty || name.isSpace() {
-                    self.errorMessage = "タグ名を入力してください"
+                    self.errorMessage = R.string.message.inputTag()
                     isShowAlert = true
                     return
                 }
@@ -50,7 +50,7 @@ struct TagRegistrationView: View {
                 try Tag.add(name: name,color: color)
                 self.presentationMode.wrappedValue.dismiss()
             } catch {
-                self.errorMessage = "タグの追加に失敗しました"
+                self.errorMessage = R.string.message.tagAddError()
                 isShowAlert = true
             }
             

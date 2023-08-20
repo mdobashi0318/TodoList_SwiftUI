@@ -16,9 +16,9 @@ struct TagView: View {
     
     var body: some View {
         Form {
-            Section("タグ") {
-                TextField("タグ名", text: $name)
-                ColorPicker("タグカラー", selection: $color)
+            Section(R.string.labels.tag()) {
+                TextField(R.string.labels.tagName(), text: $name)
+                ColorPicker(R.string.labels.tagColor(), selection: $color)
             }
        
         }

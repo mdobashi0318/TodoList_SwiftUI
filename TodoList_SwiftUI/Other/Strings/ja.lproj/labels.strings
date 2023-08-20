@@ -32,3 +32,12 @@
 "AddToDo" = "Todo 追加";
 "UpdateToDo" = "Todo 更新";
 "Required" = "*必須";
+
+
+"Tag" = "タグ";
+"TagList" = "タグリスト";
+"AddTag" = "タグ追加";
+"EditTag" = "タグ編集";
+
+"TagName" = "タグ名";
+"TagColor" = "タグカラー";
