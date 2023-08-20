@@ -108,12 +108,22 @@ final class Tag: Object {
         
     }
     
-    static func findAll() -> [Tag] {
+    
+    
+    /// タグを全件取得する
+    ///
+    /// - Parameter addEmptyTagFlag: 空のタグを追加するかのフラグ
+    /// - Returns: タグの配列を降順で返す
+    static func findAll(addEmptyTagFlag: Bool = false) -> [Tag] {
         guard let realm else {
             return []
         }
         
         var model = [Tag]()
+        
+        if addEmptyTagFlag {
+            model.append(Tag())
+        }
         
         realm.objects(Tag.self).freeze().forEach {
             model.append($0)

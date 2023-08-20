@@ -31,6 +31,9 @@ final class InputViewModel: ObservableObject {
     /// TagのID
     @Published var tag_id: String = ""
     
+    /// Tagセクションの表示フラグ
+    private(set) var isTagSection = false
+    
     /// Model側に格納する完了フラグの文字列
     private var completionFlagStr: CompletionFlag = .unfinished
     
@@ -51,7 +54,12 @@ final class InputViewModel: ObservableObject {
     
     /// Modelから取得した値を書くプロパティにセットする
     private func setModelValue(_ model: ToDoModel?) {
-        tagList = Tag.findAll()
+        tagList = Tag.findAll(addEmptyTagFlag: true)
+        
+        /// タグの一つは空のタグなので一つより多い時に表示する
+        if tagList.count > 1 {
+            isTagSection = true
+        }
         
         if let model {
             id = model.id
@@ -64,8 +72,6 @@ final class InputViewModel: ObservableObject {
             completionFlag = model.completionFlag == CompletionFlag.completion.rawValue ? true : false
             createTime = model.createTime
             tag_id = model.tag_id ?? ""
-        } else {
-            tag_id = tagList.first?.id ?? ""
         }
     }
     

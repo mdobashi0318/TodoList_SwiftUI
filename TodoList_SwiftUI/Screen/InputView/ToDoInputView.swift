@@ -36,7 +36,7 @@ struct ToDoInputView: View {
                 todoNameSection
                 todoDatePicker
                 todoDetailSection
-                if !viewModel.tagList.isEmpty { tagSection }
+                if viewModel.isTagSection { tagSection }
                 if isUpdate { completeToggleSection }
             }
             .listStyle(GroupedListStyle())
