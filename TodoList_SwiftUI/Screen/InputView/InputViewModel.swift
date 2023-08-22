@@ -65,7 +65,7 @@ final class InputViewModel: ObservableObject {
             id = model.id
             toDoName = model.toDoName
             todoDateStr = model.todoDate
-            if let date = Format().dateFromString(string: model.todoDate) {
+            if let date = Format.dateFromString(string: model.todoDate) {
                 toDoDate = date
             }
             toDo = model.toDo
@@ -79,7 +79,7 @@ final class InputViewModel: ObservableObject {
     private func setDatePub() {
         $toDoDate
             .map { date in
-                Format().stringFromDate(date: date)
+                Format.stringFromDate(date: date)
             }
             .print()
             .sink(receiveValue: { toDoDate in
@@ -139,7 +139,7 @@ final class InputViewModel: ObservableObject {
     func validateCheck() -> String? {
         if self.toDoName.isEmpty {
             return  R.string.message.validate(R.string.labels.title())
-        } else if self.completionFlagStr == CompletionFlag.unfinished && self.todoDateStr <= Format().stringFromDate(date: Format().dateFormat()) {
+        } else if self.completionFlagStr == CompletionFlag.unfinished && self.todoDateStr <= Format.stringFromDate(date: Format.dateFormat()) {
             /// 完了フラグの未完であればあれば期限のバリデーションチェックを行う
             return R.string.message.validateDate()
         } else if self.toDo.isEmpty {

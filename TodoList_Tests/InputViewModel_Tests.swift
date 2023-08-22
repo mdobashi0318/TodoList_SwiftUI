@@ -152,7 +152,7 @@ class InputViewModelTests: XCTestCase {
         inputViewModel.toDoDate = Date()
         XCTAssert(inputViewModel.validateCheck() == R.string.message.validateDate(), "バリデーションに引っかかっていない")
         
-        inputViewModel.toDoDate = Format().dateFromString(string: "2030/01/01 00:00")!
+        inputViewModel.toDoDate = Format.dateFromString(string: "2030/01/01 00:00")!
         XCTAssert(inputViewModel.validateCheck() != R.string.message.validateDate(), "バリデーションに引っかかっている")
         
         inputViewModel.completionFlag = true

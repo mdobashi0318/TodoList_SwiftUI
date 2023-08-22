@@ -39,7 +39,7 @@ final class Tag: Object {
     
     static func add(name: String, color: CGColor) throws {
         let tag = Tag()
-        let _created_at = Format().stringFromDate(date: Date(), addSec: true)
+        let _created_at = Format.stringFromDate(date: Date(), addSec: .secnd)
         
         guard let realm,
               let components = color.components else {
@@ -81,7 +81,7 @@ final class Tag: Object {
                 tag.green = components[1].description
                 tag.blue = components[2].description
                 tag.alpha = components[3].description
-                tag.updated_at = Format().stringFromDate(date: Date(), addSec: true)
+                tag.updated_at = Format.stringFromDate(date: Date(), addSec: .secnd)
             }
         } catch {
             print("error: \(error)")
@@ -131,7 +131,7 @@ final class Tag: Object {
         
         
         model.sort {
-            Format().dateFromString(string: $0.updated_at, addSec: true)?.compare(Format().dateFromString(string: $1.updated_at, addSec: true) ?? Date()) == .orderedDescending
+            Format.dateFromString(string: $0.updated_at, addSec: .secnd)?.compare(Format.dateFromString(string: $1.updated_at, addSec: .secnd) ?? Date()) == .orderedDescending
         }
         
         return model

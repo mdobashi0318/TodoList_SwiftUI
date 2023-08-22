@@ -23,13 +23,13 @@ class NotificationManagerTests: XCTestCase {
     
     func test_addNotification() {
         
-        let createTime1 = Format().stringFromDate(date: Date(), addSec: true)
-        NotificationManager().addNotification(toDoModel: ToDoModel(id: "0", toDoName: "TEST", todoDate: Format().stringFromDate(date: Date(timeIntervalSinceNow: 60 * 60 * 48)), toDo: "TESTTodo", createTime: createTime1, tag_id: "")) { result in
+        let createTime1 = Format.stringFromDate(date: Date(), addSec: .ms)
+        NotificationManager().addNotification(toDoModel: ToDoModel(id: "0", toDoName: "TEST", todoDate: Format.stringFromDate(date: Date(timeIntervalSinceNow: 60 * 60 * 48)), toDo: "TESTTodo", createTime: createTime1, tag_id: "")) { result in
             XCTAssertTrue(result, "Todoの登録に失敗している")
         }
         
         
-        NotificationManager().addNotification(toDoModel: ToDoModel(id: "0", toDoName: "TEST", todoDate: "TESTDate", toDo: "TESTTodo", createTime: Format().stringFromDate(date: Date(), addSec: true), tag_id: "")) { result in
+        NotificationManager().addNotification(toDoModel: ToDoModel(id: "0", toDoName: "TEST", todoDate: "TESTDate", toDo: "TESTTodo", createTime: Format.stringFromDate(date: Date(), addSec: .ms), tag_id: "")) { result in
             XCTAssertFalse(result, "Todoの登録に成功している")
         }
         
@@ -47,15 +47,15 @@ class NotificationManagerTests: XCTestCase {
     
     func test_deleteNotification() {
         
-        let createTime1 = Format().stringFromDate(date: Date(), addSec: true)
-        let todoDate1 = Format().stringFromDate(date: Date(timeIntervalSinceNow: 60 * 60 * 48))
+        let createTime1 = Format.stringFromDate(date: Date(), addSec: .ms)
+        let todoDate1 = Format.stringFromDate(date: Date(timeIntervalSinceNow: 60 * 60 * 48))
         let todoModel1 = ToDoModel(id: "0", toDoName: "TEST", todoDate: todoDate1, toDo: "TESTTodo", createTime: createTime1, tag_id: "")
         NotificationManager().addNotification(toDoModel: todoModel1) { _ in
         }
         sleep(1)
         
-        let createTime2 = Format().stringFromDate(date: Date(), addSec: true)
-        let todoDate2 = Format().stringFromDate(date: Date(timeIntervalSinceNow: 60 * 60 * 48))
+        let createTime2 = Format.stringFromDate(date: Date(), addSec: .ms)
+        let todoDate2 = Format.stringFromDate(date: Date(timeIntervalSinceNow: 60 * 60 * 48))
         let todoModel2 = ToDoModel(id: "0", toDoName: "TEST", todoDate: todoDate2, toDo: "TESTTodo", createTime: createTime2, tag_id: "")
         NotificationManager().addNotification(toDoModel: todoModel2) { _ in
         }
@@ -82,15 +82,15 @@ class NotificationManagerTests: XCTestCase {
     
     func test_allDeleteNotification() throws {
         
-        let createTime1 = Format().stringFromDate(date: Date(), addSec: true)
-        let todoDate1 = Format().stringFromDate(date: Date(timeIntervalSinceNow: 60 * 60 * 48))
+        let createTime1 = Format.stringFromDate(date: Date(), addSec: .ms)
+        let todoDate1 = Format.stringFromDate(date: Date(timeIntervalSinceNow: 60 * 60 * 48))
         let todoModel1 = ToDoModel(id: "0", toDoName: "TEST", todoDate: todoDate1, toDo: "TESTTodo", createTime: createTime1, tag_id: "")
         NotificationManager().addNotification(toDoModel: todoModel1) { _ in
         }
         sleep(1)
         
-        let createTime2 = Format().stringFromDate(date: Date(), addSec: true)
-        let todoDate2 = Format().stringFromDate(date: Date(timeIntervalSinceNow: 60 * 60 * 48))
+        let createTime2 = Format.stringFromDate(date: Date(), addSec: .ms)
+        let todoDate2 = Format.stringFromDate(date: Date(timeIntervalSinceNow: 60 * 60 * 48))
         let todoModel2 = ToDoModel(id: "0", toDoName: "TEST", todoDate: todoDate2, toDo: "TESTTodo", createTime: createTime2, tag_id: "")
         NotificationManager().addNotification(toDoModel: todoModel2) { _ in
         }

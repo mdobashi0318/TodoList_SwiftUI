@@ -33,11 +33,11 @@ final class ToDoViewModel: ObservableObject {
         switch segmentIndex {
         case .active:
             self.todoModel = model.filter {
-                Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() && $0.completionFlag != CompletionFlag.completion.rawValue
+                Format.dateFromString(string: $0.todoDate)! > Format.dateFormat() && $0.completionFlag != CompletionFlag.completion.rawValue
             }
         case .expired:
             self.todoModel = model.filter {
-                $0.todoDate <= Format().stringFromDate(date: Date()) && $0.completionFlag != CompletionFlag.completion.rawValue
+                $0.todoDate <= Format.stringFromDate(date: Date()) && $0.completionFlag != CompletionFlag.completion.rawValue
             }
         case .complete:
             self.todoModel = model.filter {

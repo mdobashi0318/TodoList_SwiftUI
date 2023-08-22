@@ -32,7 +32,7 @@ struct Provider: TimelineProvider {
         var entries: [SimpleEntry] = []
         var todo: ToDoModel? {
             return ToDoModel.allFindTodo().first(where: {
-                Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() &&
+                Format.dateFromString(string: $0.todoDate)! > Format.dateFormat() &&
                 $0.completionFlag != CompletionFlag.completion.rawValue
             })
         }

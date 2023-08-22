@@ -116,7 +116,7 @@ final class ToDoModel: Object {
         toDoModel.todoDate = addValue.todoDate
         toDoModel.toDo = addValue.toDo
         toDoModel.completionFlag = CompletionFlag.unfinished.rawValue
-        toDoModel.createTime = Format().stringFromDate(date: Date(), addSec: true)
+        toDoModel.createTime = Format.stringFromDate(date: Date(), addSec: .ms)
         toDoModel.tag_id = addValue.tag_id
         
         do {
@@ -308,7 +308,7 @@ let testModel:[ToDoModel] = {
     
     let todo1 = ToDoModel()
     todo1.toDoName = "TODOName1"
-    todo1.todoDate = Format().stringFromDate(date: Date())
+    todo1.todoDate = Format.stringFromDate(date: Date())
     todo1.toDo = "TODO詳細1"
     todo1.createTime = "2020/01/01 00:00:01"
     todo1.completionFlag = CompletionFlag.unfinished.rawValue
@@ -316,7 +316,7 @@ let testModel:[ToDoModel] = {
     
     let todo2 = ToDoModel()
     todo2.toDoName = "TODOName2"
-    todo2.todoDate = Format().stringFromDate(date: Date())
+    todo2.todoDate = Format.stringFromDate(date: Date())
     todo2.toDo = "TODO詳細2"
     todo2.createTime = "2020/01/01 00:00:02"
     todo2.completionFlag = CompletionFlag.completion.rawValue
@@ -330,7 +330,7 @@ let testModel:[ToDoModel] = {
     
     let todo4 = ToDoModel()
     todo4.toDoName = "TODOName4"
-    todo4.todoDate = Format().stringFromDate(date: Date())
+    todo4.todoDate = Format.stringFromDate(date: Date())
     todo4.toDo = "TODO詳細4"
     todo4.createTime = "2020/01/01 00:00:04"
     
