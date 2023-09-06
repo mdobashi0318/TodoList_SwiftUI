@@ -29,7 +29,7 @@ final class OpenTodoManager: ObservableObject {
     private var findNextTodo: ToDoModel? {
         get {
             let model = ToDoModel.allFindTodo()
-            guard let _nextTodo = model.filter({ Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() && $0.completionFlag != CompletionFlag.completion.rawValue }).first,
+            guard let _nextTodo = model.filter({ Format.dateFromString(string: $0.todoDate)! > Format.dateFormat() && $0.completionFlag != CompletionFlag.completion.rawValue }).first,
                   !_nextTodo.id.isEmpty else {
                 return nil
             }

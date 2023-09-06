@@ -36,6 +36,7 @@ struct ToDoInputView: View {
                 todoNameSection
                 todoDatePicker
                 todoDetailSection
+                if viewModel.isTagSection { tagSection }
                 if isUpdate { completeToggleSection }
             }
             .listStyle(GroupedListStyle())
@@ -170,6 +171,17 @@ extension ToDoInputView {
         return Section {
             Toggle(R.string.labels.complete(), isOn: $viewModel.completionFlag)
                 .accessibility(identifier: "completeSwitch")
+        }
+    }
+    
+    /// TodoのTag
+    private var tagSection: some View {
+        return Section {
+            Picker("Tag", selection: $viewModel.tag_id) {
+                ForEach(viewModel.tagList, id: \.id) { tag in
+                    Text(tag.name)
+                }
+            }
         }
     }
     

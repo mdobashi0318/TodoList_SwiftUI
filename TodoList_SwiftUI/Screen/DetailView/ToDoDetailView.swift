@@ -22,7 +22,7 @@ struct TodoDetailView: View {
     
     /// 削除確認アラートを出すフラグ
     @State private var isDeleteAction = false
-     
+    
     /// ellipsisButtonの表示非表示を設定
     ///
     /// - default: true
@@ -34,16 +34,24 @@ struct TodoDetailView: View {
     var body: some View {
         Form {
             Section(header: Text(R.string.labels.deadline())
-                        .font(.headline)) {
-                CompletionLable(todoDate: viewModel.model.todoDate, completionFlag: $viewModel.model.completionFlag)
-            }
+                .font(.headline)) {
+                    CompletionLable(todoDate: viewModel.model.todoDate, completionFlag: $viewModel.model.completionFlag)
+                }
             
             Section(header: Text(R.string.labels.details())
-                        .font(.headline)) {
-                Text(viewModel.model.toDo)
-                    .accessibility(identifier: "todoDetaillabel")
-            }
+                .font(.headline)) {
+                    Text(viewModel.model.toDo)
+                        .accessibility(identifier: "todoDetaillabel")
+                }
             
+            
+            if let tag_id = viewModel.model.tag_id,
+               let tag = Tag.find(id: tag_id) {
+                Section(header: Text(R.string.labels.tag())
+                    .font(.headline)) {
+                        TagRow(tag: tag)
+                    }
+            }
             completeToggleSection
         }
         .alert(isPresented: $viewModel.isError) {
@@ -103,11 +111,11 @@ extension TodoDetailView {
     var actionSheet: ActionSheet {
         ActionSheet(title: Text(R.string.message.detailActionSheet()),
                     buttons: [ActionSheet.Button.default(Text(R.string.labels.edit())) {
-                        self.isShowModle.toggle()
-                        }, .destructive(Text(R.string.labels.delete())) {
-                            self.isDeleteAction.toggle()
-                        }, .cancel(Text(R.string.labels.cancel()))
-        ])
+            self.isShowModle.toggle()
+        }, .destructive(Text(R.string.labels.delete())) {
+            self.isDeleteAction.toggle()
+        }, .cancel(Text(R.string.labels.cancel()))
+                             ])
     }
     
     

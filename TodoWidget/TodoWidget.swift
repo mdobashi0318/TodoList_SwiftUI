@@ -22,7 +22,8 @@ struct Provider: TimelineProvider {
                                                      toDoName: NSLocalizedString("TodoTitle", tableName: "Label", comment: ""),
                                                      todoDate: "2021/01/01 00:00",
                                                      toDo: NSLocalizedString("TodoDetail", tableName: "Label", comment: ""),
-                                                     createTime: nil)
+                                                     createTime: nil,
+                                                    tag_id: nil)
         )
         completion(entry)
     }
@@ -31,7 +32,7 @@ struct Provider: TimelineProvider {
         var entries: [SimpleEntry] = []
         var todo: ToDoModel? {
             return ToDoModel.allFindTodo().first(where: {
-                Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() &&
+                Format.dateFromString(string: $0.todoDate)! > Format.dateFormat() &&
                 $0.completionFlag != CompletionFlag.completion.rawValue
             })
         }

@@ -16,11 +16,11 @@ final class ToDoViewModel_Test: XCTestCase {
         viewModel = ToDoViewModel()
         ToDoModel.allDelete()
         
-        try? ToDoModel.add(addValue: ToDoModel(toDoName: "TEST1", todoDate: "2030/01/01 00:00", toDo: "toDo1", completionFlag: CompletionFlag.unfinished.rawValue, createTime: ""))
+        try? ToDoModel.add(addValue: ToDoModel(toDoName: "TEST1", todoDate: "2030/01/01 00:00", toDo: "toDo1", completionFlag: CompletionFlag.unfinished.rawValue, createTime: "", tag_id: ""))
         
-        try? ToDoModel.add(addValue: ToDoModel(toDoName: "TEST2", todoDate: "2000/01/01 00:00", toDo: "toDo2", completionFlag: CompletionFlag.unfinished.rawValue, createTime: ""))
+        try? ToDoModel.add(addValue: ToDoModel(toDoName: "TEST2", todoDate: "2000/01/01 00:00", toDo: "toDo2", completionFlag: CompletionFlag.unfinished.rawValue, createTime: "", tag_id: ""))
         
-        try? ToDoModel.add(addValue: ToDoModel(toDoName: "TEST3", todoDate: "2000/01/01 00:00", toDo: "toDo3", completionFlag: CompletionFlag.unfinished.rawValue, createTime: ""))
+        try? ToDoModel.add(addValue: ToDoModel(toDoName: "TEST3", todoDate: "2000/01/01 00:00", toDo: "toDo3", completionFlag: CompletionFlag.unfinished.rawValue, createTime: "", tag_id: ""))
         
     }
     

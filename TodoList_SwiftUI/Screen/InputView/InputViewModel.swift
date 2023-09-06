@@ -28,6 +28,12 @@ final class InputViewModel: ObservableObject {
     /// 画面側の完了フラグ
     @Published var completionFlag: Bool = false
     
+    /// TagのID
+    @Published var tag_id: String = ""
+    
+    /// Tagセクションの表示フラグ
+    private(set) var isTagSection = false
+    
     /// Model側に格納する完了フラグの文字列
     private var completionFlagStr: CompletionFlag = .unfinished
     
@@ -35,6 +41,9 @@ final class InputViewModel: ObservableObject {
     private var createTime: String?
     
     private var cancellable: Set<AnyCancellable> = []
+    
+    
+    var tagList: [Tag] = []
     
 
     init(model: ToDoModel? = nil) {
@@ -45,16 +54,24 @@ final class InputViewModel: ObservableObject {
     
     /// Modelから取得した値を書くプロパティにセットする
     private func setModelValue(_ model: ToDoModel?) {
+        tagList = Tag.findAll(addEmptyTagFlag: true)
+        
+        /// タグの一つは空のタグなので一つより多い時に表示する
+        if tagList.count > 1 {
+            isTagSection = true
+        }
+        
         if let model {
             id = model.id
             toDoName = model.toDoName
             todoDateStr = model.todoDate
-            if let date = Format().dateFromString(string: model.todoDate) {
+            if let date = Format.dateFromString(string: model.todoDate) {
                 toDoDate = date
             }
             toDo = model.toDo
             completionFlag = model.completionFlag == CompletionFlag.completion.rawValue ? true : false
             createTime = model.createTime
+            tag_id = model.tag_id ?? ""
         }
     }
     
@@ -62,7 +79,7 @@ final class InputViewModel: ObservableObject {
     private func setDatePub() {
         $toDoDate
             .map { date in
-                Format().stringFromDate(date: date)
+                Format.stringFromDate(date: date)
             }
             .print()
             .sink(receiveValue: { toDoDate in
@@ -90,7 +107,7 @@ final class InputViewModel: ObservableObject {
         }
         
         do {
-            try ToDoModel.add(addValue: ToDoModel(toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo))
+            try ToDoModel.add(addValue: ToDoModel(toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo, tag_id: self.tag_id))
         } catch {
             if let _error = error as? TodoModelError {
                 throw _error
@@ -107,7 +124,7 @@ final class InputViewModel: ObservableObject {
         }
         
         do {
-            try ToDoModel.update(updateTodo: ToDoModel(id: self.id,toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo, completionFlag: self.completionFlagStr.rawValue, createTime: self.createTime))
+            try ToDoModel.update(updateTodo: ToDoModel(id: self.id,toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo, completionFlag: self.completionFlagStr.rawValue, createTime: self.createTime, tag_id: self.tag_id))
         } catch {
             if let _error = error as? TodoModelError {
                 throw _error
@@ -122,7 +139,7 @@ final class InputViewModel: ObservableObject {
     func validateCheck() -> String? {
         if self.toDoName.isEmpty {
             return  R.string.message.validate(R.string.labels.title())
-        } else if self.completionFlagStr == CompletionFlag.unfinished && self.todoDateStr <= Format().stringFromDate(date: Format().dateFormat()) {
+        } else if self.completionFlagStr == CompletionFlag.unfinished && self.todoDateStr <= Format.stringFromDate(date: Format.dateFormat()) {
             /// 完了フラグの未完であればあれば期限のバリデーションチェックを行う
             return R.string.message.validateDate()
         } else if self.toDo.isEmpty {
