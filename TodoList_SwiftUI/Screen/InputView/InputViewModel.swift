@@ -142,8 +142,6 @@ final class InputViewModel: ObservableObject {
         } else if self.completionFlagStr == CompletionFlag.unfinished && self.todoDateStr <= Format.stringFromDate(date: Format.dateFormat()) {
             /// 完了フラグの未完であればあれば期限のバリデーションチェックを行う
             return R.string.message.validateDate()
-        } else if self.toDo.isEmpty {
-            return R.string.message.validate(R.string.labels.details())
         } else {
             return nil
         }

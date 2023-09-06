@@ -158,10 +158,7 @@ class InputViewModelTests: XCTestCase {
         inputViewModel.completionFlag = true
         XCTAssert(inputViewModel.validateCheck() != R.string.message.validateDate(), "バリデーションに引っかかっている")
         
-        
-        /// 詳細
-        XCTAssert(inputViewModel.validateCheck() == R.string.message.validate(R.string.labels.details()), "バリデーションに引っかかっていない")
-        
+                
         inputViewModel.toDo = "詳細"
         XCTAssert(inputViewModel.validateCheck() != R.string.message.validate(R.string.labels.details()), "バリデーションに引っかかっている")
         

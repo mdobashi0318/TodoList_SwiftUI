@@ -38,11 +38,13 @@ struct TodoDetailView: View {
                     CompletionLable(todoDate: viewModel.model.todoDate, completionFlag: $viewModel.model.completionFlag)
                 }
             
-            Section(header: Text(R.string.labels.details())
-                .font(.headline)) {
-                    Text(viewModel.model.toDo)
-                        .accessibility(identifier: "todoDetaillabel")
-                }
+            if !viewModel.model.toDo.isEmpty {
+                Section(header: Text(R.string.labels.details())
+                    .font(.headline)) {
+                        Text(viewModel.model.toDo)
+                            .accessibility(identifier: "todoDetaillabel")
+                    }
+            }
             
             
             if let tag_id = viewModel.model.tag_id,

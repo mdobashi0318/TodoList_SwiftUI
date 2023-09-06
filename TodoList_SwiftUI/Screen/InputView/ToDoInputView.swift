@@ -157,7 +157,7 @@ extension ToDoInputView {
     
     /// 詳細入力テキストフィールド
     private var todoDetailSection: some View {
-        return Section(header: headerLabel(text: R.string.labels.details(), identifier: "detailLabel", isRequiredLabel: true)) {
+        return Section(header: headerLabel(text: R.string.labels.details(), identifier: "detailLabel", isRequiredLabel: false)) {
             textField(placeholder: R.string.message.inputDetails(),
                       text: $viewModel.toDo,
                       identifier: "detailTextField"
