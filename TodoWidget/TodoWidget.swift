@@ -23,7 +23,7 @@ struct Provider: TimelineProvider {
                                                      todoDate: "2021/01/01 00:00",
                                                      toDo: NSLocalizedString("TodoDetail", tableName: "Label", comment: ""),
                                                      createTime: nil,
-                                                    tag_id: nil)
+                                                     tag_id: nil)
         )
         completion(entry)
     }
@@ -39,11 +39,9 @@ struct Provider: TimelineProvider {
         
         
         let currentDate = Date()
-        let entryDate = Calendar.current.date(byAdding: .minute, value: 15, to: currentDate)!
-        for _ in 0 ..< 96 {
-            let entry = SimpleEntry(date: entryDate, todomodel: todo)
-            entries.append(entry)
-        }
+        let entryDate = Calendar.current.date(byAdding: .minute, value: 30, to: currentDate)!
+        let entry = SimpleEntry(date: entryDate, todomodel: todo)
+        entries.append(entry)
         
         let timeline = Timeline(entries: entries, policy: .atEnd)
         completion(timeline)
