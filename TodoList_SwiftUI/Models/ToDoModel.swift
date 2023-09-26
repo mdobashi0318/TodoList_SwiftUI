@@ -14,15 +14,6 @@ import WidgetKit
 
 final class ToDoModel: Object {
     
-    private static var realm: Realm? {
-        var configuration: Realm.Configuration
-        configuration = Realm.Configuration()
-        configuration.schemaVersion = UInt64(1)
-        let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.TodoList-SwiftUI")
-        configuration.fileURL = url!.appendingPathComponent("db.realm")
-        return try? Realm(configuration: configuration)
-    }
-    
     
     @Persisted var id: String = ""
     
@@ -66,7 +57,7 @@ final class ToDoModel: Object {
     /// 全件取得
     /// - Returns: 取得したTodoを全件返す
     static func allFindTodo() -> [ToDoModel] {
-        guard let realm else {
+        guard let realm = RealmManager.realm else {
             return []
         }
         var model = [ToDoModel]()
@@ -88,7 +79,7 @@ final class ToDoModel: Object {
     ///   - createTime: Todoの作成時間
     /// - Returns: 取得したTodoの最初の1件を返す
     static func findTodo(todoId: String, createTime: String?) -> ToDoModel? {
-        guard let realm else {
+        guard let realm = RealmManager.realm else {
             return nil
         }
         if let createTime {
@@ -106,7 +97,7 @@ final class ToDoModel: Object {
     ///   - result: Todoの登録時の成功すればVoid、またはエラーを返す
     static func add(addValue:ToDoModel)  throws {
         
-        guard let realm else {
+        guard let realm = RealmManager.realm else {
             throw TodoModelError(message: NSLocalizedString("AddError", tableName: "Message", comment: ""))
         }
         
@@ -145,7 +136,7 @@ final class ToDoModel: Object {
     ///   - result: Todoの更新時のエラー
     ///   - result: Todoの登録時の成功すればVoid、またはエラーを返す
     static func update(updateTodo: ToDoModel) throws {
-        guard let realm,
+        guard let realm = RealmManager.realm,
               let toDoModel: ToDoModel = ToDoModel.findTodo(todoId: updateTodo.id, createTime: updateTodo.createTime) else {
                   throw TodoModelError(message: NSLocalizedString("UpdateError", tableName: "Message", comment: ""))
               }
@@ -181,7 +172,7 @@ final class ToDoModel: Object {
     ///   - updateTodo: 更新するTodo
     ///   - flag: 変更する値
     static func updateCompletionFlag(updateTodo: ToDoModel, flag: CompletionFlag) {
-        guard let realm else {
+        guard let realm = RealmManager.realm else {
             return
         }
         guard let toDoModel: ToDoModel = ToDoModel.findTodo(todoId: updateTodo.id, createTime: updateTodo.createTime) else { return }
@@ -207,7 +198,7 @@ final class ToDoModel: Object {
     ///   - deleteTodo: 削除するTodo
     ///   - result: Todoの登録時の成功すればVoid、またはエラーを返す
     static func delete(deleteTodo: ToDoModel) throws {
-        guard let realm else {
+        guard let realm = RealmManager.realm else {
             throw DeleteError(model: deleteTodo, message: NSLocalizedString("DeleteError", tableName: "Message", comment: ""))
         }
         if let _createTime = deleteTodo.createTime {
@@ -230,7 +221,7 @@ final class ToDoModel: Object {
     
     /// 全件削除
     static func allDelete()  {
-        guard let realm else {
+        guard let realm = RealmManager.realm else {
             return
         }
         try? realm.write {

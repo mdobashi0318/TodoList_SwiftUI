@@ -13,14 +13,7 @@ import CoreGraphics
 
 final class Tag: Object {
     
-    private static var realm: Realm? {
-        var configuration = Realm.Configuration()
-        configuration.schemaVersion = UInt64(1)
-        let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.TodoList-SwiftUI")
-        configuration.fileURL = url!.appendingPathComponent("tag.realm")
-        return try? Realm(configuration: configuration)
-    }
-    
+
     @Persisted(primaryKey: true) var id: String
     
     @Persisted var name: String
@@ -41,7 +34,7 @@ final class Tag: Object {
         let tag = Tag()
         let _created_at = Format.stringFromDate(date: Date(), addSec: .secnd)
         
-        guard let realm,
+        guard let realm = RealmManager.realm,
               let components = color.components else {
             return
         }
@@ -68,7 +61,7 @@ final class Tag: Object {
     
     
     static func update(id: String, name: String, color: CGColor) throws {
-        guard let realm,
+        guard let realm = RealmManager.realm,
               let tag = find(id: id),
               let components = color.components else {
             return
@@ -92,7 +85,7 @@ final class Tag: Object {
     
     
     static func delete(id: String) throws {
-        guard let realm,
+        guard let realm = RealmManager.realm,
               let tag = find(id: id) else {
             throw TagModelError(message: "Tagの削除に失敗しました")
         }
@@ -115,7 +108,7 @@ final class Tag: Object {
     /// - Parameter addEmptyTagFlag: 空のタグを追加するかのフラグ
     /// - Returns: タグの配列を降順で返す
     static func findAll(addEmptyTagFlag: Bool = false) -> [Tag] {
-        guard let realm else {
+        guard let realm = RealmManager.realm else {
             return []
         }
         
@@ -140,7 +133,7 @@ final class Tag: Object {
     
     
     static func find(id: String) -> Tag? {
-        guard let realm else {
+        guard let realm = RealmManager.realm else {
             return nil
         }
         
