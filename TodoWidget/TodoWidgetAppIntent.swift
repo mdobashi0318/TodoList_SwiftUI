@@ -17,10 +17,7 @@ struct TodoWidgetAppIntent: AppIntent {
     @Parameter(title: "createTime")
     var createTime: String
     
-    init() {
-        createTime = ""
-    }
-    
+    init() {}
     
     init(_ createTime: String) {
         self.createTime = createTime
