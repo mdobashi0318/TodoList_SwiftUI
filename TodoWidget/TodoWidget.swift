@@ -75,8 +75,13 @@ struct TodoWidgetEntryView : View {
                     .font(.caption)
                 Text(entry.todomodel?.toDoName ?? NSLocalizedString("NoTodo", tableName: "Label", comment: ""))
                 Text(entry.todomodel?.todoDate ?? "")
+                
+                if #available(iOS 17.0, *) {
+                    todoButton(entry.todomodel)
+                }
             }
             .widgetURL(Self.deeplinkURL)
+            
         case .systemMedium:
             VStack(alignment: .leading) {
                 Text(NSLocalizedString("NextTodo", tableName: "Label", comment: ""))
@@ -88,11 +93,28 @@ struct TodoWidgetEntryView : View {
                     }
                     Text(entry.todomodel?.toDo ?? "")
                 }
+                
+                if #available(iOS 17.0, *) {
+                    todoButton(entry.todomodel)
+                }
             }
             .padding()
             .widgetURL(Self.deeplinkURL)
         default:
             Text("")
+        }
+    }
+    
+    
+    @ViewBuilder
+    @available(iOS 17.0, *)
+    private func todoButton(_ todo: ToDoModel?) -> some View {
+        if let todo,
+           let createTime = todo.createTime {
+            TodoButton(createTime: createTime)
+                .invalidatableContent()
+        } else {
+            EmptyView()
         }
     }
 }
