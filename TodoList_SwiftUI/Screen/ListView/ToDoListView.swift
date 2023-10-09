@@ -32,24 +32,27 @@ struct ToDoListView: View {
     
     var body: some View {
         NavigationView {
-            TabView(selection: $viewModel.segmentIndex) {
-                todoList
-                    .tag(SegmentIndex.all)
-                
-                todoList
-                    .tag(SegmentIndex.active)
-                
-                todoList
-                    .tag(SegmentIndex.complete)
-                
-                todoList
-                    .tag(SegmentIndex.expired)
-            }
-            .tabViewStyle(PageTabViewStyle())
-            .onReceive(viewModel.$segmentIndex) { _ in
-                Task {
+            VStack {
+                ListHeader(segmentIndex: self.$viewModel.segmentIndex)
+                TabView(selection: $viewModel.segmentIndex) {
+                    todoList
+                        .tag(SegmentIndex.all)
+                    
+                    todoList
+                        .tag(SegmentIndex.active)
+                    
+                    todoList
+                        .tag(SegmentIndex.expired)
+                    
+                    todoList
+                        .tag(SegmentIndex.complete)
+                    
+                }
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .task(id: viewModel.segmentIndex) {
                     await viewModel.fetchAllTodoModel()
                 }
+                
             }
             .navigationTitle("ToDoList")
             .toolbar {
@@ -100,11 +103,6 @@ extension ToDoListView {
                         }
                     }
                 }
-            }, header: {
-                headerText
-                    .font(.headline)
-                    .padding()
-                    .animation(.none)
             })
         }
         .listStyle(InsetListStyle())
