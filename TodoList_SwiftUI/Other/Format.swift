@@ -15,13 +15,10 @@ struct Format {
     /// - Parameter addSec: 秒数もフォーマットに設定するかの判定
     private static func _dateFormatter(addSec: SecndType = .None) -> DateFormatter {
         let formatter: DateFormatter = DateFormatter()
-        switch addSec {
-        case .secnd:
-            formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
-        case .ms:
-            formatter.dateFormat = "yyyy/MM/dd HH:mm:SSSS"
-        default:
-            formatter.dateFormat = "yyyy/MM/dd HH:mm"
+        formatter.dateFormat = switch addSec {
+        case .secnd: "yyyy/MM/dd HH:mm:ss"
+        case .ms: "yyyy/MM/dd HH:mm:SSSS"
+        default: "yyyy/MM/dd HH:mm"
         }
         
         formatter.timeZone = TimeZone(identifier: "Asia/Tokyo")

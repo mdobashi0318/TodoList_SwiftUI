@@ -29,22 +29,21 @@ final class ToDoViewModel: ObservableObject {
     /// Todoを全件取得する
     @MainActor
     func fetchAllTodoModel() async {
-        let model = ToDoModel.allFindTodo()
-        switch segmentIndex {
+        todoModel = switch segmentIndex {
         case .active:
-            self.todoModel = model.filter {
+            ToDoModel.allFindTodo().filter {
                 Format.dateFromString(string: $0.todoDate)! > Format.dateFormat() && $0.completionFlag != CompletionFlag.completion.rawValue
             }
         case .expired:
-            self.todoModel = model.filter {
+            ToDoModel.allFindTodo().filter {
                 $0.todoDate <= Format.stringFromDate(date: Date()) && $0.completionFlag != CompletionFlag.completion.rawValue
             }
         case .complete:
-            self.todoModel = model.filter {
+            ToDoModel.allFindTodo().filter {
                 $0.completionFlag == CompletionFlag.completion.rawValue
             }
         case .all:
-            self.todoModel = model
+            ToDoModel.allFindTodo()
         }
     }
     

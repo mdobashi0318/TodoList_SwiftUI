@@ -113,15 +113,15 @@ extension ToDoListView {
     
     /// どのカテゴリかを表示するテキスト
     private var headerText: some View {
-        switch viewModel.segmentIndex {
+        return switch viewModel.segmentIndex {
         case .all:
-            return Text(R.string.labels.all())
+             Text(R.string.labels.all())
         case .active:
-            return Text(R.string.labels.active())
+             Text(R.string.labels.active())
         case .complete:
-            return Text(R.string.labels.complete())
+             Text(R.string.labels.complete())
         case .expired:
-            return Text(R.string.labels.expired())
+             Text(R.string.labels.expired())
         }
     }
     
