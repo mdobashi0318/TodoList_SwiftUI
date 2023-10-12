@@ -7,11 +7,14 @@
 
 import SwiftUI
 
+private let constAddPositionX = -1.5
+
 struct ListHeader: View {
     
     @Binding var segmentIndex: SegmentIndex
     
-    @State var positionX : CGFloat = -UIScreen.main.bounds.width /  2.6
+    /// バーのX座標
+    @State var positionX : CGFloat = UIScreen.main.bounds.width * constAddPositionX
     
     var body: some View {
         ScrollView(.horizontal) {
@@ -41,20 +44,10 @@ struct ListHeader: View {
     }
     
     private func selectedBar(_ index: Int) {
+        var addPositionX: CGFloat = constAddPositionX
         withAnimation(.default) {
-            // TODO: バーの位置を調整
-            switch index {
-            case 0:
-                positionX = -UIScreen.main.bounds.width /  2.6
-            case 1:
-                positionX = -UIScreen.main.bounds.width /  8.1
-            case 2:
-                positionX = UIScreen.main.bounds.width /  8.1
-            case 3:
-                positionX = UIScreen.main.bounds.width /  2.7
-            default:
-                break
-            }
+            addPositionX += CGFloat(index)
+            positionX = UIScreen.main.bounds.width / CGFloat(SegmentIndex.allCases.count) * addPositionX
           }
     }
     
