@@ -110,8 +110,9 @@ extension ToDoListView {
     }
     
     /// どのカテゴリかを表示するテキスト
+    @ViewBuilder
     private var headerText: some View {
-        return switch viewModel.segmentIndex {
+        switch viewModel.segmentIndex {
         case .all:
              Text(R.string.labels.all())
         case .active:
