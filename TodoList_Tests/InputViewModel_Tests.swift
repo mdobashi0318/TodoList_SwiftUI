@@ -26,7 +26,7 @@ class InputViewModelTests: XCTestCase {
     
     
     func test_addTodo() {
-        let inputViewModel = InputViewModel(model: ToDoModel(toDoName: "UnitTest", todoDate: "2030/01/01 00:00", toDo: "詳細"))
+        let inputViewModel = InputViewModel(model: ToDoModel(toDoName: "UnitTest", todoDate: "2030/01/01 00:00", toDo: "詳細", tag_id: ""))
         
         
         do {
@@ -47,7 +47,7 @@ class InputViewModelTests: XCTestCase {
     
     
     func test_updateTodo() {
-        var inputViewModel = InputViewModel(model: ToDoModel(toDoName: "UnitTest", todoDate: "2030/01/01 00:00", toDo: "詳細"))
+        var inputViewModel = InputViewModel(model: ToDoModel(toDoName: "UnitTest", todoDate: "2030/01/01 00:00", toDo: "詳細", tag_id: ""))
         
         do {
             try inputViewModel.addTodo()
@@ -63,7 +63,7 @@ class InputViewModelTests: XCTestCase {
             XCTAssertNil(error, "エラーが発生している\(error)")
         }
         
-        inputViewModel = InputViewModel(model: ToDoModel(id: "1", toDoName: "EditUnitTest", todoDate: "2030/01/01 10:00", toDo: "詳細編集", createTime: nil))
+        inputViewModel = InputViewModel(model: ToDoModel(id: "1", toDoName: "EditUnitTest", todoDate: "2030/01/01 10:00", toDo: "詳細編集", createTime: nil, tag_id: ""))
         
         do {
             try inputViewModel.updateTodo()
@@ -84,7 +84,7 @@ class InputViewModelTests: XCTestCase {
     
     
     func test_EditCompletionFlag() {
-        var inputViewModel = InputViewModel(model: ToDoModel(toDoName: "UnitTest", todoDate: "2030/01/01 00:00", toDo: "詳細"))
+        var inputViewModel = InputViewModel(model: ToDoModel(toDoName: "UnitTest", todoDate: "2030/01/01 00:00", toDo: "詳細", tag_id: ""))
         
         do {
             try inputViewModel.addTodo()
@@ -108,7 +108,8 @@ class InputViewModelTests: XCTestCase {
                                                          todoDate: "2030/01/01 10:00",
                                                          toDo: "詳細編集",
                                                          completionFlag: CompletionFlag.completion.rawValue,
-                                                         createTime: nil)
+                                                         createTime: nil,
+                                                         tag_id: "")
         )
         
         
@@ -151,16 +152,13 @@ class InputViewModelTests: XCTestCase {
         inputViewModel.toDoDate = Date()
         XCTAssert(inputViewModel.validateCheck() == R.string.message.validateDate(), "バリデーションに引っかかっていない")
         
-        inputViewModel.toDoDate = Format().dateFromString(string: "2030/01/01 00:00")!
+        inputViewModel.toDoDate = Format.dateFromString(string: "2030/01/01 00:00")!
         XCTAssert(inputViewModel.validateCheck() != R.string.message.validateDate(), "バリデーションに引っかかっている")
         
         inputViewModel.completionFlag = true
         XCTAssert(inputViewModel.validateCheck() != R.string.message.validateDate(), "バリデーションに引っかかっている")
         
-        
-        /// 詳細
-        XCTAssert(inputViewModel.validateCheck() == R.string.message.validate(R.string.labels.details()), "バリデーションに引っかかっていない")
-        
+                
         inputViewModel.toDo = "詳細"
         XCTAssert(inputViewModel.validateCheck() != R.string.message.validate(R.string.labels.details()), "バリデーションに引っかかっている")
         

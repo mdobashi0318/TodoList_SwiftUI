@@ -13,6 +13,10 @@
 "AllDelete" = "全件削除しますか?";
 "DeleteTodo" = "Todoを削除しますか?";
 
+
+"NoTag" = "タグが登録されていません";
+"DeleteTag" = "このタグを削除しますか?";
+
 "inputTitle" = "タイトルを入力してください";
 "inputDetails" = "詳細を入力してください";
 
@@ -23,6 +27,11 @@
 "UpdateError" = "Todoの更新に失敗しました。";
 "DeleteError" = "Todoの削除に失敗しました。";
 "FindError" = "Todoの取得に失敗しました";
+
+"InputTag" = "タグ名を入力してください";
+"TagAddError" = "タグの追加に失敗しました";
+"TagEditError" = "タグの更新に失敗しました";
+"TagDeleteError" = "タグの削除に失敗しました";
 
 // MARK: - Validate Message
 "Validate" = "%@が入力されていません";

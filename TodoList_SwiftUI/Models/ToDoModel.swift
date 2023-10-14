@@ -14,46 +14,33 @@ import WidgetKit
 
 final class ToDoModel: Object {
     
-    private static var realm: Realm? {
-        var configuration: Realm.Configuration
-        configuration = Realm.Configuration()
-        configuration.schemaVersion = UInt64(1)
-        let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.TodoList-SwiftUI")
-        configuration.fileURL = url!.appendingPathComponent("db.realm")
-        return try? Realm(configuration: configuration)
-    }
     
-    
-    @objc dynamic var id: String = ""
+    @Persisted var id: String = ""
     
     /// Todoの期限
-    @objc dynamic var todoDate: String = ""
+    @Persisted var todoDate: String = ""
     
     /// Todoのタイトル
-    @objc dynamic var toDoName: String = ""
+    @Persisted var toDoName: String = ""
     
     /// Todoの詳細
-    @objc dynamic var toDo: String = ""
+    @Persisted var toDo: String = ""
     
     /// Todoの完了フラグ
     /// - 0: 未完
     /// - 1: 完了
-    @objc dynamic var completionFlag: String = ""
+    @Persisted var completionFlag: String = ""
     
     /// Todoの作成日時
-    @objc dynamic var createTime: String?
+    @Persisted(primaryKey: true) var createTime: String?
     
-    
-    // idをプライマリキーに設定
-    override static func primaryKey() -> String? {
-        return "createTime"
-    }
-    
+    /// Tagのプライマリキー
+    @Persisted var tag_id: String?
     
     
     // MARK: init
     
-    convenience init(id: String = "", toDoName: String, todoDate: String, toDo: String, completionFlag: String = CompletionFlag.unfinished.rawValue, createTime: String? = nil) {
+    convenience init(id: String = "", toDoName: String, todoDate: String, toDo: String, completionFlag: String = CompletionFlag.unfinished.rawValue, createTime: String? = nil, tag_id: String?) {
         self.init()
         
         self.id = id
@@ -62,6 +49,7 @@ final class ToDoModel: Object {
         self.toDo = toDo
         self.completionFlag = completionFlag
         self.createTime = createTime
+        self.tag_id = tag_id
     }
     
     // MARK: Todo取得
@@ -69,7 +57,7 @@ final class ToDoModel: Object {
     /// 全件取得
     /// - Returns: 取得したTodoを全件返す
     static func allFindTodo() -> [ToDoModel] {
-        guard let realm else {
+        guard let realm = RealmManager.realm else {
             return []
         }
         var model = [ToDoModel]()
@@ -91,7 +79,7 @@ final class ToDoModel: Object {
     ///   - createTime: Todoの作成時間
     /// - Returns: 取得したTodoの最初の1件を返す
     static func findTodo(todoId: String, createTime: String?) -> ToDoModel? {
-        guard let realm else {
+        guard let realm = RealmManager.realm else {
             return nil
         }
         if let createTime {
@@ -109,7 +97,7 @@ final class ToDoModel: Object {
     ///   - result: Todoの登録時の成功すればVoid、またはエラーを返す
     static func add(addValue:ToDoModel)  throws {
         
-        guard let realm else {
+        guard let realm = RealmManager.realm else {
             throw TodoModelError(message: NSLocalizedString("AddError", tableName: "Message", comment: ""))
         }
         
@@ -119,7 +107,8 @@ final class ToDoModel: Object {
         toDoModel.todoDate = addValue.todoDate
         toDoModel.toDo = addValue.toDo
         toDoModel.completionFlag = CompletionFlag.unfinished.rawValue
-        toDoModel.createTime = Format().stringFromDate(date: Date(), addSec: true)
+        toDoModel.createTime = Format.stringFromDate(date: Date(), addSec: .ms)
+        toDoModel.tag_id = addValue.tag_id
         
         do {
             try realm.write() {
@@ -147,7 +136,7 @@ final class ToDoModel: Object {
     ///   - result: Todoの更新時のエラー
     ///   - result: Todoの登録時の成功すればVoid、またはエラーを返す
     static func update(updateTodo: ToDoModel) throws {
-        guard let realm,
+        guard let realm = RealmManager.realm,
               let toDoModel: ToDoModel = ToDoModel.findTodo(todoId: updateTodo.id, createTime: updateTodo.createTime) else {
                   throw TodoModelError(message: NSLocalizedString("UpdateError", tableName: "Message", comment: ""))
               }
@@ -158,6 +147,7 @@ final class ToDoModel: Object {
                 toDoModel.todoDate = updateTodo.todoDate
                 toDoModel.toDo = updateTodo.toDo
                 toDoModel.completionFlag = updateTodo.completionFlag
+                toDoModel.tag_id = updateTodo.tag_id
             }
             
             if updateTodo.completionFlag == CompletionFlag.completion.rawValue {
@@ -182,7 +172,7 @@ final class ToDoModel: Object {
     ///   - updateTodo: 更新するTodo
     ///   - flag: 変更する値
     static func updateCompletionFlag(updateTodo: ToDoModel, flag: CompletionFlag) {
-        guard let realm else {
+        guard let realm = RealmManager.realm else {
             return
         }
         guard let toDoModel: ToDoModel = ToDoModel.findTodo(todoId: updateTodo.id, createTime: updateTodo.createTime) else { return }
@@ -208,7 +198,7 @@ final class ToDoModel: Object {
     ///   - deleteTodo: 削除するTodo
     ///   - result: Todoの登録時の成功すればVoid、またはエラーを返す
     static func delete(deleteTodo: ToDoModel) throws {
-        guard let realm else {
+        guard let realm = RealmManager.realm else {
             throw DeleteError(model: deleteTodo, message: NSLocalizedString("DeleteError", tableName: "Message", comment: ""))
         }
         if let _createTime = deleteTodo.createTime {
@@ -231,7 +221,7 @@ final class ToDoModel: Object {
     
     /// 全件削除
     static func allDelete()  {
-        guard let realm else {
+        guard let realm = RealmManager.realm else {
             return
         }
         try? realm.write {
@@ -309,7 +299,7 @@ let testModel:[ToDoModel] = {
     
     let todo1 = ToDoModel()
     todo1.toDoName = "TODOName1"
-    todo1.todoDate = Format().stringFromDate(date: Date())
+    todo1.todoDate = Format.stringFromDate(date: Date())
     todo1.toDo = "TODO詳細1"
     todo1.createTime = "2020/01/01 00:00:01"
     todo1.completionFlag = CompletionFlag.unfinished.rawValue
@@ -317,7 +307,7 @@ let testModel:[ToDoModel] = {
     
     let todo2 = ToDoModel()
     todo2.toDoName = "TODOName2"
-    todo2.todoDate = Format().stringFromDate(date: Date())
+    todo2.todoDate = Format.stringFromDate(date: Date())
     todo2.toDo = "TODO詳細2"
     todo2.createTime = "2020/01/01 00:00:02"
     todo2.completionFlag = CompletionFlag.completion.rawValue
@@ -331,7 +321,7 @@ let testModel:[ToDoModel] = {
     
     let todo4 = ToDoModel()
     todo4.toDoName = "TODOName4"
-    todo4.todoDate = Format().stringFromDate(date: Date())
+    todo4.todoDate = Format.stringFromDate(date: Date())
     todo4.toDo = "TODO詳細4"
     todo4.createTime = "2020/01/01 00:00:04"
     

@@ -25,7 +25,7 @@ class TodoDetailViewModelTest: XCTestCase {
     
     func test_setFlag() {
         /// completionFlagをfalseからtrueへ変更する
-        var model: ToDoModel = ToDoModel(id: "0", toDoName: "TEST", todoDate: "Date", toDo: "toDo", completionFlag: CompletionFlag.unfinished.rawValue)
+        var model: ToDoModel = ToDoModel(id: "0", toDoName: "TEST", todoDate: "Date", toDo: "toDo", completionFlag: CompletionFlag.unfinished.rawValue, tag_id: "")
         var viewModel = TodoDetailViewModel(model: model)
         XCTAssertFalse(viewModel.completionFlag, "falseが設定されていない")
         XCTAssert(viewModel.completionFlagStr == CompletionFlag.unfinished, "unfinishedの値が設定されていない")
@@ -36,7 +36,7 @@ class TodoDetailViewModelTest: XCTestCase {
         
         
         /// completionFlagをtrueからfalseへ変更する
-        model = ToDoModel(id: "0", toDoName: "TEST", todoDate: "Date", toDo: "toDo", completionFlag: CompletionFlag.completion.rawValue)
+        model = ToDoModel(id: "0", toDoName: "TEST", todoDate: "Date", toDo: "toDo", completionFlag: CompletionFlag.completion.rawValue, tag_id: "")
         viewModel = TodoDetailViewModel(model: model)
         XCTAssertTrue(viewModel.completionFlag, "trueが設定されていない")
         XCTAssert(viewModel.completionFlagStr == CompletionFlag.completion, "completionの値が設定されていない")
@@ -48,8 +48,8 @@ class TodoDetailViewModelTest: XCTestCase {
     
     
     func test_findTodo() {
-        try? ToDoModel.add(addValue: ToDoModel(toDoName: "TEST", todoDate: "2030/01/01 00:00", toDo: "toDo", completionFlag: CompletionFlag.unfinished.rawValue, createTime: ""))
-        let viewModel = TodoDetailViewModel(model: ToDoModel(id: "1", toDoName: "", todoDate: "", toDo: "", completionFlag: ""))
+        try? ToDoModel.add(addValue: ToDoModel(toDoName: "TEST", todoDate: "2030/01/01 00:00", toDo: "toDo", completionFlag: CompletionFlag.unfinished.rawValue, createTime: "", tag_id: ""))
+        let viewModel = TodoDetailViewModel(model: ToDoModel(id: "1", toDoName: "", todoDate: "", toDo: "", completionFlag: "", tag_id: ""))
         viewModel.findTodo()
         
         XCTAssert(viewModel.model.toDoName == "TEST", "値が異なっている")
@@ -62,8 +62,8 @@ class TodoDetailViewModelTest: XCTestCase {
     
     @MainActor
     func test_deleteTodo() async {
-        try? ToDoModel.add(addValue: ToDoModel(toDoName: "TEST", todoDate: "2030/01/01 00:00", toDo: "toDo", completionFlag: CompletionFlag.unfinished.rawValue, createTime: ""))
-        let viewModel = TodoDetailViewModel(model: ToDoModel(id: "1", toDoName: "", todoDate: "", toDo: "", completionFlag: ""))
+        try? ToDoModel.add(addValue: ToDoModel(toDoName: "TEST", todoDate: "2030/01/01 00:00", toDo: "toDo", completionFlag: CompletionFlag.unfinished.rawValue, createTime: "", tag_id: ""))
+        let viewModel = TodoDetailViewModel(model: ToDoModel(id: "1", toDoName: "", todoDate: "", toDo: "", completionFlag: "", tag_id: ""))
         viewModel.findTodo()
         
         let todoViewModel = ToDoViewModel()

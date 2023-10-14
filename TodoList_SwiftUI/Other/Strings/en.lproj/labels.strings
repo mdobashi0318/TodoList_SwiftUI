@@ -33,3 +33,12 @@
 "AddToDo" = "Add Todo";
 "UpdateToDo" = "Update Todo";
 "Required" = "*Required";
+
+
+"Tag" = "Tag";
+"TagList" = "Tag List";
+"AddTag" = "Add Tag";
+"EditTag" = "Edit Tag";
+
+"TagName" = "Tag Name";
+"TagColor" = "Tag Color";

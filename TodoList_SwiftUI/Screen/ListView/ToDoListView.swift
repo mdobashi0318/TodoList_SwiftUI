@@ -25,29 +25,34 @@ struct ToDoListView: View {
     /// 全件削除の確認アラートの表示フラグ
     @State private var isDeleteFlag = false
     
+    /// Tagリスト画面のモーダル表示フラグ
+    @State private var isShowTagModle = false
     
     // MARK: Body
     
     var body: some View {
         NavigationView {
-            TabView(selection: $viewModel.segmentIndex) {
-                todoList
-                    .tag(SegmentIndex.all)
-                
-                todoList
-                    .tag(SegmentIndex.active)
-                
-                todoList
-                    .tag(SegmentIndex.complete)
-                
-                todoList
-                    .tag(SegmentIndex.expired)
-            }
-            .tabViewStyle(PageTabViewStyle())
-            .onReceive(viewModel.$segmentIndex) { _ in
-                Task {
+            VStack {
+                ListHeader(segmentIndex: self.$viewModel.segmentIndex)
+                TabView(selection: $viewModel.segmentIndex) {
+                    todoList
+                        .tag(SegmentIndex.all)
+                    
+                    todoList
+                        .tag(SegmentIndex.active)
+                    
+                    todoList
+                        .tag(SegmentIndex.expired)
+                    
+                    todoList
+                        .tag(SegmentIndex.complete)
+                    
+                }
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .task(id: viewModel.segmentIndex) {
                     await viewModel.fetchAllTodoModel()
                 }
+                
             }
             .navigationTitle("ToDoList")
             .toolbar {
@@ -56,6 +61,7 @@ struct ToDoListView: View {
                 }
                 
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    tagButton
                     notificationButton
                     addButton
                 }
@@ -97,11 +103,6 @@ extension ToDoListView {
                         }
                     }
                 }
-            }, header: {
-                headerText
-                    .font(.headline)
-                    .padding()
-                    .animation(.none)
             })
         }
         .listStyle(InsetListStyle())
@@ -109,16 +110,17 @@ extension ToDoListView {
     }
     
     /// どのカテゴリかを表示するテキスト
+    @ViewBuilder
     private var headerText: some View {
         switch viewModel.segmentIndex {
         case .all:
-            return Text(R.string.labels.all())
+             Text(R.string.labels.all())
         case .active:
-            return Text(R.string.labels.active())
+             Text(R.string.labels.active())
         case .complete:
-            return Text(R.string.labels.complete())
+             Text(R.string.labels.complete())
         case .expired:
-            return Text(R.string.labels.expired())
+             Text(R.string.labels.expired())
         }
     }
     
@@ -169,6 +171,24 @@ extension ToDoListView {
         }) {
             Image(systemName: setting.isNotification ? "bell" : "bell.slash")
         }
+    }
+    
+    /// タグリスト画面に遷移させるボタン
+    private var tagButton: some View {
+        Button(action: {
+            self.isShowTagModle.toggle()
+        }) {
+            Image(systemName: "tag")
+        }
+        .fullScreenCover(isPresented: $isShowTagModle) {
+            TagListView()
+                .onDisappear {
+                    Task {
+                        await viewModel.fetchAllTodoModel()
+                    }
+                }
+        }
+        .accessibility(identifier: "tagButton")
     }
     
     /// WidgetでタップしたTodoをモーダルで表示する

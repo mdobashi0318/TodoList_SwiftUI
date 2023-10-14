@@ -6,6 +6,6 @@ target 'TodoList_SwiftUI' do
   use_frameworks!
 
   # Pods for TodoList_SwiftUI
-  pod 'R.swift','6.1.0'
+  pod 'R.swift','7.3.2'
 
 end

@@ -22,7 +22,8 @@ struct Provider: TimelineProvider {
                                                      toDoName: NSLocalizedString("TodoTitle", tableName: "Label", comment: ""),
                                                      todoDate: "2021/01/01 00:00",
                                                      toDo: NSLocalizedString("TodoDetail", tableName: "Label", comment: ""),
-                                                     createTime: nil)
+                                                     createTime: nil,
+                                                     tag_id: nil)
         )
         completion(entry)
     }
@@ -31,18 +32,16 @@ struct Provider: TimelineProvider {
         var entries: [SimpleEntry] = []
         var todo: ToDoModel? {
             return ToDoModel.allFindTodo().first(where: {
-                Format().dateFromString(string: $0.todoDate)! > Format().dateFormat() &&
+                Format.dateFromString(string: $0.todoDate)! > Format.dateFormat() &&
                 $0.completionFlag != CompletionFlag.completion.rawValue
             })
         }
         
         
         let currentDate = Date()
-        let entryDate = Calendar.current.date(byAdding: .minute, value: 15, to: currentDate)!
-        for _ in 0 ..< 96 {
-            let entry = SimpleEntry(date: entryDate, todomodel: todo)
-            entries.append(entry)
-        }
+        let entryDate = Calendar.current.date(byAdding: .minute, value: 30, to: currentDate)!
+        let entry = SimpleEntry(date: entryDate, todomodel: todo)
+        entries.append(entry)
         
         let timeline = Timeline(entries: entries, policy: .atEnd)
         completion(timeline)
@@ -76,8 +75,13 @@ struct TodoWidgetEntryView : View {
                     .font(.caption)
                 Text(entry.todomodel?.toDoName ?? NSLocalizedString("NoTodo", tableName: "Label", comment: ""))
                 Text(entry.todomodel?.todoDate ?? "")
+                
+                if #available(iOS 17.0, *) {
+                    todoButton(entry.todomodel)
+                }
             }
             .widgetURL(Self.deeplinkURL)
+            
         case .systemMedium:
             VStack(alignment: .leading) {
                 Text(NSLocalizedString("NextTodo", tableName: "Label", comment: ""))
@@ -89,11 +93,28 @@ struct TodoWidgetEntryView : View {
                     }
                     Text(entry.todomodel?.toDo ?? "")
                 }
+                
+                if #available(iOS 17.0, *) {
+                    todoButton(entry.todomodel)
+                }
             }
             .padding()
             .widgetURL(Self.deeplinkURL)
         default:
             Text("")
+        }
+    }
+    
+    
+    @ViewBuilder
+    @available(iOS 17.0, *)
+    private func todoButton(_ todo: ToDoModel?) -> some View {
+        if let todo,
+           let createTime = todo.createTime {
+            TodoButton(createTime: createTime)
+                .invalidatableContent()
+        } else {
+            EmptyView()
         }
     }
 }

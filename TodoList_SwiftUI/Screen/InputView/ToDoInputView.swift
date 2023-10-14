@@ -13,7 +13,7 @@ struct ToDoInputView: View {
     
     // MARK: Properties
     
-    @ObservedObject var viewModel: InputViewModel
+    @StateObject var viewModel: InputViewModel
     
     
     @Environment(\.presentationMode) private var presentationMode:Binding<PresentationMode>
@@ -32,10 +32,11 @@ struct ToDoInputView: View {
     
     var body: some View {
         NavigationView {
-            List {
+            Form {
                 todoNameSection
                 todoDatePicker
                 todoDetailSection
+                if viewModel.isTagSection { tagSection }
                 if isUpdate { completeToggleSection }
             }
             .listStyle(GroupedListStyle())
@@ -156,7 +157,7 @@ extension ToDoInputView {
     
     /// 詳細入力テキストフィールド
     private var todoDetailSection: some View {
-        return Section(header: headerLabel(text: R.string.labels.details(), identifier: "detailLabel", isRequiredLabel: true)) {
+        return Section(header: headerLabel(text: R.string.labels.details(), identifier: "detailLabel", isRequiredLabel: false)) {
             textField(placeholder: R.string.message.inputDetails(),
                       text: $viewModel.toDo,
                       identifier: "detailTextField"
@@ -170,6 +171,17 @@ extension ToDoInputView {
         return Section {
             Toggle(R.string.labels.complete(), isOn: $viewModel.completionFlag)
                 .accessibility(identifier: "completeSwitch")
+        }
+    }
+    
+    /// TodoのTag
+    private var tagSection: some View {
+        return Section {
+            Picker("Tag", selection: $viewModel.tag_id) {
+                ForEach(viewModel.tagList, id: \.id) { tag in
+                    Text(tag.name)
+                }
+            }
         }
     }
     
