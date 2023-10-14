@@ -18,38 +18,54 @@ struct ListHeader: View {
     
     var body: some View {
         ScrollView(.horizontal) {
-            ZStack(alignment: .bottom) {
-                HStack(spacing: 1) {
-                    ForEach(0..<SegmentIndex.allCases.count, id: \.self) { index in
-                        Button(action: {
-                            guard let selectIndex = SegmentIndex(rawValue: index) else { return }
-                            segmentIndex = selectIndex
-                        }, label: {
-                            Text(buttonText(index))
-                        })
-                        .frame(minWidth: UIScreen.main.bounds.width / CGFloat(SegmentIndex.allCases.count) , minHeight: 40)
-                    }
+            VStack {
+                ZStack(alignment: .bottom) {
+                    tabs
+                    bar
                 }
-                Rectangle()
-                    .frame(width: UIScreen.main.bounds.width / CGFloat(SegmentIndex.allCases.count) / 1.5, height: 5)
-                    .foregroundColor(.red)
-                    .offset(x: positionX, y: 0)
-                
+                Divider()
             }
+            
         }
         .task(id: segmentIndex) {
-            selectedBar(segmentIndex.rawValue)
+            barPosition(segmentIndex.rawValue)
         }
-        
     }
     
-    private func selectedBar(_ index: Int) {
+    
+    
+    private var tabs: some View {
+        HStack(spacing: 1) {
+            ForEach(0..<SegmentIndex.allCases.count, id: \.self) { index in
+                Button(action: {
+                    guard let selectIndex = SegmentIndex(rawValue: index) else { return }
+                    segmentIndex = selectIndex
+                }, label: {
+                    Text(buttonText(index))
+                })
+                .frame(minWidth: UIScreen.main.bounds.width / CGFloat(SegmentIndex.allCases.count) , minHeight: 40)
+            }
+        }
+    }
+    
+    
+    private var bar: some View {
+        Rectangle()
+            .cornerRadius(18)
+            .frame(width: UIScreen.main.bounds.width / CGFloat(SegmentIndex.allCases.count) / 1.5, height: 4)
+            .foregroundColor(.blue)
+            .offset(x: positionX, y: 0)
+    }
+    
+    
+    private func barPosition(_ index: Int) {
         var addPositionX: CGFloat = constAddPositionX
         withAnimation(.default) {
             addPositionX += CGFloat(index)
             positionX = UIScreen.main.bounds.width / CGFloat(SegmentIndex.allCases.count) * addPositionX
-          }
+        }
     }
+    
     
     private func buttonText(_ index: Int) -> String {
         switch index {
