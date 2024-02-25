@@ -2,13 +2,7 @@
 
 
 ## setup
-1. Clone the project.
-```
-   git clone https://github.com/mdobashi0318/TodoList_SwiftUI.git
-   cd TodoList_SwiftUI
-   xcodegen generate
-```
-or 
+1. Download the project.
 ```
    download zip
    cd TodoList_SwiftUI-1.8.0
