@@ -3,7 +3,7 @@ targets:
   TodoList_SwiftUI:
     type: application
     platform: iOS
-    deploymentTarget: &deployment_target "15.0"
+    deploymentTarget: &deployment_target "16.0"
     entitlements:
       path: TodoList_SwiftUI/TodoList_SwiftUI.entitlements
       properties:
@@ -52,7 +52,7 @@ targets:
          CODE_SIGN_STYLE: Automatic
          DEVELOPMENT_TEAM: 7RPFL7EXKD
          INFOPLIST_FILE: TodoList_Tests/Info.plist
-         IPHONEOS_DEPLOYMENT_TARGET: 14.0
+         IPHONEOS_DEPLOYMENT_TARGET: 16.0
          PRODUCT_BUNDLE_IDENTIFIER: "m.dobashi.TodoList-Tests"
          PRODUCT_NAME: "$(TARGET_NAME)"
          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/TodoList_SwiftUI.app/TodoList_SwiftUI"
