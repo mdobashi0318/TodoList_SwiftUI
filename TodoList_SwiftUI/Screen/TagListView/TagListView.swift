@@ -16,28 +16,29 @@ struct TagListView: View {
     @Environment(\.presentationMode) private var presentationMode:Binding<PresentationMode>
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 if viewModel.model.isEmpty {
                     Text(R.string.message.noTag())
                 } else {
                     ForEach(viewModel.model, id: \.id) { tag in
-                        NavigationLink(destination: {
-                            EditTagView(viewModel: EditTagViewModel(tag))
-                                .onDisappear {
-                                    Task {
-                                        await self.viewModel.fetchAllTag()
-                                    }
-                                    
-                                }
-                        }, label: {
+                        NavigationLink(value: tag) {
                             TagRow(tag: tag)
-                        })
+                        }
                         
                     }
                 }
             }
             .navigationTitle(R.string.labels.tagList())
+            .navigationDestination(for: Tag.self) { tag in
+                EditTagView(viewModel: EditTagViewModel(tag))
+                    .onDisappear {
+                        Task {
+                            await self.viewModel.fetchAllTag()
+                        }
+                        
+                    }
+            }
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     addButton

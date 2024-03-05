@@ -22,7 +22,7 @@ struct TagRegistrationView: View {
     @State private var errorMessage = ""
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             TagView(name: $name, color: $color)
                 .navigationTitle(R.string.labels.addTag())
                 .toolbar {

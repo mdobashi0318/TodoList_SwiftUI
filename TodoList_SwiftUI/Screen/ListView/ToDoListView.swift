@@ -31,7 +31,7 @@ struct ToDoListView: View {
     // MARK: Body
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 ListHeader(segmentIndex: self.$viewModel.segmentIndex)
                 TabView(selection: $viewModel.segmentIndex) {
@@ -55,6 +55,9 @@ struct ToDoListView: View {
                 
             }
             .navigationTitle("ToDoList")
+            .navigationDestination(for: ToDoModel.self) { model in
+                TodoDetailView(viewModel: TodoDetailViewModel(model: model))
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     allDeleteButton
@@ -90,14 +93,7 @@ extension ToDoListView {
                     Text(R.string.message.noTodo())
                 } else {
                     ForEach(0..<self.viewModel.todoModel.count, id: \.self) { row in
-                        NavigationLink(destination:
-                                        TodoDetailView(viewModel: TodoDetailViewModel(model: self.viewModel.todoModel[row]))
-                            .onDisappear {
-                                Task {
-                                    await viewModel.fetchAllTodoModel()
-                                }
-                            }
-                        ) {
+                        NavigationLink(value: self.viewModel.todoModel[row]) {
                             ToDoRow(todoModel: self.$viewModel.todoModel[row])
                                 .frame(height: 60)
                         }
@@ -193,7 +189,7 @@ extension ToDoListView {
     
     /// WidgetでタップしたTodoをモーダルで表示する
     private var openWidgetView: some View {
-        return NavigationView {
+        return NavigationStack {
             TodoDetailView(viewModel: TodoDetailViewModel(model: openWidget.openTodo), isDisplayEllipsisBtn: false)
                 .onDisappear { openWidget.isOpneTodo = false }
                 .navigationTitle(openWidget.openTodo.toDoName)

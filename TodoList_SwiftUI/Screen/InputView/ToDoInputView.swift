@@ -31,7 +31,7 @@ struct ToDoInputView: View {
     // MARK: Body
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 todoNameSection
                 todoDatePicker
