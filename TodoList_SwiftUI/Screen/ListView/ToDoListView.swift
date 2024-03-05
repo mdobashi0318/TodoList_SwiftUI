@@ -102,7 +102,6 @@ extension ToDoListView {
             })
         }
         .listStyle(InsetListStyle())
-        .animation(.easeIn)
     }
     
     /// どのカテゴリかを表示するテキスト
