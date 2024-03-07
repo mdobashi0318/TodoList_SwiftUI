@@ -9,21 +9,17 @@ targets:
       properties:
         com.apple.security.application-groups:
         - group.TodoList-SwiftUI
-    prebuildScripts:
-      - name: Run R.swift
-        script: |
-           "$PODS_ROOT/R.swift/rswift" generate "$SRCROOT/$TARGET_NAME/Generated/R.generated.swift"
-        outputFiles:
-          - $SRCROOT/$TARGET_NAME/Generated/R.generated.swift
     sources:
-         - TodoList_SwiftUI
-         - path: "TodoList_SwiftUI/Generated/R.generated.swift"
-           optional: true
-           type: file
+      - TodoList_SwiftUI
     dependencies:
       - target: TodoWidgetExtension
       - package: Realm
         product: RealmSwift
+      - package: Rswift
+        product: RswiftLibrary
+    buildToolPlugins:
+      - plugin: RswiftGenerateInternalResources
+        package: Rswift
     settings:
         base: 
          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
@@ -116,7 +112,6 @@ targets:
          
 options:
   bundleIdPrefix: m.dobashi
-  postGenCommand: pod install
 packages:
  XcodeGen:
     url: https://github.com/yonaskolb/XcodeGen
@@ -124,6 +119,9 @@ packages:
  Realm:
     url: https://github.com/realm/realm-swift
     version: 10.30.0
+ Rswift:
+    url: https://github.com/mac-cain13/R.swift
+    version: 7.4.0
 
 
 schemes:
