@@ -19,14 +19,15 @@ struct EditTagView: View {
     @State private var errorMessage = ""
     
     @State private var deleteConfilmFlag = false
+    
+    @State private var disabledFlag = true
 
     var body: some View {
-        TagView(name: $viewModel.name, color: $viewModel.color)
+        TagView(name: $viewModel.name, color: $viewModel.color, disabledFlag: $disabledFlag)
             .navigationTitle(R.string.labels.editTag())
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    deleteButton
-                    editButton
+                    navigationBarTrailingButton()
                 }
             }
             .alert(isPresented: $isShowAlert) {
@@ -35,7 +36,26 @@ struct EditTagView: View {
     }
     
     
+    @ViewBuilder
+    private func navigationBarTrailingButton() -> some View {
+        if disabledFlag {
+            deleteButton
+            editButton
+        } else {
+            cancelButton
+            doneButton
+        }
+    }
+    
     private var editButton: some View {
+        Button(action: {
+            disabledFlag.toggle()
+        }) {
+            Text("Edit")
+        }
+    }
+    
+    private var doneButton: some View {
         Button(action: {
             do {
                 try viewModel.update()
@@ -76,5 +96,15 @@ struct EditTagView: View {
         }
     }
     
+    
+    
+    private var cancelButton: some View {
+        Button(action: {
+            disabledFlag.toggle()
+            viewModel.rollback()
+        }) {
+            Text("Cancel")
+        }
+    }
     
 }

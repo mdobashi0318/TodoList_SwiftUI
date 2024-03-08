@@ -23,7 +23,7 @@ struct TagRegistrationView: View {
     
     var body: some View {
         NavigationStack {
-            TagView(name: $name, color: $color)
+            TagView(name: $name, color: $color, disabledFlag: .constant(false))
                 .navigationTitle(R.string.labels.addTag())
                 .toolbar {
                     ToolbarItemGroup(placement: .navigationBarTrailing) {
