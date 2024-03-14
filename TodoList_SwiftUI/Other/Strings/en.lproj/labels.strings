@@ -39,6 +39,7 @@
 "TagList" = "Tag List";
 "AddTag" = "Add Tag";
 "EditTag" = "Edit Tag";
+"TagDetails" = "Tag Details";
 
 "TagName" = "Tag Name";
 "TagColor" = "Tag Color";

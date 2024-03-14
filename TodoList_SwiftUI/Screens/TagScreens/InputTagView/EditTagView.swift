@@ -24,7 +24,7 @@ struct EditTagView: View {
 
     var body: some View {
         TagView(name: $viewModel.name, color: $viewModel.color, disabledFlag: $disabledFlag)
-            .navigationTitle(R.string.labels.editTag())
+            .navigationTitle(disabledFlag ? R.string.labels.tagDetails() : R.string.labels.editTag())
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     navigationBarTrailingButton()

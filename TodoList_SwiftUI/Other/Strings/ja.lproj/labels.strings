@@ -38,6 +38,7 @@
 "TagList" = "タグリスト";
 "AddTag" = "タグ追加";
 "EditTag" = "タグ編集";
+"TagDetails" = "タグ詳細";
 
 "TagName" = "タグ名";
 "TagColor" = "タグカラー";
