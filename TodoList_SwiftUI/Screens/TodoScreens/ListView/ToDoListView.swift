@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 struct ToDoListView: View {
     
@@ -52,6 +53,14 @@ struct ToDoListView: View {
                 .task(id: viewModel.segmentIndex) {
                     await viewModel.fetchAllTodoModel()
                 }
+                .task {
+                    if #available(iOS 17.0, *) {
+                        try? Tips.configure([
+                                     .displayFrequency(.immediate),
+                                     .datastoreLocation(.applicationDefault)
+                                 ])
+                    }
+                }
                 
             }
             .navigationTitle("ToDoList")
@@ -66,7 +75,12 @@ struct ToDoListView: View {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     tagButton
                     notificationButton
-                    addButton
+                    if #available(iOS 17.0, *) {
+                        addButton
+                            .popoverTip(AddTodoTip())
+                    } else {
+                        addButton
+                    }
                 }
             }
             .sheet(isPresented: $openWidget.isOpneTodo) { openWidgetView }
