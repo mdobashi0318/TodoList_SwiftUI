@@ -38,6 +38,9 @@
 "ValidateDate" = "入力されている期限が無効です";
 
 
-/// MARK: Tip
+/// MARK: - Tip
 "TipAddTodoTitle" = "Todoの追加画面を表示";
 "TipAddTodoMessage" = "Todoを作成することができます。";
+
+"TipTagTitle" = "Todoに追加できるタグ";
+"TipTagMessage" = "この画面からタグの追加や詳細の表示、編集をする画面に遷移することができます。";

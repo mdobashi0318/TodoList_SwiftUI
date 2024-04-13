@@ -42,6 +42,10 @@
 "ValidateDate" = "The deadline you entered is invalid.";
 
 
+/// MARK: - Tip
 
 "TipAddTodoTitle" = "Display the Add Todo screen";
 "TipAddTodoMessage" = "You can create a Todo.";
+
+"TipTagTitle" = "";
+"TipTagMessage" = "";
