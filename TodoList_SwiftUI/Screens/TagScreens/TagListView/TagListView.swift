@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 struct TagListView: View {
     
@@ -18,6 +19,9 @@ struct TagListView: View {
     var body: some View {
         NavigationStack {
             List {
+                if #available(iOS 17.0, *) {
+                    TipView(TagTip())
+                }
                 if viewModel.model.isEmpty {
                     Text(R.string.message.noTag())
                 } else {
@@ -29,6 +33,7 @@ struct TagListView: View {
                     }
                 }
             }
+            .listStyle(.inset)
             .navigationTitle(R.string.labels.tagList())
             .navigationDestination(for: Tag.self) { tag in
                 EditTagView(viewModel: EditTagViewModel(tag))
