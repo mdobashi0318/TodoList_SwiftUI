@@ -47,5 +47,5 @@
 "TipAddTodoTitle" = "Display the Add Todo screen";
 "TipAddTodoMessage" = "You can create a Todo.";
 
-"TipTagTitle" = "";
-"TipTagMessage" = "";
+"TipTagTitle" = "Tags that can be added to Todo";
+"TipTagMessage" = "From this screen, you can move to a screen where you can add tags, view details, and edit them.";
