@@ -14,9 +14,6 @@ import WidgetKit
 
 final class ToDoModel: Object {
     
-    
-    @Persisted var id: String = ""
-    
     /// Todoの期限
     @Persisted var todoDate: String = ""
     
@@ -40,10 +37,9 @@ final class ToDoModel: Object {
     
     // MARK: init
     
-    convenience init(id: String = "", toDoName: String, todoDate: String, toDo: String, completionFlag: String = CompletionFlag.unfinished.rawValue, createTime: String? = nil, tag_id: String?) {
+    convenience init(toDoName: String, todoDate: String, toDo: String, completionFlag: String = CompletionFlag.unfinished.rawValue, createTime: String? = nil, tag_id: String?) {
         self.init()
         
-        self.id = id
         self.toDoName = toDoName
         self.todoDate = todoDate
         self.toDo = toDo
@@ -78,15 +74,11 @@ final class ToDoModel: Object {
     ///   - todoId: TodoId
     ///   - createTime: Todoの作成時間
     /// - Returns: 取得したTodoの最初の1件を返す
-    static func findTodo(todoId: String, createTime: String?) -> ToDoModel? {
+    static func findTodo(createTime: String?) -> ToDoModel? {
         guard let realm = RealmManager.realm else {
             return nil
         }
-        if let createTime {
-            return (realm.objects(ToDoModel.self).filter("createTime == '\(String(describing: createTime))'").first)
-        } else {
-            return (realm.objects(ToDoModel.self).filter("id == '\(String(describing: todoId))'").first)
-        }
+        return (realm.object(ofType: ToDoModel.self, forPrimaryKey: createTime))
     }
     
     // MARK: Todo追加
@@ -102,7 +94,6 @@ final class ToDoModel: Object {
         }
         
         let toDoModel: ToDoModel = ToDoModel()
-        toDoModel.id = String(realm.objects(ToDoModel.self).count + 1)
         toDoModel.toDoName = addValue.toDoName
         toDoModel.todoDate = addValue.todoDate
         toDoModel.toDo = addValue.toDo
@@ -137,7 +128,7 @@ final class ToDoModel: Object {
     ///   - result: Todoの登録時の成功すればVoid、またはエラーを返す
     static func update(updateTodo: ToDoModel) throws {
         guard let realm = RealmManager.realm,
-              let toDoModel: ToDoModel = ToDoModel.findTodo(todoId: updateTodo.id, createTime: updateTodo.createTime) else {
+              let toDoModel: ToDoModel = ToDoModel.findTodo(createTime: updateTodo.createTime) else {
                   throw TodoModelError(message: NSLocalizedString("UpdateError", tableName: "Message", comment: ""))
               }
         
@@ -175,7 +166,7 @@ final class ToDoModel: Object {
         guard let realm = RealmManager.realm else {
             return
         }
-        guard let toDoModel: ToDoModel = ToDoModel.findTodo(todoId: updateTodo.id, createTime: updateTodo.createTime) else { return }
+        guard let toDoModel: ToDoModel = ToDoModel.findTodo(createTime: updateTodo.createTime) else { return }
         try? realm.write() {
             toDoModel.completionFlag = flag.rawValue
         }

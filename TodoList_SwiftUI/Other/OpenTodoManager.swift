@@ -29,8 +29,7 @@ final class OpenTodoManager: ObservableObject {
     private var findNextTodo: ToDoModel? {
         get {
             let model = ToDoModel.allFindTodo()
-            guard let _nextTodo = model.filter({ Format.dateFromString(string: $0.todoDate)! > Format.dateFormat() && $0.completionFlag != CompletionFlag.completion.rawValue }).first,
-                  !_nextTodo.id.isEmpty else {
+            guard let _nextTodo = model.filter({ Format.dateFromString(string: $0.todoDate)! > Format.dateFormat() && $0.completionFlag != CompletionFlag.completion.rawValue }).first else {
                 return nil
             }
             return _nextTodo
@@ -48,7 +47,7 @@ final class OpenTodoManager: ObservableObject {
     private let openedFromNotsificationBanner = NotificationCenter.default.publisher(for: Notification.Name(rawValue: R.string.notifications.tapNotificationBanner()))
         .sink(receiveValue: { notification in
             guard let _id = notification.object as? String else { return }
-            shared.openTodoModal(.NotificationBanner, todo: ToDoModel.findTodo(todoId: "", createTime: _id))
+            shared.openTodoModal(.NotificationBanner, todo: ToDoModel.findTodo(createTime: _id))
         })
     
     
