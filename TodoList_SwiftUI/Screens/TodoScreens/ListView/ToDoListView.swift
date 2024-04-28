@@ -61,7 +61,9 @@ struct ToDoListView: View {
                                  ])
                     }
                 }
-                
+                .task(id: viewModel.searchTagId) {
+                    await viewModel.fetchAllTodoModel()
+                }
             }
             .navigationTitle("ToDoList")
             .navigationDestination(for: ToDoModel.self) { model in
@@ -103,6 +105,11 @@ extension ToDoListView {
     private var todoList: some View {
         List {
             Section(content: {
+                Picker(R.string.labels.filterByTag(), selection: $viewModel.searchTagId) {
+                    ForEach(viewModel.tagModel, id: \.id) { tag in
+                        Text(tag.name)
+                    }
+                }
                 if self.viewModel.todoModel.count == 0 {
                     Text(R.string.message.noTodo())
                 } else {
@@ -194,6 +201,7 @@ extension ToDoListView {
                 .onDisappear {
                     Task {
                         await viewModel.fetchAllTodoModel()
+                        viewModel.fetchAllTag()
                     }
                 }
         }

@@ -42,3 +42,6 @@
 
 "TagName" = "タグ名";
 "TagColor" = "タグカラー";
+
+
+"FilterByTag" = "タグで絞り込み";
