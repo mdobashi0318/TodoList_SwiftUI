@@ -30,15 +30,11 @@ class SettingManager: ObservableObject {
     /// - iOS15以下: 設定アプリのアプリ設定画面に遷移する
     @MainActor
     func openSettingsURL() {
-        if #available(iOS 16.0, *) {
-            Task {
-                if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
-                    /// シミュレータに「設定」>「通知」>「アプリ」の動線がないので実機でしか通知設定に遷移しない。
-                    let _ = await UIApplication.shared.open(url)
-                }
+        Task {
+            if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
+                /// シミュレータに「設定」>「通知」>「アプリ」の動線がないので実機でしか通知設定に遷移しない。
+                let _ = await UIApplication.shared.open(url)
             }
-        } else {
-            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
         }
     }
     
