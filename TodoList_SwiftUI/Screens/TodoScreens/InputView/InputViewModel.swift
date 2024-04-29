@@ -10,9 +10,7 @@ import Foundation
 import Combine
 
 final class InputViewModel: ObservableObject {
-    
-    var id: String = ""
-    
+        
     /// Todoのタイトル
     @Published var toDoName: String = ""
     
@@ -62,7 +60,6 @@ final class InputViewModel: ObservableObject {
         }
         
         if let model {
-            id = model.id
             toDoName = model.toDoName
             todoDateStr = model.todoDate
             if let date = Format.dateFromString(string: model.todoDate) {
@@ -124,7 +121,7 @@ final class InputViewModel: ObservableObject {
         }
         
         do {
-            try ToDoModel.update(updateTodo: ToDoModel(id: self.id,toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo, completionFlag: self.completionFlagStr.rawValue, createTime: self.createTime, tag_id: self.tag_id))
+            try ToDoModel.update(updateTodo: ToDoModel(toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo, completionFlag: self.completionFlagStr.rawValue, createTime: self.createTime, tag_id: self.tag_id))
         } catch {
             if let _error = error as? TodoModelError {
                 throw _error

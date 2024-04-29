@@ -44,7 +44,7 @@ class TodoDetailViewModel: ObservableObject {
     
     /// Todoを１件検索
     func findTodo() {
-        guard let model = ToDoModel.findTodo(todoId: model.id, createTime: model.createTime) else {
+        guard let model = ToDoModel.findTodo(createTime: model.createTime) else {
             isError = true
             errorMessage = R.string.message.findError()
             return

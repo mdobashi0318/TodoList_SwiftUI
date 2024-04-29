@@ -22,8 +22,8 @@ struct TagRegistrationView: View {
     @State private var errorMessage = ""
     
     var body: some View {
-        NavigationView {
-            TagView(name: $name, color: $color)
+        NavigationStack {
+            TagView(name: $name, color: $color, disabledFlag: .constant(false))
                 .navigationTitle(R.string.labels.addTag())
                 .toolbar {
                     ToolbarItemGroup(placement: .navigationBarTrailing) {

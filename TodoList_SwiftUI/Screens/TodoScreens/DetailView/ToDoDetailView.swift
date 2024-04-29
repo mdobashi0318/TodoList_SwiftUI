@@ -155,7 +155,7 @@ extension TodoDetailView {
 
 struct TodoDetail_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             TodoDetailView(viewModel: TodoDetailViewModel(model: testModel[0]))
             //            .colorScheme(.dark)
             //            .background(Color(.systemBackground))

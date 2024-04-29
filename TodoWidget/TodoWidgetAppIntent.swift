@@ -25,7 +25,7 @@ struct TodoWidgetAppIntent: AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult {
-        guard let todo = ToDoModel.findTodo(todoId: "", createTime: createTime) else { return .result() }
+        guard let todo = ToDoModel.findTodo(createTime: createTime) else { return .result() }
         ToDoModel.updateCompletionFlag(
             updateTodo: todo,
             flag: CompletionFlag.completion

@@ -23,27 +23,40 @@ final class ToDoViewModel: ObservableObject {
     @Published var todoModel: [ToDoModel] = []
     
     @Published var segmentIndex: SegmentIndex = .all
+    
+    @Published var searchTagId = ""
+    
+    var tagModel: [Tag] = []
         
     var isAlertError: Bool = false
+    
+    
+    init() {
+        Task {
+            await fetchAllTodoModel()
+            await fetchAllTag()
+        }
+        
+    }
     
     /// Todoを全件取得する
     @MainActor
     func fetchAllTodoModel() async {
         todoModel = switch segmentIndex {
         case .active:
-            ToDoModel.allFindTodo().filter {
+            ToDoModel.allFindTodo(tagId: searchTagId).filter {
                 Format.dateFromString(string: $0.todoDate)! > Format.dateFormat() && $0.completionFlag != CompletionFlag.completion.rawValue
             }
         case .expired:
-            ToDoModel.allFindTodo().filter {
+            ToDoModel.allFindTodo(tagId: searchTagId).filter {
                 $0.todoDate <= Format.stringFromDate(date: Date()) && $0.completionFlag != CompletionFlag.completion.rawValue
             }
         case .complete:
-            ToDoModel.allFindTodo().filter {
+            ToDoModel.allFindTodo(tagId: searchTagId).filter {
                 $0.completionFlag == CompletionFlag.completion.rawValue
             }
         case .all:
-            ToDoModel.allFindTodo()
+            ToDoModel.allFindTodo(tagId: searchTagId)
         }
     }
     
@@ -52,6 +65,11 @@ final class ToDoViewModel: ObservableObject {
     func allDeleteTodo() {
         ToDoModel.allDelete()
         self.todoModel = []
+    }
+    
+    @MainActor
+    func fetchAllTag() {
+        tagModel = Tag.findAll(addEmptyTagFlag: true)
     }
 
 }

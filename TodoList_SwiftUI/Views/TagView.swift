@@ -13,12 +13,15 @@ struct TagView: View {
     
     @Binding var color: CGColor
     
+    @Binding var disabledFlag: Bool
     
     var body: some View {
         Form {
             Section(R.string.labels.tag()) {
                 TextField(R.string.labels.tagName(), text: $name)
+                    .disabled(disabledFlag)
                 ColorPicker(R.string.labels.tagColor(), selection: $color)
+                    .disabled(disabledFlag)
             }
        
         }

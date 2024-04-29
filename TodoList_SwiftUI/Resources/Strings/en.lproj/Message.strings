@@ -41,3 +41,11 @@
 "Validate" = "%@ is not entered.";
 "ValidateDate" = "The deadline you entered is invalid.";
 
+
+/// MARK: - Tip
+
+"TipAddTodoTitle" = "Display the Add Todo screen";
+"TipAddTodoMessage" = "You can create a Todo.";
+
+"TipTagTitle" = "Tags that can be added to Todo";
+"TipTagMessage" = "From this screen, you can move to a screen where you can add tags, view details, and edit them.";

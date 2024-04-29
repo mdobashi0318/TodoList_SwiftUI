@@ -18,8 +18,7 @@ struct Provider: TimelineProvider {
     
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> Void) {
         let entry = SimpleEntry(date: Date(),
-                                todomodel: ToDoModel(id: "",
-                                                     toDoName: NSLocalizedString("TodoTitle", tableName: "Label", comment: ""),
+                                todomodel: ToDoModel(toDoName: NSLocalizedString("TodoTitle", tableName: "Label", comment: ""),
                                                      todoDate: "2021/01/01 00:00",
                                                      toDo: NSLocalizedString("TodoDetail", tableName: "Label", comment: ""),
                                                      createTime: nil,

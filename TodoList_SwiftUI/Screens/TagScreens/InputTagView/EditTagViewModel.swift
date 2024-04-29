@@ -24,7 +24,11 @@ class EditTagViewModel: ObservableObject {
         self.name = tag.name
     }
     
-    
+    func rollback() {
+        self.tag = tag
+        self.color = tag.color()
+        self.name = tag.name
+    }
     
     func update() throws {
         do {
