@@ -12,9 +12,19 @@ struct ToDoListApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegates
     
+    @Environment(\.scenePhase) private var scenePhase
+    
     var body: some Scene {
         WindowGroup {
             ToDoListView()
+                .onChange(of: scenePhase) { phase in
+                    switch phase {
+                    case .active:
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: R.string.notifications.getNotificationStatus()), object: nil)
+                    default:
+                        break
+                    }
+                }
         }
     }
 }
