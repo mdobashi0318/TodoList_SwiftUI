@@ -115,10 +115,10 @@ options:
 packages:
  XcodeGen:
     url: https://github.com/yonaskolb/XcodeGen
-    version: 2.29.0
+    version: 2.40.1
  Realm:
     url: https://github.com/realm/realm-swift
-    version: 10.30.0
+    version: 10.50.0
  Rswift:
     url: https://github.com/mac-cain13/R.swift
     version: 7.4.0
