@@ -105,9 +105,11 @@ extension ToDoListView {
     private var todoList: some View {
         List {
             Section(content: {
-                Picker(R.string.labels.filterByTag(), selection: $viewModel.searchTagId) {
-                    ForEach(viewModel.tagModel, id: \.id) { tag in
-                        Text(tag.name)
+                if viewModel.tagModel.isNotEmpty {
+                    Picker(R.string.labels.filterByTag(), selection: $viewModel.searchTagId) {
+                        ForEach(viewModel.tagModel, id: \.id) { tag in
+                            Text(tag.name)
+                        }
                     }
                 }
                 if self.viewModel.todoModel.count == 0 {
