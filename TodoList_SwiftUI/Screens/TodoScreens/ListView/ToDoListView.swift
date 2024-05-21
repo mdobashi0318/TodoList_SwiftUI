@@ -118,13 +118,12 @@ extension ToDoListView {
                     ForEach(0..<self.viewModel.todoModel.count, id: \.self) { row in
                         NavigationLink(value: self.viewModel.todoModel[row]) {
                             ToDoRow(todoModel: self.$viewModel.todoModel[row])
-                                .frame(height: 60)
                         }
                     }
                 }
             })
         }
-        .listStyle(InsetListStyle())
+        .listStyle(.inset)
     }
     
     /// どのカテゴリかを表示するテキスト
