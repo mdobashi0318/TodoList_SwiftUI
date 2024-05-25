@@ -30,7 +30,7 @@ targets:
          DEVELOPMENT_TEAM: 7RPFL7EXKD
          ENABLE_PREVIEWS: YES
          INFOPLIST_FILE: TodoList_SwiftUI/Info.plist
-         MARKETING_VERSION: &marketing_version 1.9.0
+         MARKETING_VERSION: &marketing_version 1.9.1
          CURRENT_PROJECT_VERSIO: 1
          PRODUCT_BUNDLE_IDENTIFIER: "m.dobashi.TodoList-SwiftUI"
          PRODUCT_NAME: "$(TARGET_NAME)"
@@ -115,10 +115,10 @@ options:
 packages:
  XcodeGen:
     url: https://github.com/yonaskolb/XcodeGen
-    version: 2.29.0
+    version: 2.40.1
  Realm:
     url: https://github.com/realm/realm-swift
-    version: 10.30.0
+    version: 10.50.0
  Rswift:
     url: https://github.com/mac-cain13/R.swift
     version: 7.4.0

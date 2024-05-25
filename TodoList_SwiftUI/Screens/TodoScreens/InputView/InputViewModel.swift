@@ -54,10 +54,7 @@ final class InputViewModel: ObservableObject {
     private func setModelValue(_ model: ToDoModel?) {
         tagList = Tag.findAll(addEmptyTagFlag: true)
         
-        /// タグの一つは空のタグなので一つより多い時に表示する
-        if tagList.count > 1 {
-            isTagSection = true
-        }
+        isTagSection = tagList.isNotEmpty
         
         if let model {
             toDoName = model.toDoName

@@ -25,7 +25,6 @@ struct ToDoRow: View {
             }
         }
         .frame(alignment: .leading)
-        .padding()
     }
 }
 
