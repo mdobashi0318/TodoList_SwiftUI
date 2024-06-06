@@ -15,7 +15,7 @@ struct CompletionLable: View {
     let todoDate: String
     
     /// 完了フラグ
-    @Binding var completionFlag: String
+    var completionFlag: String
     
     var body: some View {
         HStack {
@@ -45,11 +45,11 @@ struct CompletionLable: View {
 struct CompletionLable_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            CompletionLable(todoDate: testModel[0].todoDate, completionFlag: .constant(testModel[0].completionFlag))
+            CompletionLable(todoDate: testModel[0].todoDate, completionFlag: testModel[0].completionFlag)
                 .previewLayout(.sizeThatFits)
-            CompletionLable(todoDate: testModel[1].todoDate, completionFlag: .constant( testModel[1].completionFlag))
+            CompletionLable(todoDate: testModel[1].todoDate, completionFlag:  testModel[1].completionFlag)
                 .previewLayout(.sizeThatFits)
-            CompletionLable(todoDate: testModel[2].todoDate, completionFlag: .constant(testModel[2].completionFlag))
+            CompletionLable(todoDate: testModel[2].todoDate, completionFlag: testModel[2].completionFlag)
                 .previewLayout(.sizeThatFits)
         }
     }

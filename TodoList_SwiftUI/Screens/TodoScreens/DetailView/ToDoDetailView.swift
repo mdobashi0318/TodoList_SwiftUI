@@ -33,34 +33,16 @@ struct TodoDetailView: View {
     
     var body: some View {
         Form {
-            Section(header: Text(R.string.labels.deadline())
-                .font(.headline)) {
-                    CompletionLable(todoDate: viewModel.model.todoDate, completionFlag: $viewModel.model.completionFlag)
-                }
-            
-            if !viewModel.model.toDo.isEmpty {
-                Section(header: Text(R.string.labels.details())
-                    .font(.headline)) {
-                        Text(viewModel.model.toDo)
-                            .accessibility(identifier: "todoDetaillabel")
-                    }
-            }
-            
-            
-            if let tag_id = viewModel.model.tag_id,
-               let tag = Tag.find(id: tag_id) {
-                Section(header: Text(R.string.labels.tag())
-                    .font(.headline)) {
-                        TagRow(tag: tag)
-                    }
-            }
+            nameSection
+            detailSection
+            tagSection
             completeToggleSection
         }
         .alert(isPresented: $viewModel.isError) {
             Alert(title: Text(viewModel.errorMessage))
         }
-        .listStyle(GroupedListStyle())
-        .navigationTitle(viewModel.model.toDoName)
+        .listStyle(.grouped)
+        .navigationTitle(viewModel.title)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 if isDisplayEllipsisBtn {
@@ -80,8 +62,38 @@ struct TodoDetailView: View {
 
 extension TodoDetailView {
     
+    @ViewBuilder
+    private var nameSection: some View {
+        Section(header: Text(R.string.labels.deadline())
+            .font(.headline)) {
+                CompletionLable(todoDate: viewModel.date, completionFlag: viewModel.completionFlag)
+            }
+    }
+    
+    @ViewBuilder
+    private var detailSection: some View {
+        if !viewModel.detail.isEmpty {
+            Section(header: Text(R.string.labels.details())
+                .font(.headline)) {
+                    Text(viewModel.detail)
+                        .accessibility(identifier: "todoDetaillabel")
+                }
+        }
+    }
+    
+    @ViewBuilder
+    private var tagSection: some View {
+        if let tag_id = viewModel.tagId,
+           let tag = Tag.find(id: tag_id) {
+            Section(header: Text(R.string.labels.tag())
+                .font(.headline)) {
+                    TagRow(tag: tag)
+                }
+        }
+    }
+    
     /// 編集/削除のアクションシート表示ボタン
-    var ellipsisButton: some View {
+    private var ellipsisButton: some View {
         Button(action: {
             self.isActionSheet.toggle()
         }) {
@@ -92,11 +104,10 @@ extension TodoDetailView {
         }
         .sheet(isPresented: $isShowModle) {
             /// 編集を選択
-            ToDoInputView(viewModel: InputViewModel(model: viewModel.model),
-                          isUpdate: true
-            )
+            ToDoInputView(viewModel: InputViewModel(createTime: viewModel.createTime),
+                          isUpdate: true)
             .onDisappear {
-                viewModel.findTodo()
+                viewModel.findTodo(createTime: viewModel.createTime)
             }
         }
         .alert(isPresented: $isDeleteAction) {
@@ -110,7 +121,7 @@ extension TodoDetailView {
     
     
     /// Todoの編集、削除の選択をするアクションシートを出す
-    var actionSheet: ActionSheet {
+    private var actionSheet: ActionSheet {
         ActionSheet(title: Text(R.string.message.detailActionSheet()),
                     buttons: [ActionSheet.Button.default(Text(R.string.labels.edit())) {
             self.isShowModle.toggle()
@@ -122,15 +133,11 @@ extension TodoDetailView {
     
     
     /// 削除確認アラート
-    var deleteAlert: Alert {
+    private var deleteAlert: Alert {
         Alert(title: Text(R.string.message.deleteTodo()),
               primaryButton: .destructive(Text(R.string.labels.delete())) {
-            do {
-                viewModel.model = try viewModel.deleteTodo(delete: viewModel.model)
+            if viewModel.deleteTodo() {
                 self.presentationMode.wrappedValue.dismiss()
-            } catch {
-                viewModel.errorMessage = R.string.message.deleteError()
-                viewModel.isError = true
             }
         },
               secondaryButton: .cancel(Text(R.string.labels.cancel()))
@@ -143,7 +150,7 @@ extension TodoDetailView {
     /// Todoの未完・完了トグル
     private var completeToggleSection: some View {
         return Section {
-            Toggle(R.string.labels.complete(), isOn: $viewModel.completionFlag.animation())
+            Toggle(R.string.labels.complete(), isOn: $viewModel.isCompletion.animation())
                 .accessibility(identifier: "completeSwitch")
         }
     }
@@ -156,7 +163,7 @@ extension TodoDetailView {
 struct TodoDetail_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            TodoDetailView(viewModel: TodoDetailViewModel(model: testModel[0]))
+            TodoDetailView(viewModel: TodoDetailViewModel(createTime: testModel[0].createTime ?? "0"))
             //            .colorScheme(.dark)
             //            .background(Color(.systemBackground))
             //            .environment(\.colorScheme, .dark)

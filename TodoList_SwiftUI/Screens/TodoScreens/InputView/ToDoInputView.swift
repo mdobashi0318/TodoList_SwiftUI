@@ -237,7 +237,7 @@ struct ToDoInputView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             ToDoInputView(viewModel: InputViewModel(), isUpdate: false)
-            ToDoInputView(viewModel: InputViewModel(model: testModel[0]), isUpdate: true)
+            ToDoInputView(viewModel: InputViewModel(createTime: testModel[0].createTime ?? ""), isUpdate: true)
         }
     }
 }

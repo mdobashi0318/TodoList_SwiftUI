@@ -18,7 +18,7 @@ struct ToDoRow: View {
             Text(todoModel.toDoName)
                 .animation(.none)
                 .accessibility(identifier: "titlelabel")
-            CompletionLable(todoDate: todoModel.todoDate, completionFlag: $todoModel.completionFlag)
+            CompletionLable(todoDate: todoModel.todoDate, completionFlag: todoModel.completionFlag)
             if let tag_id = todoModel.tag_id,
                let tag = Tag.find(id: tag_id) {
                 TagRow(tag: tag)

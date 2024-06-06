@@ -10,6 +10,8 @@ import Foundation
 import Combine
 
 final class InputViewModel: ObservableObject {
+    
+    private var model: ToDoModel?
         
     /// Todoのタイトル
     @Published var toDoName: String = ""
@@ -44,11 +46,22 @@ final class InputViewModel: ObservableObject {
     var tagList: [Tag] = []
     
 
-    init(model: ToDoModel? = nil) {
+    init(createTime: String? = nil) {
+        findTodo(createTime: createTime)
         setModelValue(model)
         setDatePub()
         setCompletionFlagPub()
     }
+    
+    /// Todoを１件検索
+    func findTodo(createTime: String?) {
+        guard let createTime,
+              let model = ToDoModel.findTodo(createTime: createTime) else {
+            return
+        }
+        self.model = model
+    }
+    
     
     /// Modelから取得した値を書くプロパティにセットする
     private func setModelValue(_ model: ToDoModel?) {

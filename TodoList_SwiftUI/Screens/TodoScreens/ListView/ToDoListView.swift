@@ -67,7 +67,7 @@ struct ToDoListView: View {
             }
             .navigationTitle("ToDoList")
             .navigationDestination(for: ToDoModel.self) { model in
-                TodoDetailView(viewModel: TodoDetailViewModel(model: model))
+                TodoDetailView(viewModel: TodoDetailViewModel(createTime: model.createTime ?? ""))
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -212,7 +212,7 @@ extension ToDoListView {
     /// WidgetでタップしたTodoをモーダルで表示する
     private var openWidgetView: some View {
         return NavigationStack {
-            TodoDetailView(viewModel: TodoDetailViewModel(model: openWidget.openTodo), isDisplayEllipsisBtn: false)
+            TodoDetailView(viewModel: TodoDetailViewModel(createTime: openWidget.openTodo.createTime ?? ""), isDisplayEllipsisBtn: false)
                 .onDisappear { openWidget.isOpneTodo = false }
                 .navigationTitle(openWidget.openTodo.toDoName)
                 .toolbar {
