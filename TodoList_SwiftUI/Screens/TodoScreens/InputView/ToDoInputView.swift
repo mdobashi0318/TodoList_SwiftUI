@@ -24,9 +24,6 @@ struct ToDoInputView: View {
     /// Alertの表示フラグ
     @State private var isShowAlert = false
     
-    /// エラーメッセージ
-    @State private var errorMessage: String = ""
-    
     
     // MARK: Body
     
@@ -37,9 +34,8 @@ struct ToDoInputView: View {
                 todoDatePicker
                 todoDetailSection
                 if viewModel.isTagSection { tagSection }
-                if isUpdate { completeToggleSection }
             }
-            .listStyle(GroupedListStyle())
+            .listStyle(.grouped)
             .navigationTitle(isUpdate ? R.string.labels.updateToDo() : R.string.labels.addToDo())
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -166,14 +162,6 @@ extension ToDoInputView {
     }
     
     
-    /// Todoの未完・完了トグル
-    private var completeToggleSection: some View {
-        return Section {
-            Toggle(R.string.labels.complete(), isOn: $viewModel.completionFlag)
-                .accessibility(identifier: "completeSwitch")
-        }
-    }
-    
     /// TodoのTag
     private var tagSection: some View {
         return Section {
@@ -187,7 +175,7 @@ extension ToDoInputView {
     
     /// バリデート時の表示するアラート
     private var showValidateAlert: Alert {
-        return Alert(title: Text(self.errorMessage), dismissButton: .default(Text(R.string.labels.close())))
+        return Alert(title: Text(viewModel.errorMessage), dismissButton: .default(Text(R.string.labels.close())))
     }
     
 }
@@ -201,14 +189,9 @@ extension ToDoInputView {
     
     /// Todoの追加
     private func addTodo() {
-        
-        do {
-            try viewModel.addTodo()
+        if viewModel.addTodo() {
             self.presentationMode.wrappedValue.dismiss()
-        } catch {
-            if let _error = error as? TodoModelError {
-                self.errorMessage = _error.message
-            }
+        } else {
             self.isShowAlert = true
         }
     }
@@ -216,16 +199,11 @@ extension ToDoInputView {
     
     /// Todoのアップデート
     private func updateTodo() {
-        do {
-            try viewModel.updateTodo()
+        if viewModel.updateTodo() {
             self.presentationMode.wrappedValue.dismiss()
-        } catch {
-            if let _error = error as? TodoModelError {
-                self.errorMessage = _error.message
-            }
+        } else {
             self.isShowAlert = true
         }
-        
     }
     
 }
