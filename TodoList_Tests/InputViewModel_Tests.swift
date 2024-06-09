@@ -13,44 +13,103 @@ class InputViewModelTests: XCTestCase {
     
     
     override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        ToDoModel.allDelete()
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        ToDoModel.allDelete()
+    }
+    
+    func test_findTodo() {
+        let todoDate = Format.dateFormat()
+        try? ToDoModel.add(addValue: ToDoModel(toDoName: "toDoName",
+                                               todoDate: Format.stringFromDate(date: todoDate),
+                                               toDo: "toDo",
+                                               tag_id: nil)
+        )
+        let primaryKey = ToDoModel.allFindTodo().first?.createTime
+        
+        
+        var viewModel = InputViewModel()
+        XCTAssert(viewModel.toDoName.isEmpty, "viewModelのインスタンス生成時に引数渡していないので空になる")
+        XCTAssert(viewModel.toDo.isEmpty, "viewModelのインスタンス生成時に引数渡していないので空になる")
+        
+        
+        viewModel = InputViewModel(createTime: primaryKey)
+        XCTAssert(viewModel.toDoName == "toDoName")
+        XCTAssert(viewModel.toDoDate == todoDate)
+        XCTAssert(viewModel.toDo == "toDo")
     }
     
     
-    func test_validateCheck() {
-        let inputViewModel = InputViewModel()
+    func test_addTodo_validateCheck() {
+        let viewModel = InputViewModel()
+        let name = "UnitTest"
+        let calendar = Calendar(identifier: .gregorian)
+        let date = Date()
+        let addDate = calendar.date(byAdding: .minute, value: 1, to: date)!
+        viewModel.toDoName = ""
+        viewModel.toDoDate = date
+        var result = viewModel.addTodo()
         
-        /// タイトル
-        XCTAssert(inputViewModel.validateCheck() == R.string.message.validate(R.string.labels.title()), "バリデーションに引っかかっていない")
-        inputViewModel.toDoName = "タイトル"
-        XCTAssert(inputViewModel.validateCheck() != R.string.message.validate(R.string.labels.title()), "バリデーションに引っかかっている")
+        /// 名前と日付のバリデーションが引っかかること
+        
+        XCTAssert(viewModel.errorMessage == R.string.message.validate(R.string.labels.title()), "バリデーションに引っかかっていない")
+        XCTAssertFalse(result, "追加の結果のBoolが違う")
+        viewModel.toDoName = name
+        result = viewModel.addTodo()
+        
+        XCTAssert(viewModel.errorMessage == R.string.message.validateDate(), "バリデーションに引っかかっていない")
+        XCTAssertFalse(result, "追加の結果のBoolが違う")
+        
+        viewModel.toDoDate = addDate
+        result = viewModel.addTodo()
+        
+        /// Todoに追加できること
+        XCTAssert(viewModel.errorMessage.isEmpty, "エラーメッセージが空になっていない")
+        XCTAssertTrue(result, "追加の結果のBoolが違う")
         
         
-        /// 期限
-        XCTAssert(inputViewModel.validateCheck() == R.string.message.validateDate(), "バリデーションに引っかかっていない")
-        inputViewModel.completionFlag = true
-        XCTAssert(inputViewModel.validateCheck() != R.string.message.validateDate(), "バリデーションに引っかかっている")
+        let model = ToDoModel.allFindTodo().first!
+        XCTAssert(model.toDoName == name)
+        XCTAssert(model.todoDate == Format.stringFromDate(date: addDate))
+        XCTAssert(model.toDo.isEmpty)
+    }
+    
+    
+    func test_updateTodo() {
+        let name = "UnitTest"
+        let detail = "Detail"
+        let addTodoDate = Format.dateFormat()
         
-        inputViewModel.completionFlag = false
-        inputViewModel.toDoDate = Date()
-        XCTAssert(inputViewModel.validateCheck() == R.string.message.validateDate(), "バリデーションに引っかかっていない")
+        let calendar = Calendar(identifier: .gregorian)
+        let date = Date()
+        let addDate = calendar.date(byAdding: .minute, value: 1, to: date)!
         
-        inputViewModel.toDoDate = Format.dateFromString(string: "2030/01/01 00:00")!
-        XCTAssert(inputViewModel.validateCheck() != R.string.message.validateDate(), "バリデーションに引っかかっている")
+        try? ToDoModel.add(addValue: ToDoModel(toDoName: "toDoName",
+                                               todoDate: Format.stringFromDate(date: addTodoDate),
+                                               toDo: "toDo",
+                                               tag_id: nil)
+        )
+        let primaryKey = ToDoModel.allFindTodo().first?.createTime
         
-        inputViewModel.completionFlag = true
-        XCTAssert(inputViewModel.validateCheck() != R.string.message.validateDate(), "バリデーションに引っかかっている")
         
-                
-        inputViewModel.toDo = "詳細"
-        XCTAssert(inputViewModel.validateCheck() != R.string.message.validate(R.string.labels.details()), "バリデーションに引っかかっている")
+        let viewModel = InputViewModel(createTime: primaryKey)
+        XCTAssert(viewModel.toDoName == "toDoName")
+        XCTAssert(viewModel.toDo == "toDo")
         
-        /// バリデーション突破
-        XCTAssertNil(inputViewModel.validateCheck(), "バリデーションに引っかかっている")
+        
+        viewModel.toDoName = name
+        viewModel.toDoDate = addDate
+        viewModel.toDo = detail
+        let result = viewModel.updateTodo()
+        XCTAssertTrue(result, "更新の結果のBoolが違う")
+        
+        
+        let model = ToDoModel.allFindTodo().first!
+        XCTAssert(model.toDoName == name)
+        XCTAssert(model.todoDate == Format.stringFromDate(date: addDate))
+        XCTAssert(model.toDo == detail)
     }
     
 }

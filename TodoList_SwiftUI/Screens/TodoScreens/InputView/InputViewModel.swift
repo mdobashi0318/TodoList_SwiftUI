@@ -42,7 +42,7 @@ final class InputViewModel: ObservableObject {
     }
     
     /// Todoを１件検索
-    func findTodo(createTime: String?) {
+    private func findTodo(createTime: String?) {
         guard let createTime,
               let model = ToDoModel.findTodo(createTime: createTime) else {
             return
@@ -112,14 +112,15 @@ final class InputViewModel: ObservableObject {
     
     /// バリデーションチェック
     /// - Returns: エラー文も返す
-    func validateCheck() -> String? {
-        if self.toDoName.isEmpty {
-            return  R.string.message.validate(R.string.labels.title())
+    private func validateCheck() -> String? {
+        errorMessage = ""
+        return if self.toDoName.isEmpty {
+            R.string.message.validate(R.string.labels.title())
         } else if Format.stringFromDate(date: toDoDate) <= Format.stringFromDate(date: Format.dateFormat()) {
             /// 完了フラグの未完であればあれば期限のバリデーションチェックを行う
-            return R.string.message.validateDate()
+            R.string.message.validateDate()
         } else {
-            return nil
+            nil
         }
     }
     
