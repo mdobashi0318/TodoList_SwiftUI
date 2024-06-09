@@ -13,12 +13,12 @@ struct Format {
     
     /// フォーマットを返す
     /// - Parameter addSec: 秒数もフォーマットに設定するかの判定
-    private static func _dateFormatter(addSec: SecndType = .None) -> DateFormatter {
+    private static func _dateFormatter(addSec: formatType = .dateTime) -> DateFormatter {
         let formatter: DateFormatter = DateFormatter()
         formatter.dateFormat = switch addSec {
         case .secnd: "yyyy/MM/dd HH:mm:ss"
         case .ms: "yyyy/MM/dd HH:mm:SSSS"
-        default: "yyyy/MM/dd HH:mm"
+        case .dateTime: "yyyy/MM/dd HH:mm"
         }
         
         formatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
@@ -29,14 +29,14 @@ struct Format {
     
     
     /// Stringのフォーマットを設定Dateを返す
-    static func dateFromString(string: String, addSec: SecndType = .None) -> Date? {
+    static func dateFromString(string: String, addSec: formatType = .dateTime) -> Date? {
         let formatter: DateFormatter = _dateFormatter(addSec: addSec)
         return formatter.date(from: string)
     }
     
     
     /// Dateのフォーマットを設定しStringを返す
-    static func stringFromDate(date: Date, addSec: SecndType = .None) -> String {
+    static func stringFromDate(date: Date, addSec: formatType = .dateTime) -> String {
         let formatter = _dateFormatter(addSec: addSec)
         let s_Date:String = formatter.string(from: date)
         
@@ -45,7 +45,7 @@ struct Format {
     
     
     /// 現在時間をのフォーマットを設定して返す
-    static func dateFormat(addSec: SecndType = .None) -> Date {
+    static func dateFormat(addSec: formatType = .dateTime) -> Date {
         let formatter = Format._dateFormatter(addSec: addSec)
         let s_Date:String = formatter.string(from: Date())
         
@@ -54,9 +54,12 @@ struct Format {
     
     
     
-    enum SecndType {
+    enum formatType {
+        /// "yyyy/MM/dd HH:mm:ss"
         case secnd
+        /// "yyyy/MM/dd HH:mm:SSSS"
         case ms
-        case None
+        /// "yyyy/MM/dd HH:mm"
+        case dateTime
     }
 }
