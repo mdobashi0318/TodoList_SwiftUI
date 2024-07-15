@@ -7,19 +7,15 @@
 //
 
 import Foundation
-import Combine
-
 
 class TodoDetailViewModel: ObservableObject {
     
-    var model: ToDoModel
-        
     /// 完了フラグ
     ///
     /// 画面側でのトグルの選択された値
-    @Published var completionFlag: Bool = false {
+    @Published var isCompletion: Bool = false {
         didSet {
-            self.completionFlagStr = completionFlag ? .completion : .unfinished
+            self.completionFlagStr = isCompletion ? .completion : .unfinished
             
             /// 新旧のcompletionFlagStrが一致していたら、モデルのフラグ更新処理を実行しない
             if self.model.completionFlag == self.completionFlagStr.rawValue { return }
@@ -27,46 +23,62 @@ class TodoDetailViewModel: ObservableObject {
         }
     }
     
-    /// Model側に格納する完了フラグの文字列
-    private(set) var completionFlagStr: CompletionFlag = .unfinished
-        
     @Published var isError: Bool = false
     
-    var errorMessage: String = ""
+    private var model = ToDoModel()
     
-    private var cancellable: Set<AnyCancellable> = []
+    var title: String { model.toDoName }
     
-    init(model: ToDoModel) { 
-        self.model = model
-        self.completionFlag = model.completionFlag == CompletionFlag.completion.rawValue ? true : false
+    var date: String { model.todoDate }
+    
+    var detail: String { model.toDo }
+    
+    var completionFlag: String { model.completionFlag }
+    
+    var createTime: String { model.createTime ?? "" }
+    
+    var tagId: String? { model.tag_id }
+        
+    /// Model側に格納する完了フラグの文字列
+    private var completionFlagStr: CompletionFlag = .unfinished
+    
+    private(set) var errorMessage: String = ""
+        
+    init(createTime: String) {
+        findTodo(createTime: createTime)
+        self.isCompletion = model.completionFlag == CompletionFlag.completion.rawValue ? true : false
     }
     
     
     /// Todoを１件検索
-    func findTodo() {
-        guard let model = ToDoModel.findTodo(createTime: model.createTime) else {
+    func findTodo(createTime: String) {
+        guard let model = ToDoModel.findTodo(createTime: createTime) else {
             isError = true
             errorMessage = R.string.message.findError()
             return
         }
         
-        let todo = model
-        self.completionFlag = self.model.completionFlag == CompletionFlag.completion.rawValue ? true : false
-        self.model = todo
+        self.isCompletion = self.model.completionFlag == CompletionFlag.completion.rawValue ? true : false
+        self.model = model
     }
     
     
     /// Todoの削除
-    func deleteTodo(delete: ToDoModel) throws -> ToDoModel {
+    func deleteTodo() -> Bool {
         do {
-            try ToDoModel.delete(deleteTodo: delete)
+            try ToDoModel.delete(deleteTodo: model)
             /// 呼び出し元のTodoがnilになるとクラッシュするのでToDoの削除後に空のTodoを入れて回避する
-            return ToDoModel()
+            self.model = ToDoModel()
+            return true
         } catch {
-            if let _error = error as? DeleteError {
-                throw _error
+            if error is DeleteError {
+                errorMessage = R.string.message.deleteError()
+                isError = true
+            } else {
+                errorMessage = R.string.message.deleteError()
+                isError = true
             }
-            throw error
+            return false
         }
     }
     

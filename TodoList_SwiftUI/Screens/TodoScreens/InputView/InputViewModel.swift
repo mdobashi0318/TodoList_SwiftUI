@@ -7,15 +7,13 @@
 //
 
 import Foundation
-import Combine
 
 final class InputViewModel: ObservableObject {
-        
+    
+    private var model: ToDoModel?
+    
     /// Todoのタイトル
     @Published var toDoName: String = ""
-    
-    /// Model側に格納する期限の文字列
-    private var todoDateStr: String = ""
     
     ///  画面側のTodoの期限
     @Published var toDoDate = Date()
@@ -23,121 +21,106 @@ final class InputViewModel: ObservableObject {
     /// Todoの詳細
     @Published var toDo: String = ""
     
-    /// 画面側の完了フラグ
-    @Published var completionFlag: Bool = false
-    
     /// TagのID
     @Published var tag_id: String = ""
     
+    /// エラーメッセージ
+    private(set) var errorMessage: String = ""
+    
     /// Tagセクションの表示フラグ
-    private(set) var isTagSection = false
-    
-    /// Model側に格納する完了フラグの文字列
-    private var completionFlagStr: CompletionFlag = .unfinished
-    
-    /// Modelのプライマリキー
-    private var createTime: String?
-    
-    private var cancellable: Set<AnyCancellable> = []
-    
-    
-    var tagList: [Tag] = []
-    
-
-    init(model: ToDoModel? = nil) {
-        setModelValue(model)
-        setDatePub()
-        setCompletionFlagPub()
+    var isTagSection: Bool {
+        tagList.isNotEmpty
     }
+
+    private(set) var tagList: [Tag] = []
+    
+    
+    init(createTime: String? = nil) {
+        findTodo(createTime: createTime)
+        setModelValue(model)
+        
+    }
+    
+    /// Todoを１件検索
+    private func findTodo(createTime: String?) {
+        guard let createTime,
+              let model = ToDoModel.findTodo(createTime: createTime) else {
+            return
+        }
+        self.model = model
+    }
+    
     
     /// Modelから取得した値を書くプロパティにセットする
     private func setModelValue(_ model: ToDoModel?) {
         tagList = Tag.findAll(addEmptyTagFlag: true)
         
-        isTagSection = tagList.isNotEmpty
-        
         if let model {
             toDoName = model.toDoName
-            todoDateStr = model.todoDate
             if let date = Format.dateFromString(string: model.todoDate) {
                 toDoDate = date
             }
             toDo = model.toDo
-            completionFlag = model.completionFlag == CompletionFlag.completion.rawValue ? true : false
-            createTime = model.createTime
             tag_id = model.tag_id ?? ""
         }
     }
     
-    /// 画面側の期限がセットされたら、文字列に変換しModel格納用の値に入れる
-    private func setDatePub() {
-        $toDoDate
-            .map { date in
-                Format.stringFromDate(date: date)
-            }
-            .print()
-            .sink(receiveValue: { toDoDate in
-                self.todoDateStr = toDoDate
-            })
-            .store(in: &cancellable)
-    }
-    
-    
-    /// 画面側の完了フラグがセットされたら、文字列に変換しModel格納用の値に入れる
-    private func setCompletionFlagPub() {
-        $completionFlag
-            .print()
-            .sink(receiveValue: { flag in
-                self.completionFlagStr = flag ? .completion : .unfinished
-            })
-            .store(in: &cancellable)
-    }
-    
-    
     /// Todoの追加
-    func addTodo() throws {
+    func addTodo() -> Bool {
         if let message = self.validateCheck() {
-            throw TodoModelError(message: message)
+            errorMessage = message
+            return false
         }
         
         do {
-            try ToDoModel.add(addValue: ToDoModel(toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo, tag_id: self.tag_id))
+            try ToDoModel.add(addValue: ToDoModel(toDoName: self.toDoName, todoDate: Format.stringFromDate(date: toDoDate), toDo: self.toDo, tag_id: self.tag_id))
+            return true
         } catch {
-            if let _error = error as? TodoModelError {
-                throw _error
-            }
-            throw error
+            errorMessage = R.string.message.addError()
+            return false
         }
     }
     
     
     /// Todoの更新
-    func updateTodo() throws {
+    func updateTodo() -> Bool {
+        guard let model = model else {
+            errorMessage = R.string.message.updateError()
+            return false
+        }
+        
         if let message = self.validateCheck() {
-            throw TodoModelError(message: message)
+            errorMessage = message
+            return false
         }
         
         do {
-            try ToDoModel.update(updateTodo: ToDoModel(toDoName: self.toDoName, todoDate: self.todoDateStr, toDo: self.toDo, completionFlag: self.completionFlagStr.rawValue, createTime: self.createTime, tag_id: self.tag_id))
+            try ToDoModel.update(updateTodo: ToDoModel(toDoName: self.toDoName,
+                                                       todoDate: Format.stringFromDate(date: toDoDate),
+                                                       toDo: self.toDo,
+                                                       completionFlag: model.completionFlag,
+                                                       createTime: model.createTime,
+                                                       tag_id: self.tag_id
+                                                      ))
+            return true
         } catch {
-            if let _error = error as? TodoModelError {
-                throw _error
-            }
-            throw error
+            errorMessage = R.string.message.updateError()
+            return false
         }
     }
     
     
     /// バリデーションチェック
     /// - Returns: エラー文も返す
-    func validateCheck() -> String? {
-        if self.toDoName.isEmpty {
-            return  R.string.message.validate(R.string.labels.title())
-        } else if self.completionFlagStr == CompletionFlag.unfinished && self.todoDateStr <= Format.stringFromDate(date: Format.dateFormat()) {
+    private func validateCheck() -> String? {
+        errorMessage = ""
+        return if self.toDoName.isEmpty {
+            R.string.message.validate(R.string.labels.title())
+        } else if Format.stringFromDate(date: toDoDate) <= Format.stringFromDate(date: Format.dateFormat()) {
             /// 完了フラグの未完であればあれば期限のバリデーションチェックを行う
-            return R.string.message.validateDate()
+            R.string.message.validateDate()
         } else {
-            return nil
+            nil
         }
     }
     
