@@ -13,8 +13,7 @@ struct ToDoListView: View {
     
     // MARK: Properties
     
-    @StateObject private var viewModel = ToDoViewModel()
-    
+    @StateObject private var viewModel = ViewModel()
     /// Widget、通知をタップして開いた時のTodoを設定する
     @StateObject private var openWidget = OpenTodoManager.shared
     
