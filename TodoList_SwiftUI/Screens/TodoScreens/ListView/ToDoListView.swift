@@ -19,15 +19,6 @@ struct ToDoListView: View {
     
     @StateObject private var setting = SettingManager.shared
     
-    /// Todo追加画面のモーダル表示フラグ
-    @State private var isShowModle = false
-    
-    /// 全件削除の確認アラートの表示フラグ
-    @State private var isDeleteFlag = false
-    
-    /// Tagリスト画面のモーダル表示フラグ
-    @State private var isShowTagModle = false
-    
     // MARK: Body
     
     var body: some View {
@@ -66,7 +57,7 @@ struct ToDoListView: View {
             }
             .navigationTitle("ToDoList")
             .navigationDestination(for: ToDoModel.self) { model in
-                TodoDetailView(viewModel: TodoDetailViewModel(createTime: model.createTime ?? ""))
+                TodoDetailView(viewModel: TodoDetailView.ViewModel(createTime: model.createTime ?? ""))
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -116,7 +107,7 @@ extension ToDoListView {
                 } else {
                     ForEach(0..<self.viewModel.todoModel.count, id: \.self) { row in
                         NavigationLink(value: self.viewModel.todoModel[row]) {
-                            ToDoRow(todoModel: self.$viewModel.todoModel[row])
+                            ToDoRow(todoModel: viewModel.todoModel[row])
                         }
                     }
                 }
@@ -143,12 +134,12 @@ extension ToDoListView {
     /// ToDoの追加画面に遷移させるボタン
     private var addButton: some View {
         Button(action: {
-            self.isShowModle.toggle()
+            viewModel.isShowModle.toggle()
         }) {
             Image(systemName: "plus")
         }
-        .sheet(isPresented: $isShowModle) {
-            ToDoInputView(viewModel: InputViewModel(), isUpdate: false)
+        .sheet(isPresented: $viewModel.isShowModle) {
+            ToDoInputView(viewModel: ToDoInputView.ViewModel(), isUpdate: false)
                 .onDisappear {
                     Task {
                         await viewModel.fetchAllTodoModel()
@@ -165,11 +156,11 @@ extension ToDoListView {
     /// 全件削除ボタン
     private var allDeleteButton : some View {
         Button(action: {
-            self.isDeleteFlag.toggle()
+            viewModel.isDeleteFlag.toggle()
         }) {
             Image(systemName: "trash")
         }
-        .alert(isPresented: self.$isDeleteFlag) {
+        .alert(isPresented: $viewModel.isDeleteFlag) {
             Alert(title: Text(R.string.message.allDelete()), primaryButton: .destructive(Text(R.string.labels.delete())) {
                 viewModel.allDeleteTodo()
             }, secondaryButton: .cancel(Text(R.string.labels.cancel())))
@@ -192,11 +183,11 @@ extension ToDoListView {
     /// タグリスト画面に遷移させるボタン
     private var tagButton: some View {
         Button(action: {
-            self.isShowTagModle.toggle()
+            viewModel.isShowTagModle.toggle()
         }) {
             Image(systemName: "tag")
         }
-        .fullScreenCover(isPresented: $isShowTagModle) {
+        .fullScreenCover(isPresented: $viewModel.isShowTagModle) {
             TagListView()
                 .onDisappear {
                     Task {
@@ -211,7 +202,7 @@ extension ToDoListView {
     /// WidgetでタップしたTodoをモーダルで表示する
     private var openWidgetView: some View {
         return NavigationStack {
-            TodoDetailView(viewModel: TodoDetailViewModel(createTime: openWidget.openTodo.createTime ?? ""), isDisplayEllipsisBtn: false)
+            TodoDetailView(viewModel: TodoDetailView.ViewModel(createTime: openWidget.openTodo.createTime ?? ""), isDisplayEllipsisBtn: false)
                 .onDisappear { openWidget.isOpneTodo = false }
                 .navigationTitle(openWidget.openTodo.toDoName)
                 .toolbar {

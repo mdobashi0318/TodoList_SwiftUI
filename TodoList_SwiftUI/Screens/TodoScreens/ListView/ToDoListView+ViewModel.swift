@@ -15,13 +15,19 @@ extension ToDoListView {
     
     class ViewModel: ObservableObject {
         
-        @Published var todoModel: [ToDoModel] = []
+        @Published private(set) var todoModel: [ToDoModel] = []
         
         @Published var segmentIndex: SegmentIndex = .all
         
         @Published var searchTagId = ""
+        /// Todo追加画面のモーダル表示フラグ
+        @Published var isShowModle = false
+        /// 全件削除の確認アラートの表示フラグ
+        @Published var isDeleteFlag = false
+        /// Tagリスト画面のモーダル表示フラグ
+        @Published var isShowTagModle = false
         
-        var tagModel: [Tag] = []
+        private(set) var tagModel: [Tag] = []
         
         var isAlertError: Bool = false
         
