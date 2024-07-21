@@ -13,7 +13,7 @@ struct ToDoInputView: View {
     
     // MARK: Properties
     
-    @StateObject var viewModel: InputViewModel
+    @StateObject var viewModel: ViewModel
     
     
     @Environment(\.presentationMode) private var presentationMode:Binding<PresentationMode>
@@ -214,8 +214,8 @@ extension ToDoInputView {
 struct ToDoInputView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ToDoInputView(viewModel: InputViewModel(), isUpdate: false)
-            ToDoInputView(viewModel: InputViewModel(createTime: testModel[0].createTime ?? ""), isUpdate: true)
+            ToDoInputView(viewModel: ToDoInputView.ViewModel(), isUpdate: false)
+            ToDoInputView(viewModel: ToDoInputView.ViewModel(createTime: testModel[0].createTime ?? ""), isUpdate: true)
         }
     }
 }

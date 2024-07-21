@@ -9,6 +9,7 @@
 import Foundation
 
 extension TodoDetailView {
+    
     class ViewModel: ObservableObject {
         
         /// 完了フラグ
