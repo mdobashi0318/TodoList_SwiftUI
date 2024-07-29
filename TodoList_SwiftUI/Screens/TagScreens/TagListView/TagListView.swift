@@ -68,7 +68,7 @@ struct TagListView: View {
             Image(systemName: "plus")
         }
         .sheet(isPresented: $isShowModle) {
-            TagRegistrationView()
+            AddTagView()
                 .onDisappear {
                     Task {
                         await self.viewModel.fetchAllTag()

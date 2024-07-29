@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// タグ編集画面
 struct EditTagView: View {
     
     @StateObject var viewModel: EditTagViewModel
