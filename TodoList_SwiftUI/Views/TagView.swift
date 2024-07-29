@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+/// タグの詳細を表示するView
 struct TagView: View {
     
     @Binding var name: String
@@ -29,3 +31,11 @@ struct TagView: View {
 }
 
 
+
+
+
+struct TagView_Previews: PreviewProvider {
+    static var previews: some View {
+        TagView(name: .constant("name"), color: .constant(.init(red: 10, green: 10, blue: 10, alpha: 1)), disabledFlag: .constant(false))
+    }
+}

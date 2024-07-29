@@ -109,3 +109,24 @@ struct EditTagView: View {
     }
     
 }
+
+
+
+
+struct EditTagView_Previews: PreviewProvider {
+    
+    static func dummy() -> Tag {
+        let tag = Tag()
+        tag.name = "name"
+        tag.blue = "10"
+        tag.green = "10"
+        tag.red = "10"
+        tag.alpha = "10"
+        
+        return tag
+    }
+    
+    static var previews: some View {
+        EditTagView(viewModel: EditTagViewModel(dummy()))
+    }
+}
