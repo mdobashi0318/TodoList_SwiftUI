@@ -9,7 +9,7 @@ import Foundation
 
 extension TagListView {
     
-    class TagListViewModel: ObservableObject {
+    class ViewModel: ObservableObject {
         
         @Published var model: [Tag] = []
             

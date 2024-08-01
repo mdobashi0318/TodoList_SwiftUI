@@ -10,7 +10,7 @@ import SwiftUI
 /// タグ編集画面
 struct EditTagView: View {
     
-    @StateObject var viewModel: EditTagViewModel
+    @StateObject var viewModel: ViewModel
     
     @Environment(\.presentationMode) private var presentationMode:Binding<PresentationMode>
     
@@ -127,6 +127,6 @@ struct EditTagView_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        EditTagView(viewModel: EditTagViewModel(dummy()))
+        EditTagView(viewModel: EditTagView.ViewModel(dummy()))
     }
 }

@@ -10,7 +10,7 @@ import TipKit
 
 struct TagListView: View {
     
-    @StateObject var viewModel = TagListViewModel()
+    @StateObject var viewModel = ViewModel()
     
     @State private var isShowModle = false
     
@@ -36,7 +36,7 @@ struct TagListView: View {
             .listStyle(.inset)
             .navigationTitle(R.string.labels.tagList())
             .navigationDestination(for: Tag.self) { tag in
-                EditTagView(viewModel: EditTagViewModel(tag))
+                EditTagView(viewModel: EditTagView.ViewModel(tag))
                     .onDisappear {
                         Task {
                             await self.viewModel.fetchAllTag()
