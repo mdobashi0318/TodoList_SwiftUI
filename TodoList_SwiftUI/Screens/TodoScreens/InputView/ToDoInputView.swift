@@ -67,7 +67,7 @@ extension ToDoInputView {
             self.presentationMode.wrappedValue.dismiss()
         }) {
             Image(systemName: "xmark")
-                .accessibilityLabel(R.string.labels.close())
+                .accessibilityLabel(R.string.buttons.close())
         }
         .accessibility(identifier: "cancelButton")
     }
@@ -84,7 +84,7 @@ extension ToDoInputView {
         }) {
             Image(systemName: "plus")
                 .resizable()
-                .accessibilityLabel(R.string.labels.add())
+                .accessibilityLabel(R.string.buttons.add())
         }
         .alert(isPresented: $isShowAlert) {
             return showValidateAlert
@@ -175,7 +175,7 @@ extension ToDoInputView {
     
     /// バリデート時の表示するアラート
     private var showValidateAlert: Alert {
-        return Alert(title: Text(viewModel.errorMessage), dismissButton: .default(Text(R.string.labels.close())))
+        return Alert(title: Text(viewModel.errorMessage), dismissButton: .default(Text(R.string.buttons.close())))
     }
     
 }

@@ -32,7 +32,7 @@ struct AddTagView: View {
                     }
                 }
                 .alert(isPresented: $isShowAlert) {
-                    return Alert(title: Text(errorMessage), dismissButton: .default(Text(R.string.labels.close())))
+                    return Alert(title: Text(errorMessage), dismissButton: .default(Text(R.string.buttons.close())))
                 }
         }
         

@@ -78,7 +78,7 @@ struct ToDoListView: View {
             .sheet(isPresented: $openWidget.isOpneTodo) { openWidgetView }
         }
         .alert(isPresented: $viewModel.isAlertError) {
-            Alert(title: Text(R.string.message.findError()), dismissButton: .default(Text(R.string.labels.close())))
+            Alert(title: Text(R.string.message.findError()), dismissButton: .default(Text(R.string.buttons.close())))
         }
         .accessibility(identifier: "ToDoList")
     }
@@ -161,9 +161,9 @@ extension ToDoListView {
             Image(systemName: "trash")
         }
         .alert(isPresented: $viewModel.isDeleteFlag) {
-            Alert(title: Text(R.string.message.allDelete()), primaryButton: .destructive(Text(R.string.labels.delete())) {
+            Alert(title: Text(R.string.message.allDelete()), primaryButton: .destructive(Text(R.string.buttons.delete)) {
                 viewModel.allDeleteTodo()
-            }, secondaryButton: .cancel(Text(R.string.labels.cancel())))
+            }, secondaryButton: .cancel(Text(R.string.buttons.cancel)))
         }
         .disabled(self.viewModel.isAlertError)
         .accessibility(identifier: "allDeleteButton")

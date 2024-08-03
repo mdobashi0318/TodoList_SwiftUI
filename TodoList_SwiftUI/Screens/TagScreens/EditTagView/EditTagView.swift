@@ -32,7 +32,7 @@ struct EditTagView: View {
                 }
             }
             .alert(isPresented: $isShowAlert) {
-                return Alert(title: Text(errorMessage), dismissButton: .default(Text(R.string.labels.close())))
+                return Alert(title: Text(errorMessage), dismissButton: .default(Text(R.string.buttons.close)))
             }
     }
     
@@ -52,7 +52,7 @@ struct EditTagView: View {
         Button(action: {
             disabledFlag.toggle()
         }) {
-            Text("Edit")
+            Text(R.string.buttons.edit)
         }
     }
     
@@ -69,7 +69,7 @@ struct EditTagView: View {
                 isShowAlert = true
             }
         }) {
-            Text("Done")
+            Text(R.string.buttons.done)
         }
     }
     
@@ -82,7 +82,7 @@ struct EditTagView: View {
         }
         .alert(isPresented: $deleteConfilmFlag) {
             return Alert(title: Text(R.string.message.deleteTag()),
-                         primaryButton: .destructive(Text(R.string.labels.delete()), action: {
+                         primaryButton: .destructive(Text(R.string.buttons.delete()), action: {
                 do {
                     try viewModel.delete()
                     self.presentationMode.wrappedValue.dismiss()
@@ -93,7 +93,7 @@ struct EditTagView: View {
                     self.errorMessage = R.string.message.tagDeleteError()
                     isShowAlert = true
                 }
-            }), secondaryButton: .cancel(Text(R.string.labels.cancel())))
+            }), secondaryButton: .cancel(Text(R.string.buttons.cancel())))
         }
     }
     
@@ -104,7 +104,7 @@ struct EditTagView: View {
             disabledFlag.toggle()
             viewModel.rollback()
         }) {
-            Text("Cancel")
+            Text(R.string.buttons.cancel)
         }
     }
     

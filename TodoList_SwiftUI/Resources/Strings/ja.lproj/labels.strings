@@ -16,14 +16,6 @@
 "Complete" = "完了";
 
 
-
-// MARK: - Button
-"Close" = "閉じる";
-"Cancel" = "キャンセル";
-"Delete" = "削除";
-"Edit" = "編集";
-"Add" = "追加";
-
 "Title" = "タイトル";
 "Deadline" = "期限";
 "Details" = "詳細";

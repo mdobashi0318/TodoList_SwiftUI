@@ -85,7 +85,7 @@ struct TagListView: View {
             self.presentationMode.wrappedValue.dismiss()
         }) {
             Image(systemName: "xmark")
-                .accessibilityLabel(R.string.labels.close())
+                .accessibilityLabel(R.string.buttons.close())
         }
         .accessibility(identifier: "closeButton")
     }
