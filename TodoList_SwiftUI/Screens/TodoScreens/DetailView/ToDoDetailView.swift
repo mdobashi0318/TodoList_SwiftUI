@@ -21,7 +21,7 @@ struct TodoDetailView: View {
     @State private var isActionSheet = false
     
     /// 削除確認アラートを出すフラグ
-    @State private var isDeleteAction = false
+    @State private var isDeleteConfilm = false
     
     /// ellipsisButtonの表示非表示を設定
     ///
@@ -110,7 +110,7 @@ extension TodoDetailView {
                 viewModel.findTodo(createTime: viewModel.createTime)
             }
         }
-        .alert(isPresented: $isDeleteAction) {
+        .alert(isPresented: $isDeleteConfilm) {
             /// 削除を選択
             deleteAlert
         }
@@ -126,7 +126,7 @@ extension TodoDetailView {
                     buttons: [ActionSheet.Button.default(Text(R.string.buttons.edit())) {
             self.isShowModle.toggle()
         }, .destructive(Text(R.string.buttons.delete())) {
-            self.isDeleteAction.toggle()
+            self.isDeleteConfilm.toggle()
         }, .cancel(Text(R.string.buttons.cancel()))
                              ])
     }

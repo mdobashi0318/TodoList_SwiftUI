@@ -19,6 +19,11 @@ extension EditTagView {
         
         @Published var name = ""
         
+        /// Alertの表示フラグ
+        @Published var isShowAlert = false
+        
+        @Published private(set) var errorMessage = ""
+        
         
         init(_ tag: Tag) {
             self.tag = tag
@@ -34,23 +39,25 @@ extension EditTagView {
         }
         
         /// 更新
-        func update() throws {
+        func update() {
             do {
                 if name.isEmpty || name.isSpace() {
                     throw TagModelError(message: R.string.message.inputTag())
                 }
                 try Tag.update(id: tag.id, name: name, color: color)
             } catch {
-                throw TagModelError(message: R.string.message.tagEditError())
+                isShowAlert = true
+                errorMessage = R.string.message.tagEditError()
             }
         }
         
         /// 削除
-        func delete() throws {
+        func delete() {
             do {
                 try Tag.delete(id: tag.id)
             } catch {
-                throw TagModelError(message: R.string.message.tagDeleteError())
+                isShowAlert = true
+                errorMessage = R.string.message.tagDeleteError()
             }
         }
     }
