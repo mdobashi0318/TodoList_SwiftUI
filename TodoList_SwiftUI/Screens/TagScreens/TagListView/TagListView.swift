@@ -10,7 +10,7 @@ import TipKit
 
 struct TagListView: View {
     
-    @StateObject var viewModel = ViewModel()
+    @StateObject private var viewModel = ViewModel()
     
     @State private var isShowModle = false
     
@@ -61,11 +61,10 @@ struct TagListView: View {
         
     }
     
+    /// 追加ボタン
     private var addButton: some View {
-        Button(action: {
+        AddIconButton {
             self.isShowModle.toggle()
-        }) {
-            Image(systemName: "plus")
         }
         .sheet(isPresented: $isShowModle) {
             AddTagView()
@@ -73,7 +72,6 @@ struct TagListView: View {
                     Task {
                         await self.viewModel.fetchAllTag()
                     }
-                    
                 }
         }
     }

@@ -75,16 +75,12 @@ extension ToDoInputView {
     
     /// ToDo追加ボタン
     private var addButton: some View {
-        Button(action: {
+        AddIconButton {
             if !self.isUpdate {
                 self.addTodo()
             } else {
                 self.updateTodo()
             }
-        }) {
-            Image(systemName: "plus")
-                .resizable()
-                .accessibilityLabel(R.string.buttons.add())
         }
         .alert(isPresented: $isShowAlert) {
             return showValidateAlert

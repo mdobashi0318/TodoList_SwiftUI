@@ -64,10 +64,8 @@ struct EditTagView: View {
     
     
     private var deleteButton: some View {
-        Button(action: {
+        DeleteIconButton {
             isDeleteConfilm.toggle()
-        }) {
-            Image(systemName: "trash")
         }
         .alert(isPresented: $isDeleteConfilm) {
             return Alert(title: Text(R.string.message.deleteTag()),

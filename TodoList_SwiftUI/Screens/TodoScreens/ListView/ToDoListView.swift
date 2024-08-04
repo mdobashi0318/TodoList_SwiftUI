@@ -46,9 +46,9 @@ struct ToDoListView: View {
                 .task {
                     if #available(iOS 17.0, *) {
                         try? Tips.configure([
-                                     .displayFrequency(.immediate),
-                                     .datastoreLocation(.applicationDefault)
-                                 ])
+                            .displayFrequency(.immediate),
+                            .datastoreLocation(.applicationDefault)
+                        ])
                     }
                 }
                 .task(id: viewModel.searchTagId) {
@@ -121,22 +121,20 @@ extension ToDoListView {
     private var headerText: some View {
         switch viewModel.segmentIndex {
         case .all:
-             Text(R.string.labels.all())
+            Text(R.string.labels.all())
         case .active:
-             Text(R.string.labels.active())
+            Text(R.string.labels.active())
         case .complete:
-             Text(R.string.labels.complete())
+            Text(R.string.labels.complete())
         case .expired:
-             Text(R.string.labels.expired())
+            Text(R.string.labels.expired())
         }
     }
     
     /// ToDoの追加画面に遷移させるボタン
     private var addButton: some View {
-        Button(action: {
+        AddIconButton {
             viewModel.isShowModle.toggle()
-        }) {
-            Image(systemName: "plus")
         }
         .sheet(isPresented: $viewModel.isShowModle) {
             ToDoInputView(viewModel: ToDoInputView.ViewModel(), isUpdate: false)
@@ -147,7 +145,6 @@ extension ToDoListView {
                 }
         }
         .disabled(self.viewModel.isAlertError)
-        .accessibility(identifier: "addButton")
         .accessibilityLabel(R.string.accessibilityText.todoAddButton())
     }
     
@@ -155,10 +152,9 @@ extension ToDoListView {
     
     /// 全件削除ボタン
     private var allDeleteButton : some View {
-        Button(action: {
+        
+        DeleteIconButton {
             viewModel.isDeleteFlag.toggle()
-        }) {
-            Image(systemName: "trash")
         }
         .alert(isPresented: $viewModel.isDeleteFlag) {
             Alert(title: Text(R.string.message.allDelete()), primaryButton: .destructive(Text(R.string.buttons.delete)) {

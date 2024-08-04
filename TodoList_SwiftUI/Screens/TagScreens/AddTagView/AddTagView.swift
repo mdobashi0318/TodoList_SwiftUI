@@ -40,7 +40,7 @@ struct AddTagView: View {
     
     
     private var addButton: some View {
-        Button(action: {
+        AddIconButton(action: {
             do {
                 if name.isEmpty || name.isSpace() {
                     self.errorMessage = R.string.message.inputTag()
@@ -54,12 +54,7 @@ struct AddTagView: View {
                 self.errorMessage = R.string.message.tagAddError()
                 isShowAlert = true
             }
-            
-            
-            
-        }) {
-            Image(systemName: "plus")
-        }
+        })
     }
     
 }
