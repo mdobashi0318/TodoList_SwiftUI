@@ -12,7 +12,7 @@ struct TodoDetailView: View {
     
     // MARK: Properties
     
-    @StateObject var viewModel: TodoDetailViewModel
+    @StateObject var viewModel: ViewModel
     
     /// Todoの編集するためのモーダルを出すフラグ
     @State private var isShowModle = false
@@ -21,7 +21,7 @@ struct TodoDetailView: View {
     @State private var isActionSheet = false
     
     /// 削除確認アラートを出すフラグ
-    @State private var isDeleteAction = false
+    @State private var isDeleteConfilm = false
     
     /// ellipsisButtonの表示非表示を設定
     ///
@@ -104,13 +104,13 @@ extension TodoDetailView {
         }
         .sheet(isPresented: $isShowModle) {
             /// 編集を選択
-            ToDoInputView(viewModel: InputViewModel(createTime: viewModel.createTime),
+            ToDoInputView(viewModel: ToDoInputView.ViewModel(createTime: viewModel.createTime),
                           isUpdate: true)
             .onDisappear {
                 viewModel.findTodo(createTime: viewModel.createTime)
             }
         }
-        .alert(isPresented: $isDeleteAction) {
+        .alert(isPresented: $isDeleteConfilm) {
             /// 削除を選択
             deleteAlert
         }
@@ -123,11 +123,11 @@ extension TodoDetailView {
     /// Todoの編集、削除の選択をするアクションシートを出す
     private var actionSheet: ActionSheet {
         ActionSheet(title: Text(R.string.message.detailActionSheet()),
-                    buttons: [ActionSheet.Button.default(Text(R.string.labels.edit())) {
+                    buttons: [ActionSheet.Button.default(Text(R.string.buttons.edit())) {
             self.isShowModle.toggle()
-        }, .destructive(Text(R.string.labels.delete())) {
-            self.isDeleteAction.toggle()
-        }, .cancel(Text(R.string.labels.cancel()))
+        }, .destructive(Text(R.string.buttons.delete())) {
+            self.isDeleteConfilm.toggle()
+        }, .cancel(Text(R.string.buttons.cancel()))
                              ])
     }
     
@@ -135,12 +135,12 @@ extension TodoDetailView {
     /// 削除確認アラート
     private var deleteAlert: Alert {
         Alert(title: Text(R.string.message.deleteTodo()),
-              primaryButton: .destructive(Text(R.string.labels.delete())) {
+              primaryButton: .destructive(Text(R.string.buttons.delete())) {
             if viewModel.deleteTodo() {
                 self.presentationMode.wrappedValue.dismiss()
             }
         },
-              secondaryButton: .cancel(Text(R.string.labels.cancel()))
+              secondaryButton: .cancel(Text(R.string.buttons.cancel()))
         )
     }
     
@@ -163,7 +163,7 @@ extension TodoDetailView {
 struct TodoDetail_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            TodoDetailView(viewModel: TodoDetailViewModel(createTime: testModel[0].createTime ?? "0"))
+            TodoDetailView(viewModel: TodoDetailView.ViewModel(createTime: testModel[0].createTime ?? "0"))
             //            .colorScheme(.dark)
             //            .background(Color(.systemBackground))
             //            .environment(\.colorScheme, .dark)

@@ -10,10 +10,10 @@ import XCTest
 
 final class ToDoViewModel_Test: XCTestCase {
     
-    private var viewModel: ToDoViewModel!
+    private var viewModel: ToDoListView.ViewModel!
     
     override func setUp() {
-        viewModel = ToDoViewModel()
+        viewModel = ToDoListView.ViewModel()
         ToDoModel.allDelete()
         
         try? ToDoModel.add(addValue: ToDoModel(toDoName: "TEST1", todoDate: "2030/01/01 00:00", toDo: "toDo1", completionFlag: CompletionFlag.unfinished.rawValue, createTime: "", tag_id: ""))

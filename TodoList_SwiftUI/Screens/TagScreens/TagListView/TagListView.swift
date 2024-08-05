@@ -10,7 +10,7 @@ import TipKit
 
 struct TagListView: View {
     
-    @StateObject var viewModel = TagListViewModel()
+    @StateObject private var viewModel = ViewModel()
     
     @State private var isShowModle = false
     
@@ -36,7 +36,7 @@ struct TagListView: View {
             .listStyle(.inset)
             .navigationTitle(R.string.labels.tagList())
             .navigationDestination(for: Tag.self) { tag in
-                EditTagView(viewModel: EditTagViewModel(tag))
+                EditTagView(viewModel: EditTagView.ViewModel(tag))
                     .onDisappear {
                         Task {
                             await self.viewModel.fetchAllTag()
@@ -61,19 +61,17 @@ struct TagListView: View {
         
     }
     
+    /// 追加ボタン
     private var addButton: some View {
-        Button(action: {
+        AddIconButton {
             self.isShowModle.toggle()
-        }) {
-            Image(systemName: "plus")
         }
         .sheet(isPresented: $isShowModle) {
-            TagRegistrationView()
+            AddTagView()
                 .onDisappear {
                     Task {
                         await self.viewModel.fetchAllTag()
                     }
-                    
                 }
         }
     }
@@ -85,7 +83,7 @@ struct TagListView: View {
             self.presentationMode.wrappedValue.dismiss()
         }) {
             Image(systemName: "xmark")
-                .accessibilityLabel(R.string.labels.close())
+                .accessibilityLabel(R.string.buttons.close())
         }
         .accessibility(identifier: "closeButton")
     }

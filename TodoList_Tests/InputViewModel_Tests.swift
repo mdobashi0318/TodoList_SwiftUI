@@ -30,12 +30,12 @@ class InputViewModelTests: XCTestCase {
         let primaryKey = ToDoModel.allFindTodo().first?.createTime
         
         
-        var viewModel = InputViewModel()
+        var viewModel = ToDoInputView.ViewModel()
         XCTAssert(viewModel.toDoName.isEmpty, "viewModelのインスタンス生成時に引数渡していないので空になる")
         XCTAssert(viewModel.toDo.isEmpty, "viewModelのインスタンス生成時に引数渡していないので空になる")
         
         
-        viewModel = InputViewModel(createTime: primaryKey)
+        viewModel = ToDoInputView.ViewModel(createTime: primaryKey)
         XCTAssert(viewModel.toDoName == "toDoName")
         XCTAssert(viewModel.toDoDate == todoDate)
         XCTAssert(viewModel.toDo == "toDo")
@@ -43,7 +43,7 @@ class InputViewModelTests: XCTestCase {
     
     
     func test_addTodo_validateCheck() {
-        let viewModel = InputViewModel()
+        let viewModel = ToDoInputView.ViewModel()
         let name = "UnitTest"
         let calendar = Calendar(identifier: .gregorian)
         let date = Date()
@@ -94,7 +94,7 @@ class InputViewModelTests: XCTestCase {
         let primaryKey = ToDoModel.allFindTodo().first?.createTime
         
         
-        let viewModel = InputViewModel(createTime: primaryKey)
+        let viewModel = ToDoInputView.ViewModel(createTime: primaryKey)
         XCTAssert(viewModel.toDoName == "toDoName")
         XCTAssert(viewModel.toDo == "toDo")
         

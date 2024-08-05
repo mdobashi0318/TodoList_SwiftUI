@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct TagRegistrationView: View {
+/// タグ登録画面
+struct AddTagView: View {
     
     @State var color: CGColor = CGColor(red: 0, green: 0, blue: 0, alpha: 1)
     
@@ -31,7 +32,7 @@ struct TagRegistrationView: View {
                     }
                 }
                 .alert(isPresented: $isShowAlert) {
-                    return Alert(title: Text(errorMessage), dismissButton: .default(Text(R.string.labels.close())))
+                    return Alert(title: Text(errorMessage), dismissButton: .default(Text(R.string.buttons.close())))
                 }
         }
         
@@ -39,7 +40,7 @@ struct TagRegistrationView: View {
     
     
     private var addButton: some View {
-        Button(action: {
+        AddIconButton(action: {
             do {
                 if name.isEmpty || name.isSpace() {
                     self.errorMessage = R.string.message.inputTag()
@@ -53,18 +54,13 @@ struct TagRegistrationView: View {
                 self.errorMessage = R.string.message.tagAddError()
                 isShowAlert = true
             }
-            
-            
-            
-        }) {
-            Image(systemName: "plus")
-        }
+        })
     }
     
 }
 
 struct InputTagView_Previews: PreviewProvider {
     static var previews: some View {
-        TagRegistrationView()
+        AddTagView()
     }
 }

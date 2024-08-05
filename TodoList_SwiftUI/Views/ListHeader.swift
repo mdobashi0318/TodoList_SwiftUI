@@ -7,14 +7,20 @@
 
 import SwiftUI
 
-private let constAddPositionX = -1.5
-
 struct ListHeader: View {
     
-    @Binding var segmentIndex: SegmentIndex
+    @Binding private var segmentIndex: SegmentIndex
     
     /// バーのX座標
-    @State var positionX : CGFloat = UIScreen.main.bounds.width * constAddPositionX
+    @State private var positionX : CGFloat
+    
+    /// バーの位置調整するための値
+    private let constPositionX: CGFloat = -1.5
+    
+    init(segmentIndex: Binding<SegmentIndex>) {
+        self._segmentIndex = segmentIndex
+        self.positionX = UIScreen.main.bounds.width * constPositionX
+    }
     
     var body: some View {
         ScrollView(.horizontal) {
@@ -28,7 +34,7 @@ struct ListHeader: View {
             
         }
         .task(id: segmentIndex) {
-            barPosition(segmentIndex.rawValue)
+            moveBar(segmentIndex.rawValue)
         }
     }
     
@@ -58,8 +64,8 @@ struct ListHeader: View {
     }
     
     
-    private func barPosition(_ index: Int) {
-        var addPositionX: CGFloat = constAddPositionX
+    private func moveBar(_ index: Int) {
+        var addPositionX: CGFloat = constPositionX
         withAnimation(.default) {
             addPositionX += CGFloat(index)
             positionX = UIScreen.main.bounds.width / CGFloat(SegmentIndex.allCases.count) * addPositionX
@@ -86,5 +92,10 @@ struct ListHeader: View {
 }
 
 #Preview {
-    ListHeader(segmentIndex: .constant(SegmentIndex.all))
+    Group {
+        ListHeader(segmentIndex: .constant(.all))
+        ListHeader(segmentIndex: .constant(.active))
+        ListHeader(segmentIndex: .constant(.expired))
+        ListHeader(segmentIndex: .constant(.complete))
+    }
 }

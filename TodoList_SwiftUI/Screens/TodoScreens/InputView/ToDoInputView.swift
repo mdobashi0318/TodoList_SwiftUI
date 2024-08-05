@@ -13,7 +13,7 @@ struct ToDoInputView: View {
     
     // MARK: Properties
     
-    @StateObject var viewModel: InputViewModel
+    @StateObject var viewModel: ViewModel
     
     
     @Environment(\.presentationMode) private var presentationMode:Binding<PresentationMode>
@@ -67,7 +67,7 @@ extension ToDoInputView {
             self.presentationMode.wrappedValue.dismiss()
         }) {
             Image(systemName: "xmark")
-                .accessibilityLabel(R.string.labels.close())
+                .accessibilityLabel(R.string.buttons.close())
         }
         .accessibility(identifier: "cancelButton")
     }
@@ -75,16 +75,12 @@ extension ToDoInputView {
     
     /// ToDo追加ボタン
     private var addButton: some View {
-        Button(action: {
+        AddIconButton {
             if !self.isUpdate {
                 self.addTodo()
             } else {
                 self.updateTodo()
             }
-        }) {
-            Image(systemName: "plus")
-                .resizable()
-                .accessibilityLabel(R.string.labels.add())
         }
         .alert(isPresented: $isShowAlert) {
             return showValidateAlert
@@ -175,7 +171,7 @@ extension ToDoInputView {
     
     /// バリデート時の表示するアラート
     private var showValidateAlert: Alert {
-        return Alert(title: Text(viewModel.errorMessage), dismissButton: .default(Text(R.string.labels.close())))
+        return Alert(title: Text(viewModel.errorMessage), dismissButton: .default(Text(R.string.buttons.close())))
     }
     
 }
@@ -214,8 +210,8 @@ extension ToDoInputView {
 struct ToDoInputView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ToDoInputView(viewModel: InputViewModel(), isUpdate: false)
-            ToDoInputView(viewModel: InputViewModel(createTime: testModel[0].createTime ?? ""), isUpdate: true)
+            ToDoInputView(viewModel: ToDoInputView.ViewModel(), isUpdate: false)
+            ToDoInputView(viewModel: ToDoInputView.ViewModel(createTime: testModel[0].createTime ?? ""), isUpdate: true)
         }
     }
 }

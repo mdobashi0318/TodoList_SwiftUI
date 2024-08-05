@@ -1,0 +1,14 @@
+/* 
+  Buttons.strings
+  TodoList_SwiftUI
+
+  Created by 土橋正晴 on 2024/08/03.
+  
+*/
+
+"Close" = "閉じる";
+"Cancel" = "キャンセル";
+"Delete" = "削除";
+"Edit" = "編集";
+"Add" = "追加";
+"Done" = "完了";

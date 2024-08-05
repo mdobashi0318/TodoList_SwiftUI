@@ -11,7 +11,7 @@ import SwiftUI
 /// TodoListに表示するセル
 struct ToDoRow: View {
     
-    @Binding var todoModel: ToDoModel
+    let todoModel: ToDoModel
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -34,10 +34,10 @@ struct ToDoRow: View {
 
 struct ToDoRow_Previews: PreviewProvider {
     static var previews: some View {
-        ToDoRow(todoModel: .constant(testModel[0]))
+        ToDoRow(todoModel: testModel[0])
             .previewLayout(.sizeThatFits)
         
-        ToDoRow(todoModel: .constant(testModel[1]))
+        ToDoRow(todoModel: testModel[1])
             .previewLayout(.sizeThatFits)
     }
 }

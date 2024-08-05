@@ -13,21 +13,11 @@ struct ToDoListView: View {
     
     // MARK: Properties
     
-    @StateObject private var viewModel = ToDoViewModel()
-    
+    @StateObject private var viewModel = ViewModel()
     /// Widget、通知をタップして開いた時のTodoを設定する
     @StateObject private var openWidget = OpenTodoManager.shared
     
     @StateObject private var setting = SettingManager.shared
-    
-    /// Todo追加画面のモーダル表示フラグ
-    @State private var isShowModle = false
-    
-    /// 全件削除の確認アラートの表示フラグ
-    @State private var isDeleteFlag = false
-    
-    /// Tagリスト画面のモーダル表示フラグ
-    @State private var isShowTagModle = false
     
     // MARK: Body
     
@@ -56,9 +46,9 @@ struct ToDoListView: View {
                 .task {
                     if #available(iOS 17.0, *) {
                         try? Tips.configure([
-                                     .displayFrequency(.immediate),
-                                     .datastoreLocation(.applicationDefault)
-                                 ])
+                            .displayFrequency(.immediate),
+                            .datastoreLocation(.applicationDefault)
+                        ])
                     }
                 }
                 .task(id: viewModel.searchTagId) {
@@ -67,7 +57,7 @@ struct ToDoListView: View {
             }
             .navigationTitle("ToDoList")
             .navigationDestination(for: ToDoModel.self) { model in
-                TodoDetailView(viewModel: TodoDetailViewModel(createTime: model.createTime ?? ""))
+                TodoDetailView(viewModel: TodoDetailView.ViewModel(createTime: model.createTime ?? ""))
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -88,7 +78,7 @@ struct ToDoListView: View {
             .sheet(isPresented: $openWidget.isOpneTodo) { openWidgetView }
         }
         .alert(isPresented: $viewModel.isAlertError) {
-            Alert(title: Text(R.string.message.findError()), dismissButton: .default(Text(R.string.labels.close())))
+            Alert(title: Text(R.string.message.findError()), dismissButton: .default(Text(R.string.buttons.close())))
         }
         .accessibility(identifier: "ToDoList")
     }
@@ -117,7 +107,7 @@ extension ToDoListView {
                 } else {
                     ForEach(0..<self.viewModel.todoModel.count, id: \.self) { row in
                         NavigationLink(value: self.viewModel.todoModel[row]) {
-                            ToDoRow(todoModel: self.$viewModel.todoModel[row])
+                            ToDoRow(todoModel: viewModel.todoModel[row])
                         }
                     }
                 }
@@ -131,25 +121,23 @@ extension ToDoListView {
     private var headerText: some View {
         switch viewModel.segmentIndex {
         case .all:
-             Text(R.string.labels.all())
+            Text(R.string.labels.all())
         case .active:
-             Text(R.string.labels.active())
+            Text(R.string.labels.active())
         case .complete:
-             Text(R.string.labels.complete())
+            Text(R.string.labels.complete())
         case .expired:
-             Text(R.string.labels.expired())
+            Text(R.string.labels.expired())
         }
     }
     
     /// ToDoの追加画面に遷移させるボタン
     private var addButton: some View {
-        Button(action: {
-            self.isShowModle.toggle()
-        }) {
-            Image(systemName: "plus")
+        AddIconButton {
+            viewModel.isShowModle.toggle()
         }
-        .sheet(isPresented: $isShowModle) {
-            ToDoInputView(viewModel: InputViewModel(), isUpdate: false)
+        .sheet(isPresented: $viewModel.isShowModle) {
+            ToDoInputView(viewModel: ToDoInputView.ViewModel(), isUpdate: false)
                 .onDisappear {
                     Task {
                         await viewModel.fetchAllTodoModel()
@@ -157,7 +145,6 @@ extension ToDoListView {
                 }
         }
         .disabled(self.viewModel.isAlertError)
-        .accessibility(identifier: "addButton")
         .accessibilityLabel(R.string.accessibilityText.todoAddButton())
     }
     
@@ -165,15 +152,14 @@ extension ToDoListView {
     
     /// 全件削除ボタン
     private var allDeleteButton : some View {
-        Button(action: {
-            self.isDeleteFlag.toggle()
-        }) {
-            Image(systemName: "trash")
+        
+        DeleteIconButton {
+            viewModel.isDeleteFlag.toggle()
         }
-        .alert(isPresented: self.$isDeleteFlag) {
-            Alert(title: Text(R.string.message.allDelete()), primaryButton: .destructive(Text(R.string.labels.delete())) {
+        .alert(isPresented: $viewModel.isDeleteFlag) {
+            Alert(title: Text(R.string.message.allDelete()), primaryButton: .destructive(Text(R.string.buttons.delete)) {
                 viewModel.allDeleteTodo()
-            }, secondaryButton: .cancel(Text(R.string.labels.cancel())))
+            }, secondaryButton: .cancel(Text(R.string.buttons.cancel)))
         }
         .disabled(self.viewModel.isAlertError)
         .accessibility(identifier: "allDeleteButton")
@@ -193,11 +179,11 @@ extension ToDoListView {
     /// タグリスト画面に遷移させるボタン
     private var tagButton: some View {
         Button(action: {
-            self.isShowTagModle.toggle()
+            viewModel.isShowTagModle.toggle()
         }) {
             Image(systemName: "tag")
         }
-        .fullScreenCover(isPresented: $isShowTagModle) {
+        .fullScreenCover(isPresented: $viewModel.isShowTagModle) {
             TagListView()
                 .onDisappear {
                     Task {
@@ -212,7 +198,7 @@ extension ToDoListView {
     /// WidgetでタップしたTodoをモーダルで表示する
     private var openWidgetView: some View {
         return NavigationStack {
-            TodoDetailView(viewModel: TodoDetailViewModel(createTime: openWidget.openTodo.createTime ?? ""), isDisplayEllipsisBtn: false)
+            TodoDetailView(viewModel: TodoDetailView.ViewModel(createTime: openWidget.openTodo.createTime ?? ""), isDisplayEllipsisBtn: false)
                 .onDisappear { openWidget.isOpneTodo = false }
                 .navigationTitle(openWidget.openTodo.toDoName)
                 .toolbar {
