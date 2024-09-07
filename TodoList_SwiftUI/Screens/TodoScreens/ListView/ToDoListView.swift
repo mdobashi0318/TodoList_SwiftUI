@@ -41,7 +41,7 @@ struct ToDoListView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .task(id: viewModel.segmentIndex) {
-                    await viewModel.fetchAllTodoModel()
+                    viewModel.fetchAllTodoModel()
                 }
                 .task {
                     if #available(iOS 17.0, *) {
@@ -52,7 +52,7 @@ struct ToDoListView: View {
                     }
                 }
                 .task(id: viewModel.searchTagId) {
-                    await viewModel.fetchAllTodoModel()
+                    viewModel.fetchAllTodoModel()
                 }
             }
             .navigationTitle("ToDoList")
@@ -139,9 +139,7 @@ extension ToDoListView {
         .sheet(isPresented: $viewModel.isShowModle) {
             ToDoInputView(viewModel: ToDoInputView.ViewModel(), isUpdate: false)
                 .onDisappear {
-                    Task {
-                        await viewModel.fetchAllTodoModel()
-                    }
+                    viewModel.fetchAllTodoModel()
                 }
         }
         .disabled(self.viewModel.isAlertError)
@@ -186,10 +184,8 @@ extension ToDoListView {
         .fullScreenCover(isPresented: $viewModel.isShowTagModle) {
             TagListView()
                 .onDisappear {
-                    Task {
-                        await viewModel.fetchAllTodoModel()
+                        viewModel.fetchAllTodoModel()
                         viewModel.fetchAllTag()
-                    }
                 }
         }
         .accessibility(identifier: "tagButton")

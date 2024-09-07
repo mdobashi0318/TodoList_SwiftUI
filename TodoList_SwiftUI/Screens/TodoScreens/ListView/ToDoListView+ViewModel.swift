@@ -33,16 +33,12 @@ extension ToDoListView {
         
         
         init() {
-            Task {
-                await fetchAllTodoModel()
-                await fetchAllTag()
-            }
-            
+            fetchAllTodoModel()
+            fetchAllTag()
         }
         
         /// Todoを全件取得する
-        @MainActor
-        func fetchAllTodoModel() async {
+        func fetchAllTodoModel() {
             todoModel = switch segmentIndex {
             case .active:
                 ToDoModel.allFindTodo(tagId: searchTagId).filter {
@@ -68,7 +64,6 @@ extension ToDoListView {
             self.todoModel = []
         }
         
-        @MainActor
         func fetchAllTag() {
             tagModel = Tag.findAll(addEmptyTagFlag: true)
         }
