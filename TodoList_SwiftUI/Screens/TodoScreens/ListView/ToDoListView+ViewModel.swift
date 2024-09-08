@@ -33,7 +33,6 @@ extension ToDoListView {
         
         
         init() {
-            fetchAllTodoModel()
             fetchAllTag()
         }
         
@@ -59,9 +58,13 @@ extension ToDoListView {
         
         
         /// Todoを全件削除する
-        func allDeleteTodo() {
+        @MainActor
+        func allDeleteTodo() async {
             ToDoModel.allDelete()
-            self.todoModel = []
+        }
+        
+        func todoModelDelete() {
+            todoModel = []
         }
         
         func fetchAllTag() {

@@ -41,7 +41,9 @@ struct ToDoListView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .task(id: viewModel.segmentIndex) {
-                    viewModel.fetchAllTodoModel()
+                    withAnimation {
+                        viewModel.fetchAllTodoModel()
+                    }
                 }
                 .task {
                     if #available(iOS 17.0, *) {
@@ -52,7 +54,9 @@ struct ToDoListView: View {
                     }
                 }
                 .task(id: viewModel.searchTagId) {
-                    viewModel.fetchAllTodoModel()
+                    withAnimation {
+                        viewModel.fetchAllTodoModel()
+                    }
                 }
             }
             .navigationTitle("ToDoList")
@@ -139,7 +143,9 @@ extension ToDoListView {
         .sheet(isPresented: $viewModel.isShowModle) {
             ToDoInputView(viewModel: ToDoInputView.ViewModel(), isUpdate: false)
                 .onDisappear {
-                    viewModel.fetchAllTodoModel()
+                    withAnimation {
+                        viewModel.fetchAllTodoModel()
+                    }
                 }
         }
         .disabled(self.viewModel.isAlertError)
@@ -156,7 +162,12 @@ extension ToDoListView {
         }
         .alert(isPresented: $viewModel.isDeleteFlag) {
             Alert(title: Text(R.string.message.allDelete()), primaryButton: .destructive(Text(R.string.buttons.delete)) {
-                viewModel.allDeleteTodo()
+                Task {
+                    await viewModel.allDeleteTodo()
+                }
+                withAnimation {
+                    viewModel.todoModelDelete()
+                }
             }, secondaryButton: .cancel(Text(R.string.buttons.cancel)))
         }
         .disabled(self.viewModel.isAlertError)
