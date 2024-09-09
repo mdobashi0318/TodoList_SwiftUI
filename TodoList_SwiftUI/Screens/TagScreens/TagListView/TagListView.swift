@@ -38,8 +38,8 @@ struct TagListView: View {
             .navigationDestination(for: Tag.self) { tag in
                 EditTagView(viewModel: EditTagView.ViewModel(tag))
                     .onDisappear {
-                        Task {
-                            await self.viewModel.fetchAllTag()
+                        withAnimation {
+                             self.viewModel.fetchAllTag()
                         }
                         
                     }
@@ -54,8 +54,10 @@ struct TagListView: View {
                 }
                 
             }
-            .task() {
-                await self.viewModel.fetchAllTag()
+            .task {
+                withAnimation {
+                    self.viewModel.fetchAllTag()
+                }
             }
         }
         
@@ -69,8 +71,8 @@ struct TagListView: View {
         .sheet(isPresented: $isShowModle) {
             AddTagView()
                 .onDisappear {
-                    Task {
-                        await self.viewModel.fetchAllTag()
+                    withAnimation {
+                        self.viewModel.fetchAllTag()
                     }
                 }
         }

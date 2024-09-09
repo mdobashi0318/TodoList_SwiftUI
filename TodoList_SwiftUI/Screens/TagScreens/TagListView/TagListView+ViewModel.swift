@@ -13,8 +13,7 @@ extension TagListView {
         
         @Published var model: [Tag] = []
             
-        @MainActor
-        func fetchAllTag() async {
+        func fetchAllTag() {
             model = Tag.findAll()
         }
         
