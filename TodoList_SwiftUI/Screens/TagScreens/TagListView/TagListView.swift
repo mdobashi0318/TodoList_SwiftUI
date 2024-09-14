@@ -19,9 +19,7 @@ struct TagListView: View {
     var body: some View {
         NavigationStack {
             List {
-                if #available(iOS 17.0, *) {
-                    TipView(TagTip())
-                }
+                TipView(TagTip())
                 if viewModel.model.isEmpty {
                     Text(R.string.message.noTag())
                 } else {
@@ -39,7 +37,7 @@ struct TagListView: View {
                 EditTagView(viewModel: EditTagView.ViewModel(tag))
                     .onDisappear {
                         withAnimation {
-                             self.viewModel.fetchAllTag()
+                            self.viewModel.fetchAllTag()
                         }
                         
                     }

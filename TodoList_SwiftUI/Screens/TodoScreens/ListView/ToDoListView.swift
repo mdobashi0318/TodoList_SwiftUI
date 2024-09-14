@@ -46,12 +46,10 @@ struct ToDoListView: View {
                     }
                 }
                 .task {
-                    if #available(iOS 17.0, *) {
-                        try? Tips.configure([
-                            .displayFrequency(.immediate),
-                            .datastoreLocation(.applicationDefault)
-                        ])
-                    }
+                    try? Tips.configure([
+                        .displayFrequency(.immediate),
+                        .datastoreLocation(.applicationDefault)
+                    ])
                 }
                 .task(id: viewModel.searchTagId) {
                     withAnimation {
@@ -71,12 +69,8 @@ struct ToDoListView: View {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     tagButton
                     notificationButton
-                    if #available(iOS 17.0, *) {
-                        addButton
-                            .popoverTip(AddTodoTip())
-                    } else {
-                        addButton
-                    }
+                    addButton
+                        .popoverTip(AddTodoTip())
                 }
             }
             .sheet(isPresented: $openWidget.isOpneTodo) { openWidgetView }
@@ -195,8 +189,8 @@ extension ToDoListView {
         .fullScreenCover(isPresented: $viewModel.isShowTagModle) {
             TagListView()
                 .onDisappear {
-                        viewModel.fetchAllTodoModel()
-                        viewModel.fetchAllTag()
+                    viewModel.fetchAllTodoModel()
+                    viewModel.fetchAllTag()
                 }
         }
         .accessibility(identifier: "tagButton")
