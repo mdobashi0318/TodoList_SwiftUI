@@ -73,7 +73,7 @@ struct TodoWidgetEntryView : View {
                 Text(NSLocalizedString("NextTodo", tableName: "Label", comment: ""))
                     .font(.caption)
                 Text(entry.todomodel?.toDoName ?? NSLocalizedString("NoTodo", tableName: "Label", comment: ""))
-                Text(entry.todomodel?.todoDate ?? "")
+                Text(Format.stringFromString(string: entry.todomodel?.todoDate ?? "", formatType: .dateTime_NoYear))
                 todoButton(entry.todomodel)
             }
             .widgetURL(Self.deeplinkURL)
