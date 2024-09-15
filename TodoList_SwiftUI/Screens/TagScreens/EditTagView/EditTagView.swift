@@ -10,7 +10,7 @@ import SwiftUI
 /// タグ編集画面
 struct EditTagView: View {
     
-    @StateObject var viewModel: ViewModel
+    @State var viewModel: ViewModel
     
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
     /// 削除確認フラグ

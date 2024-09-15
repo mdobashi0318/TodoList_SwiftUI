@@ -7,10 +7,12 @@
 //
 
 import Foundation
+import Observation
 
 
 /// アプリ外でTodoを開いた時のTodoの設定をする
-final class OpenTodoManager: ObservableObject {
+@Observable
+final class OpenTodoManager {
     
     /// アプリ外でTodoを開いた際にどこから開いたかのenum
     enum OpenMethod {
@@ -20,7 +22,7 @@ final class OpenTodoManager: ObservableObject {
         
     static let shared = OpenTodoManager()
     
-    @Published var isOpneTodo: Bool = false
+    var isOpneTodo: Bool = false
     
     /// 詳細を開くTodo
     private(set) var openTodo: ToDoModel!

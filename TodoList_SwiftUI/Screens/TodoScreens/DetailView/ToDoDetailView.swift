@@ -12,7 +12,7 @@ struct TodoDetailView: View {
     
     // MARK: Properties
     
-    @StateObject var viewModel: ViewModel
+    @State var viewModel: ViewModel
     
     /// Todoの編集するためのモーダルを出すフラグ
     @State private var isShowModle = false

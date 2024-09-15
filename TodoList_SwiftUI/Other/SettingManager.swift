@@ -7,14 +7,16 @@
 
 import Foundation
 import UIKit
+import Observation
 
 
-class SettingManager: ObservableObject {
+@Observable
+class SettingManager {
     
     static let shared = SettingManager()
     
     /// 通知が許可されているか
-    @Published var isNotification = false
+    var isNotification = false
     
     private let notificationPublisher = NotificationCenter.default.publisher(for: Notification.Name(rawValue: R.string.notifications.getNotificationStatus()))
         .sink(receiveValue: { _ in

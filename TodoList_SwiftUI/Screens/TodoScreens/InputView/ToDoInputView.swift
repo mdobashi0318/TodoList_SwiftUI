@@ -13,7 +13,7 @@ struct ToDoInputView: View {
     
     // MARK: Properties
     
-    @StateObject var viewModel: ViewModel
+    @State var viewModel: ViewModel
     
     
     @Environment(\.presentationMode) private var presentationMode:Binding<PresentationMode>

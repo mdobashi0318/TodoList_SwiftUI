@@ -7,22 +7,24 @@
 
 import Foundation
 import CoreGraphics
+import Observation
 
 
 extension EditTagView {
     
-    class ViewModel: ObservableObject {
+    @Observable
+    class ViewModel {
         
-        @Published var tag: Tag
+        var tag: Tag
         
-        @Published var color: CGColor = CGColor(red: 0, green: 0, blue: 0, alpha: 1)
+        var color: CGColor = CGColor(red: 0, green: 0, blue: 0, alpha: 1)
         
-        @Published var name = ""
+        var name = ""
         
         /// Alertの表示フラグ
-        @Published var isShowAlert = false
+        var isShowAlert = false
         
-        @Published private(set) var errorMessage = ""
+        private(set) var errorMessage = ""
         
         
         init(_ tag: Tag) {

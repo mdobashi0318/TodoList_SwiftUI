@@ -13,11 +13,11 @@ struct ToDoListView: View {
     
     // MARK: Properties
     
-    @StateObject private var viewModel = ViewModel()
+    @State private var viewModel = ViewModel()
     /// Widget、通知をタップして開いた時のTodoを設定する
-    @StateObject private var openWidget = OpenTodoManager.shared
+    @State private var openWidget = OpenTodoManager.shared
     
-    @StateObject private var setting = SettingManager.shared
+    @State private var setting = SettingManager.shared
     
     // MARK: Body
     
@@ -100,12 +100,12 @@ extension ToDoListView {
                         }
                     }
                 }
-                if self.viewModel.todoModel.count == 0 {
+                if self.viewModel.todoModel.isEmpty {
                     Text(R.string.message.noTodo())
                 } else {
-                    ForEach(0..<self.viewModel.todoModel.count, id: \.self) { row in
-                        NavigationLink(value: self.viewModel.todoModel[row]) {
-                            ToDoRow(todoModel: viewModel.todoModel[row])
+                    ForEach(self.viewModel.todoModel, id: \.createTime) { model in
+                        NavigationLink(value: model) {
+                            ToDoRow(todoModel: model)
                         }
                     }
                 }

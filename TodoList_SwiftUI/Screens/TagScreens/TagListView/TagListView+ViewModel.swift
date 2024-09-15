@@ -6,12 +6,14 @@
 //
 
 import Foundation
+import Observation
 
 extension TagListView {
     
-    class ViewModel: ObservableObject {
+    @Observable
+    class ViewModel {
         
-        @Published var model: [Tag] = []
+        private(set) var model: [Tag] = []
             
         func fetchAllTag() {
             model = Tag.findAll()

@@ -10,7 +10,7 @@ import TipKit
 
 struct TagListView: View {
     
-    @StateObject private var viewModel = ViewModel()
+    @State private var viewModel = ViewModel()
     
     @State private var isShowModle = false
     
