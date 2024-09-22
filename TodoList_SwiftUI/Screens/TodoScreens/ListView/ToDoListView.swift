@@ -13,11 +13,11 @@ struct ToDoListView: View {
     
     // MARK: Properties
     
-    @StateObject private var viewModel = ViewModel()
+    @State private var viewModel = ViewModel()
     /// Widget、通知をタップして開いた時のTodoを設定する
-    @StateObject private var openWidget = OpenTodoManager.shared
+    @State private var openWidget = OpenTodoManager.shared
     
-    @StateObject private var setting = SettingManager.shared
+    @State private var setting = SettingManager.shared
     
     // MARK: Body
     
@@ -41,18 +41,20 @@ struct ToDoListView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .task(id: viewModel.segmentIndex) {
-                    await viewModel.fetchAllTodoModel()
-                }
-                .task {
-                    if #available(iOS 17.0, *) {
-                        try? Tips.configure([
-                            .displayFrequency(.immediate),
-                            .datastoreLocation(.applicationDefault)
-                        ])
+                    withAnimation {
+                        viewModel.fetchAllTodoModel()
                     }
                 }
+                .task {
+                    try? Tips.configure([
+                        .displayFrequency(.immediate),
+                        .datastoreLocation(.applicationDefault)
+                    ])
+                }
                 .task(id: viewModel.searchTagId) {
-                    await viewModel.fetchAllTodoModel()
+                    withAnimation {
+                        viewModel.fetchAllTodoModel()
+                    }
                 }
             }
             .navigationTitle("ToDoList")
@@ -67,12 +69,8 @@ struct ToDoListView: View {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     tagButton
                     notificationButton
-                    if #available(iOS 17.0, *) {
-                        addButton
-                            .popoverTip(AddTodoTip())
-                    } else {
-                        addButton
-                    }
+                    addButton
+                        .popoverTip(AddTodoTip())
                 }
             }
             .sheet(isPresented: $openWidget.isOpneTodo) { openWidgetView }
@@ -102,12 +100,12 @@ extension ToDoListView {
                         }
                     }
                 }
-                if self.viewModel.todoModel.count == 0 {
+                if self.viewModel.todoModel.isEmpty {
                     Text(R.string.message.noTodo())
                 } else {
-                    ForEach(0..<self.viewModel.todoModel.count, id: \.self) { row in
-                        NavigationLink(value: self.viewModel.todoModel[row]) {
-                            ToDoRow(todoModel: viewModel.todoModel[row])
+                    ForEach(self.viewModel.todoModel, id: \.createTime) { model in
+                        NavigationLink(value: model) {
+                            ToDoRow(todoModel: model)
                         }
                     }
                 }
@@ -139,8 +137,8 @@ extension ToDoListView {
         .sheet(isPresented: $viewModel.isShowModle) {
             ToDoInputView(viewModel: ToDoInputView.ViewModel(), isUpdate: false)
                 .onDisappear {
-                    Task {
-                        await viewModel.fetchAllTodoModel()
+                    withAnimation {
+                        viewModel.fetchAllTodoModel()
                     }
                 }
         }
@@ -158,7 +156,12 @@ extension ToDoListView {
         }
         .alert(isPresented: $viewModel.isDeleteFlag) {
             Alert(title: Text(R.string.message.allDelete()), primaryButton: .destructive(Text(R.string.buttons.delete)) {
-                viewModel.allDeleteTodo()
+                Task {
+                    await viewModel.allDeleteTodo()
+                }
+                withAnimation {
+                    viewModel.todoModelDelete()
+                }
             }, secondaryButton: .cancel(Text(R.string.buttons.cancel)))
         }
         .disabled(self.viewModel.isAlertError)
@@ -186,10 +189,8 @@ extension ToDoListView {
         .fullScreenCover(isPresented: $viewModel.isShowTagModle) {
             TagListView()
                 .onDisappear {
-                    Task {
-                        await viewModel.fetchAllTodoModel()
-                        viewModel.fetchAllTag()
-                    }
+                    viewModel.fetchAllTodoModel()
+                    viewModel.fetchAllTag()
                 }
         }
         .accessibility(identifier: "tagButton")

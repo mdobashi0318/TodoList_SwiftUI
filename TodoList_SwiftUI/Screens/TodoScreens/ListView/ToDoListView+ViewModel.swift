@@ -7,25 +7,26 @@
 //
 
 import Foundation
-import SwiftUI
+import Observation
 
 // MARK: - ViewModel
 
 extension ToDoListView {
     
-    class ViewModel: ObservableObject {
+    @Observable
+    class ViewModel {
         
-        @Published private(set) var todoModel: [ToDoModel] = []
+        private(set) var todoModel: [ToDoModel] = []
         
-        @Published var segmentIndex: SegmentIndex = .all
+        var segmentIndex: SegmentIndex = .all
         
-        @Published var searchTagId = ""
+        var searchTagId = ""
         /// Todo追加画面のモーダル表示フラグ
-        @Published var isShowModle = false
+        var isShowModle = false
         /// 全件削除の確認アラートの表示フラグ
-        @Published var isDeleteFlag = false
+        var isDeleteFlag = false
         /// Tagリスト画面のモーダル表示フラグ
-        @Published var isShowTagModle = false
+        var isShowTagModle = false
         
         private(set) var tagModel: [Tag] = []
         
@@ -33,16 +34,11 @@ extension ToDoListView {
         
         
         init() {
-            Task {
-                await fetchAllTodoModel()
-                await fetchAllTag()
-            }
-            
+            fetchAllTag()
         }
         
         /// Todoを全件取得する
-        @MainActor
-        func fetchAllTodoModel() async {
+        func fetchAllTodoModel() {
             todoModel = switch segmentIndex {
             case .active:
                 ToDoModel.allFindTodo(tagId: searchTagId).filter {
@@ -63,12 +59,15 @@ extension ToDoListView {
         
         
         /// Todoを全件削除する
-        func allDeleteTodo() {
+        @MainActor
+        func allDeleteTodo() async {
             ToDoModel.allDelete()
-            self.todoModel = []
         }
         
-        @MainActor
+        func todoModelDelete() {
+            todoModel = []
+        }
+        
         func fetchAllTag() {
             tagModel = Tag.findAll(addEmptyTagFlag: true)
         }

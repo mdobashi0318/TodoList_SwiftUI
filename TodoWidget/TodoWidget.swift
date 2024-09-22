@@ -73,11 +73,8 @@ struct TodoWidgetEntryView : View {
                 Text(NSLocalizedString("NextTodo", tableName: "Label", comment: ""))
                     .font(.caption)
                 Text(entry.todomodel?.toDoName ?? NSLocalizedString("NoTodo", tableName: "Label", comment: ""))
-                Text(entry.todomodel?.todoDate ?? "")
-                
-                if #available(iOS 17.0, *) {
-                    todoButton(entry.todomodel)
-                }
+                Text(Format.stringFromString(string: entry.todomodel?.todoDate ?? "", formatType: .dateTime_NoYear))
+                todoButton(entry.todomodel)
             }
             .widgetURL(Self.deeplinkURL)
             
@@ -92,10 +89,7 @@ struct TodoWidgetEntryView : View {
                     }
                     Text(entry.todomodel?.toDo ?? "")
                 }
-                
-                if #available(iOS 17.0, *) {
-                    todoButton(entry.todomodel)
-                }
+                todoButton(entry.todomodel)
             }
             .padding()
             .widgetURL(Self.deeplinkURL)
@@ -126,11 +120,7 @@ struct TodoWidget: Widget {
     let kind: String = "TodoWidget"
     
     let widgetFamilys: [WidgetFamily] = {
-        if #available(iOS 16.0, *) {
-            return [.systemSmall, .systemMedium, .accessoryRectangular]
-        } else {
-            return [.systemSmall, .systemMedium]
-        }
+        return [.systemSmall, .systemMedium, .accessoryRectangular]
     }()
     
     var body: some WidgetConfiguration {

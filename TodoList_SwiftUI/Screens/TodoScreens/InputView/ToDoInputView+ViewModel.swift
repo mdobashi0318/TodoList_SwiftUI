@@ -7,25 +7,26 @@
 //
 
 import Foundation
-
+import Observation
 
 extension ToDoInputView {
     
-    final class ViewModel: ObservableObject {
+    @Observable
+    final class ViewModel {
         
         private var model: ToDoModel?
         
         /// Todoのタイトル
-        @Published var toDoName: String = ""
+        var toDoName: String = ""
         
         ///  画面側のTodoの期限
-        @Published var toDoDate = Date()
+        var toDoDate = Date()
         
         /// Todoの詳細
-        @Published var toDo: String = ""
+        var toDo: String = ""
         
         /// TagのID
-        @Published var tag_id: String = ""
+        var tag_id: String = ""
         
         /// エラーメッセージ
         private(set) var errorMessage: String = ""

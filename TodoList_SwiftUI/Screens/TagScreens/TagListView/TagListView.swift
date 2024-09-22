@@ -10,7 +10,7 @@ import TipKit
 
 struct TagListView: View {
     
-    @StateObject private var viewModel = ViewModel()
+    @State private var viewModel = ViewModel()
     
     @State private var isShowModle = false
     
@@ -19,9 +19,7 @@ struct TagListView: View {
     var body: some View {
         NavigationStack {
             List {
-                if #available(iOS 17.0, *) {
-                    TipView(TagTip())
-                }
+                TipView(TagTip())
                 if viewModel.model.isEmpty {
                     Text(R.string.message.noTag())
                 } else {
@@ -38,8 +36,8 @@ struct TagListView: View {
             .navigationDestination(for: Tag.self) { tag in
                 EditTagView(viewModel: EditTagView.ViewModel(tag))
                     .onDisappear {
-                        Task {
-                            await self.viewModel.fetchAllTag()
+                        withAnimation {
+                            self.viewModel.fetchAllTag()
                         }
                         
                     }
@@ -54,8 +52,10 @@ struct TagListView: View {
                 }
                 
             }
-            .task() {
-                await self.viewModel.fetchAllTag()
+            .task {
+                withAnimation {
+                    self.viewModel.fetchAllTag()
+                }
             }
         }
         
@@ -69,8 +69,8 @@ struct TagListView: View {
         .sheet(isPresented: $isShowModle) {
             AddTagView()
                 .onDisappear {
-                    Task {
-                        await self.viewModel.fetchAllTag()
+                    withAnimation {
+                        self.viewModel.fetchAllTag()
                     }
                 }
         }

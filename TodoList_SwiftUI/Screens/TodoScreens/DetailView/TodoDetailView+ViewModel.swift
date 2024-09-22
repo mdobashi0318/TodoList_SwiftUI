@@ -7,15 +7,17 @@
 //
 
 import Foundation
+import Observation
 
 extension TodoDetailView {
     
+    @Observable
     class ViewModel: ObservableObject {
         
         /// 完了フラグ
         ///
         /// 画面側でのトグルの選択された値
-        @Published var isCompletion: Bool = false {
+        var isCompletion: Bool = false {
             didSet {
                 self.completionFlagStr = isCompletion ? .completion : .unfinished
                 
@@ -25,7 +27,7 @@ extension TodoDetailView {
             }
         }
         
-        @Published var isError: Bool = false
+        var isError: Bool = false
         
         private var model = ToDoModel()
         
