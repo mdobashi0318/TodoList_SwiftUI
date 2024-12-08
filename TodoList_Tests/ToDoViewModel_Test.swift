@@ -31,31 +31,31 @@ final class ToDoViewModel_Test: XCTestCase {
     
     @MainActor
     func test_fetchAllTodoModel() async throws {
-            await viewModel.fetchAllTodoModel()
+            viewModel.fetchAllTodoModel()
             XCTAssert(viewModel.todoModel.count == 3, "全件取得できていない")
             
             viewModel.segmentIndex = .active
-            await viewModel.fetchAllTodoModel()
+            viewModel.fetchAllTodoModel()
             XCTAssert(viewModel.todoModel.count == 1 , "未完了のみの取得できていない")
             
             viewModel.segmentIndex = .expired
-            await viewModel.fetchAllTodoModel()
+            viewModel.fetchAllTodoModel()
             XCTAssert(viewModel.todoModel.count == 2 , "期限切れのみの取得できていない")
             
             viewModel.segmentIndex = .complete
-            await viewModel.fetchAllTodoModel()
+            viewModel.fetchAllTodoModel()
             XCTAssert(viewModel.todoModel.count == 0 , "完了のみの取得できていない")
             
             viewModel.segmentIndex = .all
-            await viewModel.fetchAllTodoModel()
+            viewModel.fetchAllTodoModel()
             ToDoModel.updateCompletionFlag(updateTodo: viewModel.todoModel[0], flag: .completion)
             viewModel.segmentIndex = .complete
-            await viewModel.fetchAllTodoModel()
+            viewModel.fetchAllTodoModel()
             XCTAssert(viewModel.todoModel.count == 1 , "完了のみの取得できていない")
             
             
             viewModel.segmentIndex = .expired
-            await viewModel.fetchAllTodoModel()
+            viewModel.fetchAllTodoModel()
             XCTAssert(viewModel.todoModel.count == 1 , "期限切れのみの取得できていない")
     
     }
@@ -64,11 +64,11 @@ final class ToDoViewModel_Test: XCTestCase {
     
     @MainActor
     func test_allDeleteTodo() async {
-        await viewModel.fetchAllTodoModel()
+        viewModel.fetchAllTodoModel()
         XCTAssert(viewModel.todoModel.count == 3, "Todoの取得失敗")
         
         viewModel.allDeleteTodo()
-        await viewModel.fetchAllTodoModel()
+        viewModel.fetchAllTodoModel()
         XCTAssert(viewModel.todoModel.count == 0, "Todoが全件削除できていない")
         
     }

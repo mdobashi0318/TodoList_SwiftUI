@@ -135,7 +135,7 @@ extension ToDoListView {
             viewModel.isShowModle.toggle()
         }
         .sheet(isPresented: $viewModel.isShowModle) {
-            ToDoInputView(viewModel: ToDoInputView.ViewModel(), isUpdate: false)
+            ToDoInputView(viewModel: ToDoInputView.ViewModel())
                 .onDisappear {
                     withAnimation {
                         viewModel.fetchAllTodoModel()

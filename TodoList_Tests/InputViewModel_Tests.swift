@@ -50,20 +50,20 @@ class InputViewModelTests: XCTestCase {
         let addDate = calendar.date(byAdding: .minute, value: 1, to: date)!
         viewModel.toDoName = ""
         viewModel.toDoDate = date
-        var result = viewModel.addTodo()
+        var result = viewModel.modelAddOrUpdate()
         
         /// 名前と日付のバリデーションが引っかかること
         
         XCTAssert(viewModel.errorMessage == R.string.message.validate(R.string.labels.title()), "バリデーションに引っかかっていない")
         XCTAssertFalse(result, "追加の結果のBoolが違う")
         viewModel.toDoName = name
-        result = viewModel.addTodo()
+        result = viewModel.modelAddOrUpdate()
         
         XCTAssert(viewModel.errorMessage == R.string.message.validateDate(), "バリデーションに引っかかっていない")
         XCTAssertFalse(result, "追加の結果のBoolが違う")
         
         viewModel.toDoDate = addDate
-        result = viewModel.addTodo()
+        result = viewModel.modelAddOrUpdate()
         
         /// Todoに追加できること
         XCTAssert(viewModel.errorMessage.isEmpty, "エラーメッセージが空になっていない")
@@ -102,7 +102,7 @@ class InputViewModelTests: XCTestCase {
         viewModel.toDoName = name
         viewModel.toDoDate = addDate
         viewModel.toDo = detail
-        let result = viewModel.updateTodo()
+        let result = viewModel.modelAddOrUpdate()
         XCTAssertTrue(result, "更新の結果のBoolが違う")
         
         

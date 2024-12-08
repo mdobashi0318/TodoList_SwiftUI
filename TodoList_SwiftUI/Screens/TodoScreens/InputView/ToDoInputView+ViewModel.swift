@@ -28,6 +28,9 @@ extension ToDoInputView {
         /// TagのID
         var tag_id: String = ""
         
+        /// Alertの表示フラグ
+        var isShowAlert = false
+        
         /// エラーメッセージ
         private(set) var errorMessage: String = ""
         
@@ -39,10 +42,25 @@ extension ToDoInputView {
         private(set) var tagList: [Tag] = []
         
         
+        var mode: Mode {
+            model == nil ? .add : .edit
+        }
+        
+        
         init(createTime: String? = nil) {
             findTodo(createTime: createTime)
             setModelValue(model)
             
+        }
+        
+        
+        
+        func modelAddOrUpdate() -> Bool {
+            if mode ==  .add {
+                return addTodo()
+            } else {
+                return updateTodo()
+            }
         }
         
         /// Todoを１件検索
@@ -70,7 +88,7 @@ extension ToDoInputView {
         }
         
         /// Todoの追加
-        func addTodo() -> Bool {
+        private func addTodo() -> Bool {
             if let message = self.validateCheck() {
                 errorMessage = message
                 return false
@@ -87,7 +105,7 @@ extension ToDoInputView {
         
         
         /// Todoの更新
-        func updateTodo() -> Bool {
+        private func updateTodo() -> Bool {
             guard let model = model else {
                 errorMessage = R.string.message.updateError()
                 return false
@@ -127,7 +145,11 @@ extension ToDoInputView {
                 nil
             }
         }
+     
         
+        enum Mode {
+            case add, edit
+        }
     }
     
 }

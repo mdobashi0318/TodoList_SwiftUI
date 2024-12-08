@@ -60,7 +60,7 @@ extension ToDoListView {
         
         /// Todoを全件削除する
         @MainActor
-        func allDeleteTodo() async {
+        func allDeleteTodo() {
             ToDoModel.allDelete()
         }
         
