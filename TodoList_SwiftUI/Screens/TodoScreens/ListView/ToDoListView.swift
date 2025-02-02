@@ -110,6 +110,7 @@ extension ToDoListView {
                     }
                 }
             })
+            .listRowSeparator(.hidden)
         }
         .listStyle(.inset)
     }

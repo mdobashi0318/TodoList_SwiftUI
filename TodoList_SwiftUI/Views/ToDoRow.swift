@@ -12,20 +12,51 @@ import SwiftUI
 struct ToDoRow: View {
     
     let todoModel: ToDoModel
-    
+ 
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(todoModel.toDoName)
-                .animation(.none)
-                .accessibility(identifier: "titlelabel")
-            CompletionLable(todoDate: todoModel.todoDate, completionFlag: todoModel.completionFlag)
-            if let tag_id = todoModel.tag_id,
-               let tag = Tag.find(id: tag_id) {
-                TagRow(tag: tag)
+        RoundedRectangle(cornerRadius: 1)
+            .foregroundStyle(.clear)
+            .padding()
+            .background(completionType().backgroundColor.opacity(0.4))
+            .cornerRadius(8)
+            .clipped()
+            .shadow(color: .gray.opacity(0.7), radius: 5)
+            .frame(minHeight: 60, alignment: .leading)
+            .overlay(content: {
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(todoModel.toDoName)
+                            .animation(.none)
+                            .accessibility(identifier: "titlelabel")
+                        CompletionLable(todoDate: todoModel.todoDate, completionFlag: todoModel.completionFlag)
+                        if let tag_id = todoModel.tag_id,
+                           let tag = Tag.find(id: tag_id) {
+                            TagRow(tag: tag)
+                        }
+                    }
+                    .frame(alignment: .leading)
+                    .padding()
+                    Spacer()
+                }
+            })
+    }
+    
+    
+    
+     private func completionType() -> CompletionType {
+        switch todoModel.completionFlag {
+        case CompletionFlag.completion.rawValue:
+                return .complete
+        default:
+            return if Format.dateFromString(string: todoModel.todoDate) ?? Date() > Format.dateFormat() {
+                .active
+            } else {
+                .expired
             }
         }
-        .frame(alignment: .leading)
     }
+    
+    
 }
 
 
