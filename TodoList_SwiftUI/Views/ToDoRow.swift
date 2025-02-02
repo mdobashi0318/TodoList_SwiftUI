@@ -14,21 +14,21 @@ struct ToDoRow: View {
     let todoModel: ToDoModel
  
     var body: some View {
-        RoundedRectangle(cornerRadius: 1)
+        RoundedRectangle(cornerRadius: 0)
             .foregroundStyle(.clear)
             .padding()
-            .background(completionType().backgroundColor.opacity(0.4))
-            .cornerRadius(8)
+            .background(completionType().backgroundColor.opacity(0.7))
+            .cornerRadius(6)
             .clipped()
-            .shadow(color: .gray.opacity(0.7), radius: 5)
-            .frame(minHeight: 60, alignment: .leading)
+            .shadow(color: .gray.opacity(0.7), radius: 6)
+            .frame(minHeight: 60)
             .overlay(content: {
                 HStack {
                     VStack(alignment: .leading) {
                         Text(todoModel.toDoName)
                             .animation(.none)
                             .accessibility(identifier: "titlelabel")
-                        CompletionLable(todoDate: todoModel.todoDate, completionFlag: todoModel.completionFlag)
+                        CompletionLable(todoDate: todoModel.todoDate, completionFlag: todoModel.completionFlag, isCompletionLabel: false)
                         if let tag_id = todoModel.tag_id,
                            let tag = Tag.find(id: tag_id) {
                             TagRow(tag: tag)
