@@ -90,29 +90,28 @@ struct ToDoListView: View {
 extension ToDoListView {
     
     /// Todoのリストを表示する
+    @ViewBuilder
     private var todoList: some View {
-        List {
-            Section(content: {
-                if viewModel.tagModel.isNotEmpty {
-                    Picker(R.string.labels.filterByTag(), selection: $viewModel.searchTagId) {
-                        ForEach(viewModel.tagModel, id: \.id) { tag in
-                            Text(tag.name)
+        if self.viewModel.todoModel.isEmpty {
+            Text(R.string.message.noTodo())
+        } else {
+            List(self.viewModel.todoModel, id: \.createTime) { model in
+                Section(content: {
+                    if viewModel.tagModel.isNotEmpty {
+                        Picker(R.string.labels.filterByTag(), selection: $viewModel.searchTagId) {
+                            ForEach(viewModel.tagModel, id: \.id) { tag in
+                                Text(tag.name)
+                            }
                         }
                     }
-                }
-                if self.viewModel.todoModel.isEmpty {
-                    Text(R.string.message.noTodo())
-                } else {
-                    ForEach(self.viewModel.todoModel, id: \.createTime) { model in
-                        NavigationLink(value: model) {
-                            ToDoRow(todoModel: model)
-                        }
+                    NavigationLink(value: model) {
+                        ToDoRow(todoModel: model)
                     }
-                }
-            })
-            .listRowSeparator(.hidden)
+                })
+                .listRowSeparator(.hidden)
+            }
+            .listStyle(.inset)
         }
-        .listStyle(.inset)
     }
     
     /// どのカテゴリかを表示するテキスト
