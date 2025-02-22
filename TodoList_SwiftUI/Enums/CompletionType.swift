@@ -24,4 +24,25 @@ enum CompletionType {
         }
     }
     
+    
+    var title: String {
+        switch self {
+        case .active:
+            R.string.labels.active()
+        case .complete:
+            R.string.labels.complete()
+        case .expired:
+            R.string.labels.expired()
+        }
+    }
+    
+    
+    static func isType(flag: CompletionFlag, date: String) -> CompletionType {
+        if flag == CompletionFlag.completion {
+            CompletionType.complete
+        } else {
+            Format.dateFromString(string: date) ?? Date() > Format.dateFormat() ? CompletionType.active : CompletionType.expired
+        }
+    }
+    
 }
