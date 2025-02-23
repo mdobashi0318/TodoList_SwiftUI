@@ -12,16 +12,18 @@ import SwiftUI
 struct ToDoRow: View {
     
     let todoModel: ToDoModel
+    
+    private let cornerRadius: CGFloat = 6
  
     var body: some View {
-        RoundedRectangle(cornerRadius: 0)
-            .foregroundStyle(.clear)
-            .padding()
-            .background(completionType().backgroundColor.opacity(0.7))
-            .cornerRadius(6)
-            .clipped()
-            .shadow(color: .gray.opacity(0.7), radius: 6)
+        RoundedRectangle(cornerRadius: cornerRadius)
+            .stroke(lineWidth: 1)
             .frame(minHeight: 60)
+            .foregroundStyle(.secondary)
+            .background(Color.systemBackground)
+            .cornerRadius(cornerRadius)
+            .clipped()
+            .shadow(color: .secondary.opacity(0.2), radius: cornerRadius)
             .overlay(content: {
                 HStack {
                     VStack(alignment: .leading) {
@@ -37,6 +39,11 @@ struct ToDoRow: View {
                     .frame(alignment: .leading)
                     .padding()
                     Spacer()
+                    UnevenRoundedRectangle(bottomTrailingRadius: cornerRadius, topTrailingRadius: cornerRadius, style: .continuous)
+                        .foregroundStyle(completionType().backgroundColor)
+                        .frame(width: 40)
+                        .padding([.trailing, .bottom, .top], 1.5)
+                        
                 }
             })
     }
