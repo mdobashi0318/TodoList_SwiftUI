@@ -92,26 +92,23 @@ extension ToDoListView {
     /// Todoのリストを表示する
     @ViewBuilder
     private var todoList: some View {
-        if self.viewModel.todoModel.isEmpty {
-            Text(R.string.message.noTodo())
-        } else {
-            List(self.viewModel.todoModel, id: \.createTime) { model in
-                Section(content: {
-                    if viewModel.tagModel.isNotEmpty {
-                        Picker(R.string.labels.filterByTag(), selection: $viewModel.searchTagId) {
-                            ForEach(viewModel.tagModel, id: \.id) { tag in
-                                Text(tag.name)
-                            }
+        List {
+            Section(content: {
+                tagPicker
+                if self.viewModel.todoModel.isEmpty {
+                    Text(R.string.message.noTodo())
+                } else {
+                    ForEach(self.viewModel.todoModel, id: \.createTime) { model in
+                        NavigationLink(value: model) {
+                            ToDoRow(todoModel: model)
                         }
                     }
-                    NavigationLink(value: model) {
-                        ToDoRow(todoModel: model)
-                    }
-                })
-                .listRowSeparator(.hidden)
-            }
-            .listStyle(.inset)
+                }
+            })
+            .listRowSeparator(.hidden)
         }
+        .listStyle(.inset)
+        
     }
     
     /// どのカテゴリかを表示するテキスト
@@ -194,6 +191,17 @@ extension ToDoListView {
                 }
         }
         .accessibility(identifier: "tagButton")
+    }
+    
+    @ViewBuilder
+    private var tagPicker: some View {
+        if viewModel.tagModel.isNotEmpty {
+            Picker(R.string.labels.filterByTag(), selection: $viewModel.searchTagId) {
+                ForEach(viewModel.tagModel, id: \.id) { tag in
+                    Text(tag.name)
+                }
+            }
+        }
     }
     
     /// WidgetでタップしたTodoをモーダルで表示する
