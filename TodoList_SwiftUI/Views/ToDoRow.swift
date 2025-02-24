@@ -34,6 +34,7 @@ struct ToDoRow: View {
                         if let tag_id = todoModel.tag_id,
                            let tag = Tag.find(id: tag_id) {
                             TagRow(tag: tag)
+                                .padding(.top, -9.0)
                         }
                     }
                     .frame(alignment: .leading)
