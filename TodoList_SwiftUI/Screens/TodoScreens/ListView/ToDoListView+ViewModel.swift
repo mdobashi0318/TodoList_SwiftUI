@@ -53,7 +53,9 @@ extension ToDoListView {
                     $0.completionFlag == CompletionFlag.completion.rawValue
                 }
             case .all:
-                ToDoModel.allFindTodo(tagId: searchTagId)
+                ToDoModel.allFindTodo(tagId: searchTagId).sorted(by: {
+                    Int($0.completionFlag) ?? 0 < Int($1.completionFlag) ?? 0
+                })
             }
         }
         

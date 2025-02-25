@@ -90,16 +90,11 @@ struct ToDoListView: View {
 extension ToDoListView {
     
     /// Todoのリストを表示する
+    @ViewBuilder
     private var todoList: some View {
         List {
             Section(content: {
-                if viewModel.tagModel.isNotEmpty {
-                    Picker(R.string.labels.filterByTag(), selection: $viewModel.searchTagId) {
-                        ForEach(viewModel.tagModel, id: \.id) { tag in
-                            Text(tag.name)
-                        }
-                    }
-                }
+                tagPicker
                 if self.viewModel.todoModel.isEmpty {
                     Text(R.string.message.noTodo())
                 } else {
@@ -110,8 +105,10 @@ extension ToDoListView {
                     }
                 }
             })
+            .listRowSeparator(.hidden)
         }
         .listStyle(.inset)
+        
     }
     
     /// どのカテゴリかを表示するテキスト
@@ -157,7 +154,7 @@ extension ToDoListView {
         .alert(isPresented: $viewModel.isDeleteFlag) {
             Alert(title: Text(R.string.message.allDelete()), primaryButton: .destructive(Text(R.string.buttons.delete)) {
                 Task {
-                    await viewModel.allDeleteTodo()
+                    viewModel.allDeleteTodo()
                 }
                 withAnimation {
                     viewModel.todoModelDelete()
@@ -194,6 +191,17 @@ extension ToDoListView {
                 }
         }
         .accessibility(identifier: "tagButton")
+    }
+    
+    @ViewBuilder
+    private var tagPicker: some View {
+        if viewModel.tagModel.isNotEmpty {
+            Picker(R.string.labels.filterByTag(), selection: $viewModel.searchTagId) {
+                ForEach(viewModel.tagModel, id: \.id) { tag in
+                    Text(tag.name)
+                }
+            }
+        }
     }
     
     /// WidgetでタップしたTodoをモーダルで表示する
