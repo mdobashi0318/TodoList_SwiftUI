@@ -96,6 +96,7 @@ extension ToDoInputView {
             
             do {
                 try ToDoModel.add(addValue: ToDoModel(toDoName: self.toDoName, todoDate: Format.stringFromDate(date: toDoDate), toDo: self.toDo, tag_id: self.tag_id))
+                AddTagTip.addTag = true
                 return true
             } catch {
                 errorMessage = R.string.message.addError()

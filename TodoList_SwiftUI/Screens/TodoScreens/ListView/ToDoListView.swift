@@ -68,6 +68,7 @@ struct ToDoListView: View {
                 
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     tagButton
+                        .popoverTip(AddTagTip())
                     notificationButton
                     addButton
                         .popoverTip(AddTodoTip())
