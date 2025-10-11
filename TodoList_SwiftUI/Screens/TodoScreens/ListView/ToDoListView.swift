@@ -19,6 +19,8 @@ struct ToDoListView: View {
     
     @State private var setting = SettingManager.shared
     
+    private let notificationTip = NotificationTip()
+    
     // MARK: Body
     
     var body: some View {
@@ -45,12 +47,6 @@ struct ToDoListView: View {
                         viewModel.fetchAllTodoModel()
                     }
                 }
-                .task {
-                    try? Tips.configure([
-                        .displayFrequency(.immediate),
-                        .datastoreLocation(.applicationDefault)
-                    ])
-                }
                 .task(id: viewModel.searchTagId) {
                     withAnimation {
                         viewModel.fetchAllTodoModel()
@@ -70,6 +66,7 @@ struct ToDoListView: View {
                     tagButton
                         .popoverTip(AddTagTip())
                     notificationButton
+                        .popoverTip(notificationTip)
                     addButton
                         .popoverTip(AddTodoTip())
                 }
@@ -172,6 +169,7 @@ extension ToDoListView {
     private var notificationButton: some View {
         Button(action: {
             setting.openSettingsURL()
+            notificationTip.invalidate(reason: .actionPerformed)
         }) {
             Image(systemName: setting.isNotification ? "bell" : "bell.slash")
         }

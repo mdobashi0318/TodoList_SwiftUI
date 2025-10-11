@@ -15,6 +15,7 @@ extension UserDefaults {
         ///
         ///  - Ver 1: Realmの保存場所にFileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.TodoList-SwiftUI")に移行
         case RealmFileVer = "RealmFileVer"
+        case AppOpendCount
     }
     
     
