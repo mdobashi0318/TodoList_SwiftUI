@@ -91,6 +91,7 @@ extension ToDoInputView {
         private func addTodo() -> Bool {
             if let message = self.validateCheck() {
                 errorMessage = message
+                isShowAlert = true
                 return false
             }
             
@@ -100,6 +101,7 @@ extension ToDoInputView {
                 return true
             } catch {
                 errorMessage = R.string.message.addError()
+                isShowAlert = true
                 return false
             }
         }
@@ -109,11 +111,13 @@ extension ToDoInputView {
         private func updateTodo() -> Bool {
             guard let model = model else {
                 errorMessage = R.string.message.updateError()
+                isShowAlert = true
                 return false
             }
             
             if let message = self.validateCheck() {
                 errorMessage = message
+                isShowAlert = true
                 return false
             }
             
