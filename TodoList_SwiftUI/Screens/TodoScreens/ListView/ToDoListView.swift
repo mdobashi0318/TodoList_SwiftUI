@@ -21,6 +21,10 @@ struct ToDoListView: View {
     
     private let notificationTip = NotificationTip()
     
+    private let addTodoTip = AddTodoTip()
+    
+    private let addTagTip = AddTagTip()
+    
     // MARK: Body
     
     var body: some View {
@@ -64,11 +68,11 @@ struct ToDoListView: View {
                 
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     tagButton
-                        .popoverTip(AddTagTip())
+                        .popoverTip(addTagTip)
                     notificationButton
                         .popoverTip(notificationTip)
                     addButton
-                        .popoverTip(AddTodoTip())
+                        .popoverTip(addTodoTip)
                 }
             }
             .sheet(isPresented: $openWidget.isOpneTodo) { openWidgetView }
@@ -128,6 +132,7 @@ extension ToDoListView {
     private var addButton: some View {
         AddIconButton {
             viewModel.isShowModle.toggle()
+            addTodoTip.invalidate(reason: .actionPerformed)
         }
         .sheet(isPresented: $viewModel.isShowModle) {
             ToDoInputView(viewModel: ToDoInputView.ViewModel())
@@ -179,6 +184,7 @@ extension ToDoListView {
     private var tagButton: some View {
         Button(action: {
             viewModel.isShowTagModle.toggle()
+            addTagTip.invalidate(reason: .actionPerformed)
         }) {
             Image(systemName: "tag")
         }
