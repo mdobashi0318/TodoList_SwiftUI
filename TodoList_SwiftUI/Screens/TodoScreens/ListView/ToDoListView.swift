@@ -155,7 +155,7 @@ extension ToDoListView {
             viewModel.isDeleteFlag.toggle()
         }
         .alert(isPresented: $viewModel.isDeleteFlag) {
-            Alert(title: Text(R.string.message.allDelete()), primaryButton: .destructive(Text(R.string.buttons.delete)) {
+            Alert(title: Text(R.string.message.allDelete()), message: Text("AllDeleteMessage"), primaryButton: .destructive(Text("AllDeleteButton")) {
                 Task {
                     viewModel.allDeleteTodo()
                 }

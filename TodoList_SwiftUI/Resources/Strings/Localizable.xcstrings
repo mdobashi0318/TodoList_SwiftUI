@@ -35,6 +35,40 @@
         }
       }
     },
+    "AllDeleteButton" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete all"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "全て削除"
+          }
+        }
+      }
+    },
+    "AllDeleteMessage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To delete individual tasks and tags, please delete them from the details screen."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Todoとタグを個別に削除する場合は詳細画面から削除してください。"
+          }
+        }
+      }
+    },
     "NotificationMessage" : {
       "extractionState" : "manual",
       "localizations" : {
