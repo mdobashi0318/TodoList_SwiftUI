@@ -14,11 +14,20 @@ struct ToDoRow: View {
     let todoModel: ToDoModel
     
     private let cornerRadius: CGFloat = 6
+    
+    private var frameMinHeight: CGFloat {
+        // タグを設定したときに、iOS26の時に枠からはみ出しているので、枠を前バージョンより大きく設定する
+        if #available(iOS 26.0, *) {
+            80
+        } else {
+            60
+        }
+    }
  
     var body: some View {
         RoundedRectangle(cornerRadius: cornerRadius)
             .stroke(lineWidth: 1)
-            .frame(minHeight: 60)
+            .frame(minHeight: frameMinHeight)
             .foregroundStyle(.secondary)
             .background(Color.systemBackground)
             .cornerRadius(cornerRadius)
