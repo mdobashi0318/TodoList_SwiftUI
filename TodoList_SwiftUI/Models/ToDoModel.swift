@@ -59,7 +59,7 @@ final class ToDoModel: Object {
         var model = [ToDoModel]()
         
         realm.objects(ToDoModel.self).forEach {
-            model.append($0)
+            model.append($0.freeze())
         }
         
         model.sort {
@@ -74,18 +74,14 @@ final class ToDoModel: Object {
     /// - Parameter tagId: Tagモデルのプライマリキー
     /// - Returns: 取得したTodoを全件返す
     static func allFindTodo(tagId: String) -> [ToDoModel] {
-        guard let realm = RealmManager.realm else {
-            return []
-        }
-        
         guard !tagId.isEmpty else {
             return allFindTodo()
         }
         
         var model = [ToDoModel]()
         
-        realm.objects(ToDoModel.self)
-            .where({ $0.tag_id == tagId })
+        allFindTodo()
+            .filter({ $0.tag_id == tagId })
             .forEach {
             model.append($0)
         }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 @main
 struct ToDoListApp: App {
@@ -13,6 +14,18 @@ struct ToDoListApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegates
     
     @Environment(\.scenePhase) private var scenePhase
+    
+    @AppStorage(UserDefaults.Key.AppOpendCount.rawValue) var appOpendCount = 0
+    
+    
+    init() {
+        try? Tips.configure([
+            .displayFrequency(.immediate),
+            .datastoreLocation(.applicationDefault)
+        ])
+        appOpendCount += 1
+        NotificationTip.appOpendCount += appOpendCount
+    }
     
     var body: some Scene {
         WindowGroup {

@@ -45,6 +45,7 @@ class SettingManager {
     @MainActor
     private func getNotificationStatus() async {
         isNotification = await NotificationManager().getNotificationStatus()
+        NotificationTip.isNotification = isNotification
     }
     
     

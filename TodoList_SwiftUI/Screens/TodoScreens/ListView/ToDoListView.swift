@@ -19,6 +19,12 @@ struct ToDoListView: View {
     
     @State private var setting = SettingManager.shared
     
+    private let notificationTip = NotificationTip()
+    
+    private let addTodoTip = AddTodoTip()
+    
+    private let addTagTip = AddTagTip()
+    
     // MARK: Body
     
     var body: some View {
@@ -45,12 +51,6 @@ struct ToDoListView: View {
                         viewModel.fetchAllTodoModel()
                     }
                 }
-                .task {
-                    try? Tips.configure([
-                        .displayFrequency(.immediate),
-                        .datastoreLocation(.applicationDefault)
-                    ])
-                }
                 .task(id: viewModel.searchTagId) {
                     withAnimation {
                         viewModel.fetchAllTodoModel()
@@ -68,9 +68,11 @@ struct ToDoListView: View {
                 
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     tagButton
+                        .popoverTip(addTagTip)
                     notificationButton
+                        .popoverTip(notificationTip)
                     addButton
-                        .popoverTip(AddTodoTip())
+                        .popoverTip(addTodoTip)
                 }
             }
             .sheet(isPresented: $openWidget.isOpneTodo) { openWidgetView }
@@ -90,16 +92,11 @@ struct ToDoListView: View {
 extension ToDoListView {
     
     /// Todoのリストを表示する
+    @ViewBuilder
     private var todoList: some View {
         List {
             Section(content: {
-                if viewModel.tagModel.isNotEmpty {
-                    Picker(R.string.labels.filterByTag(), selection: $viewModel.searchTagId) {
-                        ForEach(viewModel.tagModel, id: \.id) { tag in
-                            Text(tag.name)
-                        }
-                    }
-                }
+                tagPicker
                 if self.viewModel.todoModel.isEmpty {
                     Text(R.string.message.noTodo())
                 } else {
@@ -110,8 +107,10 @@ extension ToDoListView {
                     }
                 }
             })
+            .listRowSeparator(.hidden)
         }
         .listStyle(.inset)
+        
     }
     
     /// どのカテゴリかを表示するテキスト
@@ -133,9 +132,10 @@ extension ToDoListView {
     private var addButton: some View {
         AddIconButton {
             viewModel.isShowModle.toggle()
+            addTodoTip.invalidate(reason: .actionPerformed)
         }
         .sheet(isPresented: $viewModel.isShowModle) {
-            ToDoInputView(viewModel: ToDoInputView.ViewModel(), isUpdate: false)
+            ToDoInputView(viewModel: ToDoInputView.ViewModel())
                 .onDisappear {
                     withAnimation {
                         viewModel.fetchAllTodoModel()
@@ -155,9 +155,9 @@ extension ToDoListView {
             viewModel.isDeleteFlag.toggle()
         }
         .alert(isPresented: $viewModel.isDeleteFlag) {
-            Alert(title: Text(R.string.message.allDelete()), primaryButton: .destructive(Text(R.string.buttons.delete)) {
+            Alert(title: Text(R.string.message.allDelete()), message: Text("AllDeleteMessage"), primaryButton: .destructive(Text("AllDeleteButton")) {
                 Task {
-                    await viewModel.allDeleteTodo()
+                    viewModel.allDeleteTodo()
                 }
                 withAnimation {
                     viewModel.todoModelDelete()
@@ -174,6 +174,7 @@ extension ToDoListView {
     private var notificationButton: some View {
         Button(action: {
             setting.openSettingsURL()
+            notificationTip.invalidate(reason: .actionPerformed)
         }) {
             Image(systemName: setting.isNotification ? "bell" : "bell.slash")
         }
@@ -183,6 +184,7 @@ extension ToDoListView {
     private var tagButton: some View {
         Button(action: {
             viewModel.isShowTagModle.toggle()
+            addTagTip.invalidate(reason: .actionPerformed)
         }) {
             Image(systemName: "tag")
         }
@@ -194,6 +196,17 @@ extension ToDoListView {
                 }
         }
         .accessibility(identifier: "tagButton")
+    }
+    
+    @ViewBuilder
+    private var tagPicker: some View {
+        if viewModel.tagModel.isNotEmpty {
+            Picker(R.string.labels.filterByTag(), selection: $viewModel.searchTagId) {
+                ForEach(viewModel.tagModel, id: \.id) { tag in
+                    Text(tag.name)
+                }
+            }
+        }
     }
     
     /// WidgetでタップしたTodoをモーダルで表示する

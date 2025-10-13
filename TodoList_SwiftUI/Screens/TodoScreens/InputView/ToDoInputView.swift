@@ -15,15 +15,7 @@ struct ToDoInputView: View {
     
     @State var viewModel: ViewModel
     
-    
     @Environment(\.presentationMode) private var presentationMode:Binding<PresentationMode>
-    
-    /// Todoの更新か追加かを判断
-    @State var isUpdate: Bool
-    
-    /// Alertの表示フラグ
-    @State private var isShowAlert = false
-    
     
     // MARK: Body
     
@@ -36,7 +28,7 @@ struct ToDoInputView: View {
                 if viewModel.isTagSection { tagSection }
             }
             .listStyle(.grouped)
-            .navigationTitle(isUpdate ? R.string.labels.updateToDo() : R.string.labels.addToDo())
+            .navigationTitle(viewModel.mode == .add ? R.string.labels.addToDo() : R.string.labels.updateToDo())
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     cancelButton
@@ -76,13 +68,11 @@ extension ToDoInputView {
     /// ToDo追加ボタン
     private var addButton: some View {
         AddIconButton {
-            if !self.isUpdate {
-                self.addTodo()
-            } else {
-                self.updateTodo()
+            if viewModel.modelAddOrUpdate() {
+                self.presentationMode.wrappedValue.dismiss()
             }
         }
-        .alert(isPresented: $isShowAlert) {
+        .alert(isPresented: $viewModel.isShowAlert) {
             return showValidateAlert
         }
         .accessibility(identifier: "todoAddButton")
@@ -177,41 +167,13 @@ extension ToDoInputView {
 }
 
 
-
-
-// MARK: - Func
-
-extension ToDoInputView {
-    
-    /// Todoの追加
-    private func addTodo() {
-        if viewModel.addTodo() {
-            self.presentationMode.wrappedValue.dismiss()
-        } else {
-            self.isShowAlert = true
-        }
-    }
-    
-    
-    /// Todoのアップデート
-    private func updateTodo() {
-        if viewModel.updateTodo() {
-            self.presentationMode.wrappedValue.dismiss()
-        } else {
-            self.isShowAlert = true
-        }
-    }
-    
-}
-
-
 // MARK: - Previews
 
 struct ToDoInputView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ToDoInputView(viewModel: ToDoInputView.ViewModel(), isUpdate: false)
-            ToDoInputView(viewModel: ToDoInputView.ViewModel(createTime: testModel[0].createTime ?? ""), isUpdate: true)
+            ToDoInputView(viewModel: ToDoInputView.ViewModel())
+            ToDoInputView(viewModel: ToDoInputView.ViewModel(createTime: testModel[0].createTime ?? ""))
         }
     }
 }

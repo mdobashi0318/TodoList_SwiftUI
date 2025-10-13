@@ -17,23 +17,30 @@ struct CompletionLable: View {
     /// 完了フラグ
     var completionFlag: String
     
+    var isCompletionLabel: Bool = true
+    
     var body: some View {
         HStack {
             Text(todoDate)
                 .animation(.none)
-            if completionFlag == CompletionFlag.completion.rawValue {
-                /// 完了
-                Text(R.string.labels.complete())
-                    .font(.subheadline)
-                    .foregroundColor(.green)
-                    .accessibility(identifier: "completeLabel")
+            if isCompletionLabel {
+                if completionFlag == CompletionFlag.completion.rawValue {
+                    let type = CompletionType.complete
+                    /// 完了
+                    Text(type.title)
+                        .font(.subheadline)
+                        .foregroundColor(type.backgroundColor)
+                        .accessibility(identifier: "completeLabel")
+                } else {
+                    let type = CompletionType.isType(flag: CompletionFlag(rawValue: completionFlag) ?? .unfinished, date: todoDate)
+                    /// 未完了or期限切れ
+                    Text(type.title)
+                        .font(.subheadline)
+                        .foregroundColor(type.backgroundColor)
+                        .accessibility(identifier: "dateLabel")
+                }
             } else {
-                let text = Format.dateFromString(string: todoDate) ?? Date() > Format.dateFormat() ? R.string.labels.active() : R.string.labels.expired()
-                /// 未完了or期限切れ
-                Text(text)
-                    .font(.subheadline)
-                    .foregroundColor(text == R.string.labels.active() ? .yellow : .red)
-                    .accessibility(identifier: "dateLabel")
+                EmptyView()
             }
         }
     }

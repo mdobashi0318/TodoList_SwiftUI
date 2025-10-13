@@ -104,8 +104,7 @@ extension TodoDetailView {
         }
         .sheet(isPresented: $isShowModle) {
             /// 編集を選択
-            ToDoInputView(viewModel: ToDoInputView.ViewModel(createTime: viewModel.createTime),
-                          isUpdate: true)
+            ToDoInputView(viewModel: ToDoInputView.ViewModel(createTime: viewModel.createTime))
             .onDisappear {
                 viewModel.findTodo(createTime: viewModel.createTime)
             }
